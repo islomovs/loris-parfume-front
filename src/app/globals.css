@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a {
+  color: inherit;
+}
+a:hover {
+  color: inherit;
+}
+
+/* MainCarousel component - start */
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 7px;
+  background-color: transparent !important;
+  opacity: 1 !important;
+  border: 2px solid #ffffff;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #ffffff !important;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets {
+  position: absolute;
+  width: fit-content !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  left: auto !important ;
+}
+/* MainCarousel component - end*/
+
+.container-body {
+  height: 9000px;
+}
+
+.bg-container {
+  position: relative;
+  width: 70% !important;
+  height: 400px;
+  margin: auto;
+  margin-top: 55%;
+}
+
+.bg-container h1 {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 150px;
+  font-size: 70px;
+}
+
+.ant-drawer .ant-drawer-header {
+  padding: 20px 30px;
+}
+
+.ant-drawer .ant-drawer-footer {
+  padding: 20px 30px 30px;
+}
+
+.ant-input-number .ant-input-number-input {
+  padding: 0;
+}
+
+.product-image .ant-image {
+  width: 730px;
+  height: 730px;
+}
+
+.product-image .ant-image .ant-image-img {
+  height: 100%;
+}
