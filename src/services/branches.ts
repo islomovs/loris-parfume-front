@@ -21,7 +21,7 @@ export interface IBranchItem {
 export const fetchBranchesData = async (page: number) => {
   try {
     const response = await axiosInstance.post(
-      `/api/v1/branches/all?page=${page}`
+      `/api/v1/branches/all`
     );
     return response;
   } catch (error: any) {
