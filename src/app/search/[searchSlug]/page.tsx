@@ -3,7 +3,7 @@
 import { ProductsGrid } from "@/app/components/ProductsGrid";
 import { fetchProductsData, IProduct } from "@/services/products";
 import { useState } from "react";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 export default function SearchResultsPage({
   params,
@@ -18,8 +18,6 @@ export default function SearchResultsPage({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    refetch,
-    remove,
   } = useInfiniteQuery(
     ["productsByCollection", params.searchSlug],
     async ({ pageParam = 1 }) => {
@@ -63,7 +61,7 @@ export default function SearchResultsPage({
           search results
         </h1>
         <p className="flex justify-center items-center text-[14px] text-[#454545] font-normal">
-          {totalElements} results for "{params.searchSlug}"
+          {totalElements} results for &quot;{params.searchSlug}&quot;
         </p>
       </div>
       <hr className="border-t border-solid border-t-[#f0f0f0] mb-8" />
