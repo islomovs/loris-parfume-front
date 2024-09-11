@@ -8,6 +8,7 @@ import { message } from "antd";
 import { useMutation } from "react-query";
 import { addToCart } from "../../services/cart";
 import { queryClient } from "../providers";
+import { DrawerCartItem } from "../components/DrawerCartItem";
 
 export default function CartPage() {
   const router = useRouter();
@@ -51,7 +52,6 @@ export default function CartPage() {
     router.push("/checkouts");
   }, [cart, apiQuantity, mutation, router]);
 
-  // Set the client state when component mounts
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -59,11 +59,11 @@ export default function CartPage() {
   const formattedTotal = isClient ? totalSum().toFixed(2) : "0.00";
 
   return (
-    <div className="py-20 px-40">
-      <h1 className="uppercase font-normal text-center text-xl tracking-[.2em] text-[#454545] my-[50px]">
+    <div className="py-10 md:py-20 px-4 md:px-40">
+      <h1 className="uppercase font-normal text-center text-lg md:text-xl tracking-[.2em] text-[#454545] my-[30px] md:my-[50px]">
         shopping cart
       </h1>
-      <div className="flex flex-row border-b border-solid border-b-[#e3e3e3] pb-[10px]">
+      <div className="hidden md:flex md:flex-row border-b border-solid border-b-[#e3e3e3] pb-[10px]">
         <h1 className="text-[#9D9D9D] text-[11px] font-light flex-[12]">
           PRODUCT
         </h1>
@@ -81,17 +81,37 @@ export default function CartPage() {
             : cartItem.price;
 
           return (
-            <CartItem
+            <div
               key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
-              id={cartItem.id}
-              slug={cartItem.slug}
-              collectionSlug={cartItem.collectionSlug}
-              title={cartItem.nameRu}
-              price={discountPrice}
-              sizeId={cartItem.sizeId}
-              image={cartItem.imagesList[0]}
-              qty={cartItem.quantity}
-            />
+            >
+              {/* Desktop: Show CartItem */}
+              <div className="hidden md:block">
+                <CartItem
+                  id={cartItem.id}
+                  slug={cartItem.slug}
+                  collectionSlug={cartItem.collectionSlug}
+                  title={cartItem.nameRu}
+                  price={discountPrice}
+                  sizeId={cartItem.sizeId}
+                  image={cartItem.imagesList[0]}
+                  qty={cartItem.quantity}
+                />
+              </div>
+
+              {/* Mobile: Show DrawerCartItem */}
+              <div className="block md:hidden">
+                <DrawerCartItem
+                  id={cartItem.id}
+                  slug={cartItem.slug}
+                  price={discountPrice}
+                  qty={cartItem.quantity}
+                  title={cartItem.nameRu}
+                  sizeId={cartItem.sizeId}
+                  image={cartItem.imagesList[0]}
+                  sizeName={cartItem.sizeNameRu}
+                />
+              </div>
+            </div>
           );
         })
       ) : (
@@ -99,15 +119,16 @@ export default function CartPage() {
           Your cart is empty.
         </div>
       )}
-      <div className="flex flex-row justify-end items-center border-t border-solid border-t-[#e3e3e3] pt-[25px]">
-        <div className="flex flex-col items-end">
+
+      <div className="flex flex-col md:flex-row justify-end items-center border-t border-solid border-t-[#e3e3e3] pt-[25px]">
+        <div className="flex flex-col items-end w-full">
           <div className="text-xs tracking-[.2em] text-[#454545] font-normal mb-4">
             TOTAL: {formattedTotal} сум
           </div>
           <AnimatedButton
             title="checkout"
             variant="dark"
-            width="w-[140px]"
+            width="w-full md:w-[140px]"
             onClick={handleCheckout}
           />
         </div>

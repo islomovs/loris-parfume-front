@@ -197,9 +197,9 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center py-20">
+    <div className="flex flex-col justify-center items-center py-10 md:py-20 px-4 md:px-0">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
-      <div className="flex flex-col items-center justify-center w-full max-w-md min-h-[400px] text-center">
+      <div className="flex flex-col items-center justify-center w-full max-w-sm sm:max-w-md min-h-[400px] text-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={isResetPassword ? "reset-state" : "login-state"} // Ensure unique keys
@@ -207,12 +207,12 @@ export default function Login() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="text-center mb-6"
+            className="text-center mb-4 sm:mb-6"
           >
-            <h1 className="uppercase font-normal text-center text-xl tracking-[.2em] text-[#454545] mb-4">
+            <h1 className="uppercase font-normal text-center text-lg sm:text-xl tracking-[.2em] text-[#454545] mb-4">
               {isResetPassword ? "Reset Password" : "Log in"}
             </h1>
-            <h2 className="text-[#454545] text-[14px] text-center font-normal">
+            <h2 className="text-[#454545] text-sm sm:text-[14px] text-center font-normal">
               {isResetPassword
                 ? "Enter your phone number:"
                 : "Enter your email address and password:"}
@@ -225,52 +225,54 @@ export default function Login() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="px-5 py-[10px] mb-5 bg-[#E4C4C4] w-[400px] text-center"
+              className="px-4 py-2 sm:px-5 sm:py-[10px] mb-4 sm:mb-5 bg-[#E4C4C4] w-full sm:w-[400px] text-center"
             >
-              <p className="text-[14px] text-[#CB2B2B] mt-1">{errorMessage}</p>
+              <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
+                {errorMessage}
+              </p>
             </motion.div>
           )}
 
           <motion.form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-4 items-center"
+            className="flex flex-col gap-4 items-center justify-center w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div>
+            <div className="w-full sm:w-[400px]">
               <CustomInput
-                className="w-[400px]"
+                className="sm:w-[400px] w-full"
                 {...register("phone")}
                 title="Номер телефона"
                 borders="no-rounded"
                 type="text"
               />
               {errors.phone && (
-                <p className="text-[14px] text-[#CB2B2B] mt-1">
+                <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
                   {errors.phone.message}
                 </p>
               )}
             </div>
             {!isResetPassword && (
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col w-full sm:w-[400px]">
                 <CustomInput
-                  className="w-[400px]"
+                  className="sm:w-[400px] w-full"
                   {...register("password")}
                   title="Пароль"
                   borders="no-rounded"
                   type="password"
                 />
                 {errors.password && (
-                  <p className="text-[14px] text-[#CB2B2B] mt-1">
+                  <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
                     {errors.password.message}
                   </p>
                 )}
                 <button
                   type="button"
                   onClick={toggleResetPassword}
-                  className="mt-1 text-[14px] text-[#9d9d9d] font-normal self-end cursor-pointer hover:text-[#454545] transition-colors"
+                  className="mt-1 text-sm sm:text-[14px] text-[#9d9d9d] font-normal self-end cursor-pointer hover:text-[#454545] transition-colors"
                 >
                   Forgot your password?
                 </button>
@@ -280,12 +282,12 @@ export default function Login() {
             <AnimatedButton
               title={isResetPassword ? "Send Code" : "Log In"}
               variant="dark"
-              width="w-[400px]"
+              width="w-full sm:w-[400px]"
               type="submit"
             />
           </motion.form>
 
-          <p className="my-6 text-[#9D9D9D] text-[14px] font-normal">
+          <p className="my-4 sm:my-6 text-[#9D9D9D] text-sm sm:text-[14px] font-normal">
             {isResetPassword ? (
               <>
                 Remember your password?{" "}

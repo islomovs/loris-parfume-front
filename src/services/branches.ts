@@ -1,28 +1,21 @@
 import { axiosInstance } from "@/utils/axiosInstance";
 
 export interface ApiResponse {
-  content: IBranchItem[];
-  page: {
-    size: number;
-    number: number;
-    totalElements: number;
-    totalPages: number;
-  };
+  data: IBranchItem[];
 }
 
 export interface IBranchItem {
   id: number;
   name: string;
+  phone: string;
   longitude: number;
   latitude: number;
   redirectTo: string;
 }
 
-export const fetchBranchesData = async (page: number) => {
+export const fetchBranchesData = async () => {
   try {
-    const response = await axiosInstance.post(
-      `/api/v1/branches/all?page=${page}`
-    );
+    const response = await axiosInstance.post(`/api/v1/branches/all`);
     return response;
   } catch (error: any) {
     throw new Error(

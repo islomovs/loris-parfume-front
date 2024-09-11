@@ -41,7 +41,7 @@ export default function NavButton({
       {...rest} // Spread additional props onto the div
     >
       {link ? (
-        <Link href={link} className="hover:text-black">
+        <Link href={link} className="hover:text-[#454545]">
           {children}
         </Link>
       ) : (

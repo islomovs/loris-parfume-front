@@ -2,9 +2,8 @@
 import { useState, useEffect } from "react";
 import { Flex } from "antd";
 import { UnderlinedButton } from "./UnderlinedButton";
-import { removeFromCart, getCartItems, ICartItem } from "../../services/cart";
-import { BiMinus } from "react-icons/bi";
-import { BiPlus } from "react-icons/bi";
+import { removeFromCart, getCartItems } from "../../services/cart";
+import { BiMinus, BiPlus } from "react-icons/bi";
 import useCartStore from "@/services/store";
 
 interface IDrawerCartItemProps {
@@ -12,10 +11,11 @@ interface IDrawerCartItemProps {
   slug: string;
   title: string | undefined;
   price: number;
-  qty: number;
+  qty?: number; // Make qty optional
   image: string;
   sizeName?: string;
   sizeId?: number;
+  isSimplified?: boolean; // Prop to control simplified view
 }
 
 export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
@@ -23,12 +23,13 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
   slug,
   title,
   price,
-  qty,
+  qty = 1, // Default qty to 1 if not provided
   image,
   sizeName,
   sizeId,
+  isSimplified = false, // Default to false if not provided
 }) => {
-  const [quantity, setQuantity] = useState(qty);
+  const [quantity, setQuantity] = useState(qty); // Use optional qty with default
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { setCartItems, updateCartItemQuantity } = useCartStore(
     (state) => state
@@ -36,7 +37,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
 
   useEffect(() => {
     updateCartItemQuantity(id, quantity, sizeId);
-  }, [quantity]);
+  }, [quantity, id, sizeId, updateCartItemQuantity]);
 
   const handleRemove = async () => {
     if (sizeId !== null) {
@@ -48,30 +49,47 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
     setCartItems(updatedCart?.data);
   };
 
+  if (isSimplified) {
+    // Render only image, title, and price in simplified mode
+    return (
+      <div className="flex flex-row gap-5 min-h-[180px]">
+        <div className="w-24 md:w-[120px] flex items-center">
+          <img src={`${baseUrl}/${image}`} alt="cart item" />
+        </div>
+        <div className="flex flex-col items-start justify-center flex-1">
+          <h1 className="mb-1 md:mb-[6px] text-xs text-[#454545] tracking-[.2em] uppercase font-normal">
+            {title}
+          </h1>
+          <h2 className="text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
+            {price} сум
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
+  // Render full details in detailed mode
   return (
     <div className="flex flex-row gap-5 min-h-[180px]">
-      <div className="w-[120px] flex items-center">
+      <div className="w-24 md:w-[120px] flex items-center">
         <img src={`${baseUrl}/${image}`} alt="cart item" />
       </div>
       <div className="flex flex-col items-start justify-center flex-1">
-        <h1 className="mb-[6px] text-xs text-[#454545] tracking-[.2em] uppercase font-normal">
+        <h1 className="mb-1 md:mb-[6px] text-xs text-[#454545] tracking-[.2em] uppercase font-normal">
           {title}
         </h1>
-        {sizeName ? (
-          <h2 className="mb-5 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
+        {sizeName && (
+          <h2 className="mb-1 md:mb-5 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
             {sizeName}
           </h2>
-        ) : (
-          " "
         )}
-
-        <h2 className="mb-5 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
+        <h2 className="mb-4 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
           {price} сум
         </h2>
         <div className="flex flex-row items-center justify-between w-full">
-          <Flex className="border-solid border border-[#e3e3e3] w-[106px] h-[40px]">
+          <Flex className="border-solid border border-[#e3e3e3] w-fit md:w-[106px] h-[40px]">
             <button
-              className="my-auto flex-1 py-2 px-[14px] text-[#9D9D9D] hover:text-black"
+              className="my-auto flex-1 py-2 px-2 md:px-[14px] text-[#9D9D9D] hover:text-black"
               onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
             >
               <BiMinus />
@@ -84,7 +102,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
               min="1"
             />
             <button
-              className="my-auto flex-1 py-2 px-[14px] text-[#9D9D9D] hover:text-black"
+              className="my-auto flex-1 py-2 px-2 md:px-[14px] text-[#9D9D9D] hover:text-black"
               onClick={() => setQuantity(quantity + 1)}
             >
               <BiPlus />

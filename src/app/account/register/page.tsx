@@ -145,20 +145,22 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center py-20">
+    <div className="flex flex-col items-center py-10 md:py-20 px-4 md:px-0">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
-      <div className="text-center mb-6">
-        <h1 className="uppercase font-normal text-center text-xl tracking-[.2em] text-[#454545] mb-4">
+      <div className="text-center mb-4 sm:mb-6">
+        <h1 className="uppercase font-normal text-center text-lg sm:text-xl tracking-[.2em] text-[#454545] mb-4">
           Register
         </h1>
-        <h2 className="text-[#454545] text-[14px] text-center font-normal">
+        <h2 className="text-[#454545] text-sm sm:text-[14px] text-center font-normal">
           Please enter the information below:
         </h2>
       </div>
 
       {errorMessage && (
-        <div className="px-5 py-[10px] mb-5 bg-[#E4C4C4] w-[400px] text-center">
-          <p className="text-[14px] text-[#CB2B2B] mt-1">{errorMessage}</p>
+        <div className="px-4 py-2 sm:px-5 sm:py-[10px] mb-4 sm:mb-5 bg-[#E4C4C4] w-full sm:w-[400px] text-center">
+          <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
+            {errorMessage}
+          </p>
         </div>
       )}
 
@@ -172,60 +174,60 @@ export default function Register() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-start gap-4"
+        className="flex flex-col items-start gap-4 w-full sm:max-w-[400px]"
       >
-        <div>
+        <div className="w-full">
           <CustomInput
             {...register("fullName")}
-            className="w-[400px]"
+            className="w-full"
             title="ФИО"
             borders="no-rounded"
             type="text"
           />
           {errors.fullName && (
-            <p className="text-[14px] text-[#CB2B2B] mt-1">
+            <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
               {errors.fullName.message}
             </p>
           )}
         </div>
-        <div>
+        <div className="w-full">
           <CustomInput
             {...register("phone")}
-            className="w-[400px]"
+            className="w-full"
             title="Номер телефона"
             borders="no-rounded"
             type="text"
           />
           {errors.phone && (
-            <p className="text-[14px] text-[#CB2B2B] mt-1">
+            <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
               {errors.phone.message}
             </p>
           )}
         </div>
-        <div>
+        <div className="w-full">
           <CustomInput
             {...register("password")}
-            className="w-[400px]"
+            className="w-full"
             title="Пароль"
             borders="no-rounded"
             type="password"
           />
           {errors.password && (
-            <p className="text-[14px] text-[#CB2B2B] mt-1">
+            <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
               {errors.password.message}
             </p>
           )}
         </div>
-        <div>
+        <div className="w-full">
           <CustomInput
             {...register("rePassword")}
-            className="w-[400px]"
+            className="w-full"
             title="Repassword"
             borders="no-rounded"
             type="password"
           />
           {errors.rePassword && (
-            <p className="text-[14px] text-[#CB2B2B] mt-1">
+            <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
               {errors.rePassword.message}
             </p>
           )}
@@ -233,7 +235,7 @@ export default function Register() {
         <AnimatedButton
           title="Create my account"
           variant="dark"
-          width="w-[400px]"
+          width="w-full"
           type="submit"
         />
       </form>

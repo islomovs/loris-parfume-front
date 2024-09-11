@@ -93,7 +93,7 @@ export default function CollectionsPage({
           {matchedCollection?.nameRu}
         </p>
       </div>
-      <div className="mx-16">
+      <div className="md:mx-16 mx-5">
         <div className="flex flex-row justify-between items-center my-8">
           <p className="text-[15px] text-[#454545] font-normal">
             {totalElements} products

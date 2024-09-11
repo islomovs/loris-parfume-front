@@ -1,5 +1,4 @@
-import { Image } from "antd";
-
+/* eslint-disable @next/next/no-img-element */
 interface ProductCardProps {
   title: string;
   discountPrice?: string;
@@ -28,31 +27,31 @@ export const ProductCard = ({
       </div>
 
       {/* Product Image */}
-      <Image
-        height={360}
-        preview={false}
+      <img
         src={`${baseUrl}/${image}` || ""}
         alt="img"
-        className="object-cover transition-transform duration-500 ease-in-out z-0 mb-[10px]"
+        className="object-cover transition-transform duration-500 ease-in-out z-0 mb-[10px] h-[155px] sm:h-[360px]"
       />
 
       <div className="px-[15px] py-[10px]">
         {/* Product Title */}
-        <p className="text-[15px] font-normal break-words">{title}</p>
+        <p className="text-xs md:text-[15px] font-normal break-words">
+          {title}
+        </p>
 
         {/* Pricing */}
         <div className="mt-2">
           {hasDiscount && originalPrice ? (
             <div className="flex flex-row">
-              <p className="text-[15px] font-normal text-[#454545] line-through mr-1">
+              <p className="text-xs md:text-[15px] font-normal text-[#454545] line-through mr-1">
                 {originalPrice} сум
               </p>
-              <p className="text-[15px] font-normal text-[#454545]">
+              <p className="text-xs md:text-[15px] font-normal text-[#454545]">
                 {discountPrice} сум
               </p>
             </div>
           ) : (
-            <p className="text-[15px] font-normal text-[#454545]">
+            <p className="text-xs md:text-[15px] font-normal text-[#454545]">
               {originalPrice} сум
             </p>
           )}

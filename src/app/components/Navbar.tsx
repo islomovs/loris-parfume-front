@@ -1,9 +1,19 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { DownOutlined, MenuOutlined } from "@ant-design/icons";
-import { Dropdown, Space, Image, MenuProps, Col, Row, Drawer } from "antd";
+import {
+  Dropdown,
+  Space,
+  Image,
+  MenuProps,
+  Row,
+  Col,
+  Drawer,
+  Badge,
+} from "antd";
 import NavButton from "../components/NavButton";
-import { CustomDrawer } from "./CustomDrawer";
 import { cn } from "../../helpers/mergeFunction";
 import { useQuery } from "react-query";
 import { fetchCollectionsData, ICollectionItem } from "@/services/collections";
@@ -16,11 +26,12 @@ import { fetchCataloguesData, ICatalogueItem } from "@/services/catalogues";
 import { useDebounce } from "@/hooks/useDebounce";
 import { fetchProductsData, IData, IProduct } from "@/services/products";
 import { ProductCard } from "./ProductCard";
-import { LiaShoppingBagSolid } from "react-icons/lia"; // Cart icon
+import { LiaShoppingBagSolid } from "react-icons/lia";
+import { CustomDrawer } from "./CustomDrawer";
+import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import { DrawerCartItem } from "./DrawerCartItem";
 
-const items: MenuProps["items"] = [
-  // Dropdown items
-];
+const items: MenuProps["items"] = [];
 
 const doprdownItems = {};
 
@@ -45,20 +56,33 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [searchResults, setSearchResults] = useState<IData | null>(null);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect screen size changes
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize(); // Check initial size
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedToken = localStorage.getItem("token");
       setToken(storedToken);
     }
-  }, []);
-
-  useEffect(() => {
-    if (isSearchOpen) {
+    if (isSearchOpen || isSidebarOpen || open) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-  }, [isSearchOpen]);
+  }, [isSearchOpen, isSidebarOpen, open]);
 
   const showDrawer = () => {
     setOpen(true);
@@ -98,7 +122,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
     }
   );
 
-  const { data, isLoading } = useQuery(
+  const { data } = useQuery(
     ["collectionsAndCategories", page],
     async () => {
       const collectionsResponse = await fetchCollectionsData(page);
@@ -133,6 +157,17 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
     }
   );
 
+  const [expandedCollections, setExpandedCollections] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const toggleCollection = (id: number) => {
+    setExpandedCollections((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   return (
     <>
       <nav
@@ -147,64 +182,106 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         )}
       >
         <div className="flex flex-row items-center px-4 md:px-[50px] pb-4 md:pb-[18px] justify-between">
-          <div className="flex flex-row items-center space-x-4 md:space-x-8 flex-1">
-            {/* Burger Menu Icon for Mobile */}
+          <div className="flex-1 flex items-center justify-between">
             <button
-              className="md:hidden text-xl p-2 focus:outline-none"
+              className="block md:hidden text-xl p-2 focus:outline-none"
               onClick={toggleSidebar}
             >
               <MenuOutlined />
             </button>
-            <Link href="/">
-              <Image
-                preview={false}
-                src="/logo.png"
-                alt="logo"
-                className="max-w-[200px] md:max-w-[290px]"
-              />
-            </Link>
+            <Dropdown
+              className="hidden md:block"
+              menu={{ items }}
+              trigger={["click"]}
+            >
+              <a
+                className="text-xs md:text-[10px] uppercase hover:text-white"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Space>
+                  uzb
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
           </div>
-          <div className="flex flex-row items-center justify-end space-x-2 md:space-x-4 flex-1">
-            <button
-              className="md:hidden text-xl p-2 focus:outline-none"
-              onClick={handleSearchToggle}
-            >
-              <FiSearch />
-            </button>
-            <button
-              className="md:hidden text-xl p-2 focus:outline-none"
-              onClick={showDrawer}
-            >
-              <LiaShoppingBagSolid />
-              {cart && cart.length > 0 && (
-                <span className="ml-1">{totalQuantity}</span>
-              )}
-            </button>
+          <Link href="/">
+            <Image
+              preview={false}
+              src="/logo.png"
+              alt="logo"
+              className="max-w-[100px] md:max-w-[290px]"
+            />
+          </Link>
+
+          <div className="flex flex-row flex-1 justify-end gap-0 md:gap-10">
+            {/* Desktop Mode: Show text */}
             <NavButton
               type="sm"
-              className="hidden md:block"
+              className="hidden text-[10px] uppercase tracking-[.2em] md:block"
               link={token ? "/account" : "/account/login"}
             >
-              account
+              Account
             </NavButton>
             <NavButton
               type="sm"
-              className="hidden md:block"
+              className="hidden text-[10px] uppercase tracking-[.2em] md:block cursor-pointer"
               onClick={handleSearchToggle}
             >
-              <FiSearch />
+              Search
             </NavButton>
             <NavButton
               type="md"
-              className="hidden md:block"
+              className="hidden text-xs uppercase tracking-[.2em] md:block cursor-pointer "
               onClick={showDrawer}
             >
-              <LiaShoppingBagSolid />
+              Shopping cart
               {cart && cart.length > 0 && (
-                <span className="ml-1">{totalQuantity}</span>
+                <span className="ml-1">({totalQuantity})</span>
               )}
             </NavButton>
+
+            {/* Mobile Mode: Show Icons */}
+            <button
+              className="md:hidden text-xl p-2 focus:outline-none flex justify-center items-center"
+              onClick={handleSearchToggle}
+            >
+              <FiSearch
+                className={cn("w-5 h-5 text-white", {
+                  "text-black": variant == "filled",
+                })}
+              />
+            </button>
+            <button
+              className="md:hidden text-xl p-2 focus:outline-none flex justify-center items-center"
+              onClick={showDrawer}
+            >
+              {cart && cart.length > 0 ? (
+                <Badge
+                  dot={true}
+                  style={{
+                    backgroundColor: variant === "filled" ? "black" : "white", // Conditional badge color
+                    color: variant === "filled" ? "black" : "white", // Adjust text color if necessary
+                  }}
+                  color="white"
+                  offset={[-2, 6]}
+                >
+                  <LiaShoppingBagSolid
+                    className={cn("w-5 h-5 text-white", {
+                      "text-black": variant == "filled",
+                    })}
+                  />
+                </Badge>
+              ) : (
+                <LiaShoppingBagSolid
+                  className={cn("w-5 h-5 text-white", {
+                    "text-black": variant == "filled",
+                  })}
+                />
+              )}
+            </button>
           </div>
+
           {open && <CustomDrawer onClose={onClose} isOpen={open} />}
         </div>
         <div className="hidden md:flex flex-row items-center justify-center flex-wrap">
@@ -241,13 +318,13 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             Branches
           </NavButton>
           <div
-            className="relative py-[9px] text-xs md:text-[18px] tracking-[.2em] uppercase my-2 md:my-[6px] mx-2 md:mx-[14px] font-montserrat bg-transparent cursor-pointer group"
+            className="relative py-[9px] text-xs tracking-[.2em] uppercase my-2 md:my-[6px] mx-2 md:mx-[14px] font-montserrat bg-transparent cursor-pointer group after:bg-black after:absolute after:h-[2px] after:w-0 after:top-[38px] after:left-0 hover:after:w-full after:transition-all after:duration-300"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             e-catalog
             {isHovered && (
-              <ul className="absolute left-0 top-full bg-white border text-[#454545] w-48 z-10 p-4">
+              <ul className="absolute left-0 top-[40px] bg-white border text-[#454545] w-48 z-10 p-4">
                 {!isLoadingCatalogues
                   ? catalogues?.map((catalogue: ICatalogueItem) => (
                       <li key={catalogue.id} className="px-4 py-2">
@@ -310,20 +387,35 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                     {isSearching ? (
                       <p>Loading...</p>
                     ) : searchResults && searchResults?.content?.length > 0 ? (
-                      searchResults.content
-                        .slice(0, 3)
-                        .map((product: IProduct) => (
-                          <Col key={product.id} xs={24} sm={12} md={8}>
-                            <Link href={`products/${product.slug}`}>
-                              <ProductCard
-                                image={product.imagesList[0]}
-                                title={product.nameRu}
-                                originalPrice={product.price}
-                                hasDiscount={product.discountPercent > 0}
-                              />
-                            </Link>
-                          </Col>
-                        ))
+                      <Row gutter={[20, 30]}>
+                        {searchResults.content
+                          .slice(0, 3)
+                          .map((product: IProduct) => (
+                            <Col key={product.id} xs={24} sm={12} md={8}>
+                              {isMobile ? (
+                                // Render DrawerCartItem for mobile mode
+                                <DrawerCartItem
+                                  isSimplified={true}
+                                  id={product.id}
+                                  slug={product.slug}
+                                  title={product.nameRu}
+                                  price={Number(product.price)}
+                                  image={product.imagesList[0]}
+                                />
+                              ) : (
+                                // Render ProductCard for desktop mode
+                                <Link href={`products/${product.slug}`}>
+                                  <ProductCard
+                                    image={product.imagesList[0]}
+                                    title={product.nameRu}
+                                    originalPrice={product.price}
+                                    hasDiscount={product.discountPercent > 0}
+                                  />
+                                </Link>
+                              )}
+                            </Col>
+                          ))}
+                      </Row>
                     ) : (
                       <p>No products found</p>
                     )}
@@ -341,16 +433,15 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         closable={false}
         onClose={toggleSidebar}
         open={isSidebarOpen}
-        className="md:hidden"
-        bodyStyle={{
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          height: "100%",
+        width="80%"
+        className="flex flex-col justify-between md:hidden"
+        style={{
+          backgroundColor: "#454545",
+          color: "white",
+          overflowY: "hidden",
         }}
       >
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 px-6">
           <Link
             href="/"
             className="text-lg font-semibold"
@@ -359,14 +450,59 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             Home
           </Link>
           {data?.collections?.map((collection: ICollectionItem) => (
-            <Link
-              key={collection.id}
-              href={`/collections/${collection.slug.toLowerCase()}`}
-              className="text-lg font-semibold"
-              onClick={toggleSidebar}
-            >
-              {collection.nameRu}
-            </Link>
+            <div key={collection.id} className="relative">
+              <div
+                className="flex justify-between items-center cursor-pointer"
+                style={{
+                  borderBottom: "1px solid white",
+                  paddingBottom: "10px",
+                }}
+              >
+                <Link
+                  href={`/collections/${collection.slug.toLowerCase()}`}
+                  className="text-lg font-semibold flex-1"
+                  onClick={toggleSidebar}
+                >
+                  {collection.nameRu}
+                </Link>
+                <button
+                  className="ml-2"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevents the event from bubbling up to the link
+                    e.preventDefault(); // Prevents the default link action when the button is clicked
+                    toggleCollection(collection.id);
+                  }}
+                >
+                  {expandedCollections[collection.id] ? (
+                    <MinusOutlined style={{ color: "white" }} />
+                  ) : (
+                    <PlusOutlined style={{ color: "white" }} />
+                  )}
+                </button>
+              </div>
+
+              {/* Categories collapse */}
+              {expandedCollections[collection.id] && (
+                <div className="ml-4 mt-2">
+                  {data.categories
+                    .filter(
+                      (category: ICategoryItem) =>
+                        category.collectionId === collection.id
+                    )
+                    .map((category: ICategoryItem) => (
+                      <Link
+                        key={category.id}
+                        href={`/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`}
+                        className="block text-sm py-1 border-b border-white"
+                        style={{ color: "white" }}
+                        onClick={toggleSidebar}
+                      >
+                        {category.nameEng}
+                      </Link>
+                    ))}
+                </div>
+              )}
+            </div>
           ))}
           <Link
             href="/branches"
@@ -385,13 +521,17 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         </div>
 
         {/* Account and Language Dropdown Moved to Bottom */}
-        <div className="space-y-4">
-          <NavButton type="sm" link={token ? "/account" : "/account/login"}>
+        <div className="flex flex-row justify-around items-end space-y-4 px-6">
+          <Link
+            href={token ? "/account" : "/account/login"}
+            className="text-sm text-[#FFFFFF80] font-normal"
+            onClick={toggleSidebar}
+          >
             Account
-          </NavButton>
+          </Link>
           <Dropdown menu={{ items }} trigger={["click"]}>
             <a
-              className="text-xs md:text-[10px] uppercase hover:text-black"
+              className="text-xs md:text-[10px] uppercase hover:text-white"
               onClick={(e) => e.preventDefault()}
             >
               <Space>
@@ -404,8 +544,11 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
       </Drawer>
 
       {/* Overlay and No-Scroll */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 bg-black opacity-50 z-10"></div>
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-10"
+          onClick={toggleSidebar}
+        ></div>
       )}
     </>
   );

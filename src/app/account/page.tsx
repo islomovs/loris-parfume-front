@@ -44,7 +44,6 @@ export default function Account() {
     error: ordersError,
     isLoading: ordersLoading,
   } = useQuery("orders", () => fetchAllOrders(1), {
-    // Adjust page number as needed
     onError: (error: any) => {
       console.error("Failed to fetch all orders:", error);
     },
@@ -80,17 +79,15 @@ export default function Account() {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
-  console.log("ORDERS: ", ordersData);
-
   return (
-    <div className="flex flex-col items-start py-20 px-20">
-      <div className="flex flex-col my-10">
-        <h1 className="text-[#454545] font-normal uppercase tracking-[.2em] text-xl mb-[14px]">
+    <div className="flex flex-col items-start py-8 px-4 md:py-20 md:px-20">
+      <div className="flex flex-col my-4 md:my-10">
+        <h1 className="text-[#454545] font-normal uppercase tracking-[.2em] text-lg md:text-xl mb-[14px]">
           MY ACCOUNT
         </h1>
       </div>
-      <div className="flex flex-row w-full gap-16">
-        <div className="flex flex-col w-full my-[50px] flex-[6]">
+      <div className="flex flex-col md:flex-row w-full gap-4 md:gap-16">
+        <div className="flex flex-col w-full my-4 md:my-[50px] flex-[6]">
           <h1 className="w-full block text-[11px] font-light uppercase tracking-[.2em] text-[#9D9D9D] pb-[10px] mb-[34px] border-b border-solid border-b-[#e3e3e3]">
             MY ORDERS
           </h1>
@@ -122,7 +119,11 @@ export default function Account() {
                         order.isPaid ? "text-green-500" : "text-[#CB2B2B]"
                       } uppercase`}
                     >
-                      {order.isPaid ? "Paid" : "Not Paid"}
+                      {order.isPaid
+                        ? "Paid"
+                        : !order.isPaid && order.paymentType === "uzum nasiya"
+                        ? "Pending"
+                        : "Not Paid"}
                     </p>
                   </div>
                 </div>
@@ -171,13 +172,19 @@ export default function Account() {
                           title="Payment Type"
                           description={order.paymentType}
                         />
-                        {order.paymentType == "CASH" ? (
+                        {order.paymentType === "CASH" ? (
                           " "
                         ) : (
                           <OrderDetailsItem
                             title="Payment Link"
                             description={order.paymentLink}
                             isDescriptionLink
+                          />
+                        )}
+                        {order.paymentType === "uzum nasiya" && (
+                          <OrderDetailsItem
+                            title="Status"
+                            description="Pending"
                           />
                         )}
                       </div>
@@ -210,14 +217,14 @@ export default function Account() {
         </div>
 
         {/* Profile Section */}
-        <div className="flex flex-col my-[50px] flex-[4]">
+        <div className="flex flex-col my-4 md:my-[50px] flex-[4]">
           <div className="w-full">
             <h1 className="w-full block text-[11px] font-light uppercase tracking-[.2em] text-[#9D9D9D] pb-[10px] mb-[34px] border-b border-solid border-b-[#e3e3e3]">
               PROFILE
             </h1>
             {!isEditing ? (
-              <div className="flex flex-row items-start justify-between">
-                <div className="mr-6">
+              <div className="flex flex-col md:flex-row items-start justify-between">
+                <div className="mb-4 md:mr-6">
                   <p className="text-[#454545] font-normal text-[14px]">
                     Name: {userInfo?.fullName}
                   </p>
@@ -252,10 +259,10 @@ export default function Account() {
                 </button>
               </form>
             )}
-            <div className="border-t border-solid border-t-[#e3e3e3] mt-20">
+            <div className="border-t border-solid border-t-[#e3e3e3] mt-10 md:mt-20">
               <button
                 onClick={handleLogout}
-                className="uppercase text-[11px] text-[9D9D9D] tracking-[.2em] font-normal mb-[25px] text-start"
+                className="uppercase text-[11px] text-[#9D9D9D] tracking-[.2em] font-normal mb-[25px] text-start"
               >
                 Log out
               </button>

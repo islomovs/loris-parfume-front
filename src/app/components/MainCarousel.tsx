@@ -32,7 +32,7 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
       speed={600}
       fadeEffect={{ crossFade: true }}
       pagination={pagination}
-      className="w-full h-[300px] sm:h-[500px] md:h-[600px] lg:h-[751px]" // Responsive height adjustments
+      className="w-full h-screen sm:h-[500px] md:h-[600px] lg:h-[751px]"
     >
       {bannersData?.map((banner, index) => (
         <SwiperSlide key={index}>

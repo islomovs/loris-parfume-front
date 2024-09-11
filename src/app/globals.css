@@ -73,3 +73,24 @@ a:hover {
 .product-image .ant-image .ant-image-img {
   height: 100%;
 }
+
+/* image pagination component */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Custom drawer styles for mobile */
+.custom-drawer.ant-drawer-content-wrapper {
+  width: 100% !important; /* Set default width to 100% */
+}
+
+@media (max-width: 640px) {
+  /* Adjust the width for small screens (e.g., mobile devices) */
+  .custom-drawer.ant-drawer-content-wrapper {
+    width: 80% !important; /* Set width to 80% on mobile */
+  }
+}

@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { GrLocationPin } from "react-icons/gr";
+import { IBranchItem } from "@/services/branches";
 
-// Branch data with names and coordinates
-const branches = [
-  { name: "Branch 1", coordinates: [41.311081, 69.240562] },
-  { name: "Branch 2", coordinates: [41.327069, 69.281797] },
-  { name: "Branch 3", coordinates: [41.29746, 69.24987] },
-  { name: "Branch 4", coordinates: [41.315387, 69.286304] },
-  { name: "Branch 5", coordinates: [41.309078, 69.248819] },
-  { name: "Branch 6", coordinates: [41.324345, 69.293992] },
-  { name: "Branch 7", coordinates: [41.320841, 69.251511] },
-  { name: "Branch 8", coordinates: [41.312306, 69.275799] },
-  { name: "Branch 9", coordinates: [41.311845, 69.279619] },
-  { name: "Branch 10", coordinates: [41.30963, 69.282421] },
-  { name: "Branch 11", coordinates: [41.304975, 69.272304] },
-];
+interface YandexMapProps {
+  branches: IBranchItem[];
+}
 
-const YandexMap = () => {
+const YandexMap: React.FC<YandexMapProps> = ({ branches = [] }) => {
   const [mapInstance, setMapInstance] = useState<any>(null);
   const [placemarks, setPlacemarks] = useState<any[]>([]);
 
   useEffect(() => {
+    if (!branches.length) {
+      console.warn("Branches data is empty or not provided.");
+      return; // Exit if no branches data is available
+    }
+
     function initMap() {
       const mapContainer = document.getElementById("map");
 
@@ -32,20 +26,25 @@ const YandexMap = () => {
         controls: ["zoomControl", "fullscreenControl"], // Add zoom and fullscreen controls
       });
 
-      // Create placemarks for each branch
-      const placemarksArray = branches.map((branch) => {
-        const placemark = new window.ymaps.Placemark(
-          branch.coordinates,
-          {
-            balloonContent: `<strong>${branch.name}</strong>`,
-          },
-          {
-            preset: "islands#redDotIcon",
+      const placemarksArray = branches
+        .map((branch: IBranchItem) => {
+          if (!branch.latitude || !branch.longitude) {
+            console.warn(`Missing coordinates for branch: ${branch.name}`);
+            return null;
           }
-        );
-        myMap.geoObjects.add(placemark); // Add placemark to map
-        return { placemark, name: branch.name }; // Store placemark with branch name
-      });
+          const placemark = new window.ymaps.Placemark(
+            [branch.longitude, branch.latitude],
+            {
+              balloonContent: `<strong>${branch.name}</strong>`,
+            },
+            {
+              preset: "islands#redDotIcon",
+            }
+          );
+          myMap.geoObjects.add(placemark); // Add placemark to map
+          return { placemark, name: branch.name }; // Store placemark with branch name
+        })
+        .filter(Boolean); // Filter out null values if coordinates were missing
 
       setMapInstance(myMap); // Store map instance in state
       setPlacemarks(placemarksArray); // Store placemarks in state
@@ -60,7 +59,12 @@ const YandexMap = () => {
       document.head.appendChild(script);
 
       script.onload = () => {
+        console.log("Yandex Maps API loaded successfully.");
         window.ymaps.ready(initMap);
+      };
+
+      script.onerror = () => {
+        console.error("Failed to load Yandex Maps API.");
       };
     } else {
       window.ymaps.ready(initMap);
@@ -72,10 +76,15 @@ const YandexMap = () => {
         document.head.removeChild(scriptElement);
       }
     };
-  }, []);
+  }, [branches]);
 
   // Handle branch list item click to focus on placemark
   const handleBranchClick = (branchName: string) => {
+    if (!placemarks.length) {
+      console.error("Placemarks not initialized or empty.");
+      return;
+    }
+
     const selectedPlacemark = placemarks.find((p) => p.name === branchName);
     if (selectedPlacemark && mapInstance) {
       const coords = selectedPlacemark.placemark.geometry.getCoordinates();
@@ -84,35 +93,21 @@ const YandexMap = () => {
         duration: 300, // Smooth transition animation
       });
       selectedPlacemark.placemark.balloon.open(); // Open balloon for the placemark
+    } else {
+      console.error("Placemark not found for branch:", branchName);
     }
   };
 
   return (
-    <div className="yandex-map-container" style={{ display: "flex" }}>
+    <div className="yandex-map-container flex flex-col md:flex-row">
       {/* Branch list on the left */}
-      <div
-        style={{
-          flex: "1",
-          overflowY: "auto",
-          maxHeight: "500px",
-          paddingRight: "10px",
-        }}
-      >
-        <ul style={{ listStyleType: "none", padding: 0 }}>
-          {branches.map((branch) => (
-            <li key={branch.name}>
+      <div className="flex-1 overflow-y-auto max-h-[200px] md:max-h-[500px] pr-2 md:pr-[10px] md:mb-0 mb-4">
+        <ul className="list-none p-0">
+          {branches.map((branch: IBranchItem) => (
+            <li key={branch.id} className="mb-2">
               <button
                 onClick={() => handleBranchClick(branch.name)}
-                style={{
-                  cursor: "pointer",
-                  padding: "10px",
-                  marginBottom: "5px",
-                  backgroundColor: "#f0f0f0",
-                  border: "none",
-                  borderRadius: "5px",
-                  width: "100%",
-                  textAlign: "left",
-                }}
+                className="cursor-pointer p-2 mb-[5px] text-white bg-primary border-none w-full text-left rounded-md hover:bg-primary-dark"
               >
                 {branch.name}
               </button>
@@ -121,7 +116,7 @@ const YandexMap = () => {
         </ul>
       </div>
       {/* Yandex map display */}
-      <div id="map" style={{ width: "100%", height: "500px", flex: "3" }}></div>
+      <div id="map" className="w-full h-[300px] md:h-[500px] flex-[3]"></div>
     </div>
   );
 };

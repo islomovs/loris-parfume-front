@@ -19,10 +19,12 @@ export const CheckoutCartItem: React.FC<{
         return 0;
       }
 
+      // Calculate the discounted total: every second item is half price
       let total = 0;
-      for (let i = 0; i < quantity; i++) {
-        total += i % 2 === 0 ? itemBasePrice : itemBasePrice / 2;
+      for (let i = 1; i <= quantity; i++) {
+        total += i % 2 === 0 ? itemBasePrice / 2 : itemBasePrice;
       }
+
       return total;
     };
 
@@ -33,7 +35,7 @@ export const CheckoutCartItem: React.FC<{
   const isDiscountApplied = quantity > 1;
 
   // Calculate original total without discount for display purposes
-  const originalTotal = price * quantity;
+  const originalTotal = Number(price) * quantity;
 
   return (
     <div className="flex flex-row items-center">
@@ -49,7 +51,9 @@ export const CheckoutCartItem: React.FC<{
       </Badge>
       <div className="flex-1 flex flex-col justify-center pl-[14px]">
         <h1 className="text-[14px] font-normal">{title}</h1>
-        <p className="text-xs font-normal text-[#0000008F] my-1">{price}</p>
+        <p className="text-xs font-normal text-[#0000008F] my-1">
+          {Number(price).toFixed(2)} сум
+        </p>
         <p className="text-xs font-normal text-[#0000008F]">{subtitle}</p>
       </div>
       <div className="flex flex-col justify-center items-center pl-[14px]">
@@ -64,7 +68,7 @@ export const CheckoutCartItem: React.FC<{
           </>
         ) : (
           <p className="text-[14px] font-normal">
-            {discountedTotal.toFixed(2)} сум
+            {originalTotal.toFixed(2)} сум
           </p>
         )}
       </div>

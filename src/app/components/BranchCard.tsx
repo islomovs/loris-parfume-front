@@ -13,16 +13,16 @@ export const BranchCard: React.FC<{
         {address}
       </h2>
       <p className="text-[14px] font-normal text-[#454545]">
-        Tel:{" "}
+        Tel:
         <a href={`Tel:${phone}`} className="underline hover:text-[#454545]">
           {phone}
         </a>
       </p>
       <a
-        href="#"
+        href={location}
         className="underline text-wrap text-[#454545] hover:text-[#454545]"
       >
-        {location}
+        open in map
       </a>
     </div>
   );

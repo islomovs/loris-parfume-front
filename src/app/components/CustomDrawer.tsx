@@ -58,7 +58,6 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
         });
       }
     });
-
     handleClose();
     router.push("/checkouts");
   }, [cart, apiQuantity, mutation, handleClose, router]);
@@ -69,6 +68,7 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
 
   return (
     <Drawer
+      width={window.innerWidth > 768 ? "378" : "80%"}
       title={
         <div className="flex flex-row items-center justify-between">
           <div className="text-base uppercase font-normal tracking-[.2em]">
