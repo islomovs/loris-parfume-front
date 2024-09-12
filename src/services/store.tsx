@@ -13,6 +13,7 @@ interface CartState {
     quantity: number,
     sizeId?: number
   ) => void;
+  removeCartItem: (id: number, sizeId?: number) => void; // Add this line
   clearCart: () => void;
   totalSum: () => number;
 }
@@ -68,13 +69,21 @@ const useCartStore = create<CartState>()(
         });
         get().totalSum();
       },
+      removeCartItem: (id, sizeId) => {
+        // Implement removeCartItem function
+        set((state) => {
+          const updatedCart = state.cart.filter(
+            (item) => !(item.id === id && item.sizeId === sizeId)
+          );
+          return { cart: updatedCart };
+        });
+      },
       clearCart: () => set({ cart: [] }),
       totalSum: () => {
         const cart = get().cart;
         let total = 0;
 
         if (!cart || cart.length === 0) {
-          console.log("Cart is empty or not loaded correctly.");
           return total; // Returns 0 if cart is empty or undefined
         }
 
@@ -110,17 +119,9 @@ const useCartStore = create<CartState>()(
             // Apply 50% discount to every second item
             const effectivePrice = (index + 1) % 2 === 0 ? price / 2 : price;
 
-            // Debugging output to verify price calculations
-            console.log(
-              `Calculating total for item ${item.slug}: Original Price = ${price}, Effective Price = ${effectivePrice}`
-            );
-
             total += effectivePrice;
           });
         });
-
-        // Final debug output to verify total calculation
-        console.log("Final Total Sum:", total);
 
         return total || 0; // Ensure total is a number
       },

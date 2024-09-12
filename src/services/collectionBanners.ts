@@ -13,9 +13,12 @@ export interface ICollectionBanner {
 
 export interface IBanner {
   id: number;
-  imageNameEng: string;
-  imageNameRu: string;
-  imageNameUz: string;
+  desktopImageNameUz: string;
+  desktopImageNameRu: string;
+  desktopImageNameEng: string;
+  mobileImageNameUz: string;
+  mobileImageNameRu: string;
+  mobileImageNameEng: string;
   isActive: true;
   redirectTo: string;
   titleEng: string;

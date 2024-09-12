@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { BiBasket } from "react-icons/bi";
 import { CustomDropdown } from "../components/CustomDropdown";
 import { CustomInput } from "../components/CustomInput";
@@ -10,21 +10,22 @@ import useOrderStore from "../../services/orderStore";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "react-query";
 import { createOrder, OrderData } from "../../services/orders";
+import { fetchNearestBranch } from "../../services/orders";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import YandexMap from "../components/TYandexMap";
+import debounce from "lodash/debounce";
 
-const options = [
+const deliveryOptions = [
   { id: 0, title: "Самовывоз" },
   { id: 1, title: "Доставка" },
 ];
 
-const paymentOptions = [
+const allPaymentOptions = [
   { id: 0, title: "cash" },
-  { id: 1, title: "uzum nasiya" },
-  { id: 2, title: "payme" },
-  { id: 3, title: "click" },
+  { id: 1, title: "payme" },
+  { id: 2, title: "click" },
 ];
 
 type FormData = {
@@ -42,18 +43,17 @@ export default function Checkout() {
   const { addOrder } = useOrderStore();
   const { handleSubmit, setValue, control, register } = useForm<FormData>();
   const [isDelivery, setIsDelivery] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
+  const [filteredPaymentOptions, setFilteredPaymentOptions] =
+    useState(allPaymentOptions);
+  const [latitude, setLatitude] = useState<number>(42.0);
+  const [longitude, setLongitude] = useState<number>(43.0);
+  const [branchName, setBranchName] = useState<string>(""); // State for branch name
   const router = useRouter();
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
+  const initialRender = useRef(true);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Define the mutation using React Query
-  const mutation = useMutation(
+  // Define the mutation for creating an order using React Query
+  const orderMutation = useMutation(
     (orderData: OrderData) => createOrder(orderData),
     {
       onMutate: () => {
@@ -63,7 +63,7 @@ export default function Checkout() {
         loadingBarRef.current?.complete();
         addOrder(data);
 
-        // Check if the payment type is "Uzum Nasiya"
+        // Handle specific payment types
         if (data.paymentType.toLowerCase() === "uzum nasiya") {
           alert("Answer for your request will be sent to your phone number");
         } else if (
@@ -84,9 +84,50 @@ export default function Checkout() {
     }
   );
 
+  // Define the mutation for fetching the nearest branch using React Query
+  const nearestBranchMutation = useMutation(
+    ({ longitude, latitude }: { longitude: number; latitude: number }) =>
+      fetchNearestBranch(longitude, latitude),
+    {
+      onSuccess: (data) => {
+        console.log("Nearest branch data:", data);
+        setBranchName(data?.name); // Set the branch name from the response
+      },
+      onError: (error) => {
+        console.error("Error fetching nearest branch:", error);
+      },
+    }
+  );
+
+  // Debounced function to fetch nearest branch
+  const fetchNearestBranchDebounced = useCallback(
+    debounce((longitude, latitude) => {
+      nearestBranchMutation.mutate({ longitude, latitude });
+    }, 500),
+    [] // Ensure debounce function doesn't change on re-renders
+  );
+
+  // Effect to call mutation when longitude or latitude changes
+  useEffect(() => {
+    if (!initialRender.current) {
+      fetchNearestBranchDebounced(longitude, latitude);
+    } else {
+      initialRender.current = false;
+    }
+  }, [longitude, latitude]); // Only run on coordinates update
+
   const handleDeliveryChange = (value: string) => {
     setIsDelivery(value === "Доставка");
     setValue("deliveryType", value);
+
+    // Filter payment options based on delivery type immediately after selection
+    if (value === "Доставка") {
+      setFilteredPaymentOptions(
+        allPaymentOptions.filter((option) => option.title !== "cash")
+      );
+    } else {
+      setFilteredPaymentOptions(allPaymentOptions);
+    }
   };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -119,11 +160,11 @@ export default function Checkout() {
       ordersItemsList: ordersItemsList,
     };
 
-    mutation.mutate(orderData);
+    orderMutation.mutate(orderData);
   };
 
   return (
-    <section className="px-5 md:px-8 lg:px-16">
+    <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
       <div className="py-2">
         <header className="flex flex-row justify-between items-center md:px-[104px] py-4 md:py-[21px]">
@@ -148,7 +189,7 @@ export default function Checkout() {
             >
               <CustomDropdown
                 name="deliveryType"
-                options={options}
+                options={deliveryOptions}
                 title="Тип доставки"
                 control={control}
                 onChange={handleDeliveryChange}
@@ -172,11 +213,13 @@ export default function Checkout() {
                 borders="rounded"
                 title="Номер телефона"
               />
+              {/* Branch Name Input */}
               <CustomInput
-                {...register("branch")}
+                value={branchName}
                 type="text"
                 borders="rounded"
                 title="Филиал"
+                disabled // Make the input field unchangeable
               />
               <CustomInput
                 {...register("address")}
@@ -191,16 +234,16 @@ export default function Checkout() {
               />
               <CustomDropdown
                 name="paymentType"
-                options={paymentOptions}
+                options={filteredPaymentOptions}
                 title="Тип оплаты"
                 control={control}
               />
               <button
                 type="submit"
                 className="w-full bg-[#454545] p-[14px] font-semibold text-lg md:text-xl text-white rounded-[5px]"
-                disabled={mutation.isLoading}
+                disabled={orderMutation.isLoading}
               >
-                {mutation.isLoading ? "Processing..." : "Сделать оплату"}
+                {orderMutation.isLoading ? "Processing..." : "Сделать оплату"}
               </button>
             </form>
 
@@ -231,7 +274,7 @@ export default function Checkout() {
               <div className="w-full flex flex-col gap-2">
                 <div className="flex flex-row justify-between text-base md:text-[19px] font-semibold text-[#454545]">
                   <p>Total</p>
-                  <p>UZS {isMounted ? totalSum() : 0} сум</p>
+                  <p>UZS {totalSum().toFixed(2)} сум</p>
                 </div>
               </div>
             </div>

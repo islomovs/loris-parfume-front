@@ -8,10 +8,12 @@ interface ICustomInputProps {
   borders: "rounded" | "no-rounded";
   className?: string;
   type: "password" | "number" | "text";
+  value?: string; // Add the value prop
+  disabled?: boolean; // Add the disabled prop
 }
 
 export const CustomInput = forwardRef<HTMLInputElement, ICustomInputProps>(
-  ({ title, borders, className, type, ...rest }, ref) => {
+  ({ title, borders, className, type, value, disabled, ...rest }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const togglePasswordVisibility = () => {
@@ -31,6 +33,8 @@ export const CustomInput = forwardRef<HTMLInputElement, ICustomInputProps>(
           )}
           type={isPasswordVisible || type === "text" ? "text" : "password"}
           placeholder=" "
+          value={value} // Pass the value prop
+          disabled={disabled} // Pass the disabled prop
           {...rest}
         />
         {type === "password" && (

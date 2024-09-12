@@ -5,6 +5,8 @@ import { UnderlinedButton } from "./UnderlinedButton";
 import { removeFromCart, getCartItems } from "../../services/cart";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import useCartStore from "@/services/store";
+import { ICartItem } from "@/services/cart"; // Adjust the import path if needed
+import { message } from "antd"; // Import message from Ant Design
 
 interface IDrawerCartItemProps {
   id: number;
@@ -16,6 +18,7 @@ interface IDrawerCartItemProps {
   sizeName?: string;
   sizeId?: number;
   isSimplified?: boolean; // Prop to control simplified view
+  onClick?: () => void;
 }
 
 export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
@@ -28,31 +31,45 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
   sizeName,
   sizeId,
   isSimplified = false, // Default to false if not provided
+  onClick,
 }) => {
   const [quantity, setQuantity] = useState(qty); // Use optional qty with default
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const { setCartItems, updateCartItemQuantity } = useCartStore(
-    (state) => state
-  );
+  const { setCartItems, updateCartItemQuantity, removeCartItem, cart } =
+    useCartStore((state) => state);
 
   useEffect(() => {
     updateCartItemQuantity(id, quantity, sizeId);
   }, [quantity, id, sizeId, updateCartItemQuantity]);
 
   const handleRemove = async () => {
-    if (sizeId !== null) {
-      await removeFromCart(slug, sizeId);
+    const token = localStorage.getItem("token");
+    if (token) {
+      // User is logged in, proceed with API call
+      if (sizeId !== null) {
+        await removeFromCart(slug, sizeId);
+      } else {
+        await removeFromCart(slug);
+      }
+      const updatedCart = await getCartItems();
+      setCartItems(updatedCart?.data);
+      message.success("Item removed from cart.");
     } else {
-      await removeFromCart(slug);
+      // User is not logged in, remove from local storage only
+      removeCartItem(id, sizeId);
+      // Directly filter and update the cart state
+      const updatedCart = cart.filter(
+        (item) => !(item.id === id && item.sizeId === sizeId)
+      );
+      setCartItems(updatedCart);
+      message.info("Item removed from cart.");
     }
-    const updatedCart = await getCartItems();
-    setCartItems(updatedCart?.data);
   };
 
   if (isSimplified) {
     // Render only image, title, and price in simplified mode
     return (
-      <div className="flex flex-row gap-5 min-h-[180px]">
+      <div className="flex flex-row gap-5 min-h-[180px]" onClick={onClick}>
         <div className="w-24 md:w-[120px] flex items-center">
           <img src={`${baseUrl}/${image}`} alt="cart item" />
         </div>

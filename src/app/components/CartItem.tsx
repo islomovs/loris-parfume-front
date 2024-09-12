@@ -5,6 +5,7 @@ import { UnderlinedButton } from "../components/UnderlinedButton";
 import useCartStore from "@/services/store";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { removeFromCart, getCartItems } from "../../services/cart";
+import { ICartItem } from "@/services/cart"; // Import your ICartItem type if needed
 
 interface ICartItemProps {
   id: number;
@@ -29,21 +30,37 @@ export const CartItem: React.FC<ICartItemProps> = ({
 }) => {
   const [quantity, setQuantity] = useState(qty);
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const { setCartItems, updateCartItemQuantity } = useCartStore(
-    (state) => state
-  );
+  const { setCartItems, updateCartItemQuantity, removeCartItem, cart } =
+    useCartStore((state) => state);
 
   useEffect(() => {
     updateCartItemQuantity(id, quantity, sizeId);
   }, [quantity, id, sizeId, updateCartItemQuantity]);
 
   const handleRemove = async () => {
-    try {
-      await removeFromCart(slug, sizeId);
-      const updatedCart = await getCartItems();
-      setCartItems(updatedCart?.data);
-    } catch (error) {
-      console.error("Failed to remove item from cart:", error);
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // User is logged in, proceed with API call
+      try {
+        if (sizeId !== null) {
+          await removeFromCart(slug, sizeId);
+        } else {
+          await removeFromCart(slug);
+        }
+        const updatedCart = await getCartItems();
+        setCartItems(updatedCart?.data);
+      } catch (error) {
+        console.error("Failed to remove item from cart:", error);
+      }
+    } else {
+      // User is not logged in, remove from local storage only
+      removeCartItem(id, sizeId);
+      const updatedCart = cart.filter(
+        (item) => !(item.id === id && item.sizeId === sizeId)
+      );
+      setCartItems(updatedCart);
+      console.info("Item removed from cart.");
     }
   };
 

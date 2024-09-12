@@ -1,6 +1,5 @@
 import { axiosInstance } from "../utils/axiosInstance";
 
-// Define the types for the order and order items
 export interface OrderItem {
   itemId: number;
   sizeId: number;
@@ -23,12 +22,11 @@ export interface OrderData {
   latitude: number;
   deliverySum: number;
   totalSum: number;
-  paymentType: string; // Should match 'payme', 'click', 'cash', 'uzum nasiya'
+  paymentType: string;
   returnUrl: string;
   ordersItemsList: OrderItem[];
 }
 
-// Function to create the order
 export const createOrder = async (orderData: OrderData) => {
   try {
     const response = await axiosInstance.post(
@@ -38,19 +36,34 @@ export const createOrder = async (orderData: OrderData) => {
     return response.data;
   } catch (err: any) {
     console.error("Failed to create order:", err);
-    throw err; // Re-throwing the error to handle it in the calling function
+    throw err;
   }
 };
 
 export const fetchAllOrders = async (page: number = 1) => {
   try {
-    // Making a POST request with the page number in the request body
     const response = await axiosInstance.post(
       `/api/v1/orders/allMy?page=${page}`
     );
     return response.data;
   } catch (err: any) {
     console.error("Failed to fetch all orders:", err);
-    throw err; // Re-throwing the error to handle it in the calling function
+    throw err;
+  }
+};
+
+export const fetchNearestBranch = async (
+  longitude: number,
+  latitude: number
+) => {
+  try {
+    const response = await axiosInstance.post("/api/v1/branches/nearest", {
+      longitude,
+      latitude,
+    });
+    return response.data;
+  } catch (err: any) {
+    console.error("Failed to fetch nearest branches:", err);
+    throw err;
   }
 };

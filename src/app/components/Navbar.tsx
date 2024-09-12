@@ -30,6 +30,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CustomDrawer } from "./CustomDrawer";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { DrawerCartItem } from "./DrawerCartItem";
+import { useRouter } from "next/navigation";
 
 const items: MenuProps["items"] = [];
 
@@ -57,6 +58,16 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
   const [searchResults, setSearchResults] = useState<IData | null>(null);
 
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
+
+  // Function to handle navigation to product page
+  const navigateToProduct = (productSlug: string) => {
+    // Construct the URL for the product path
+    const productPath = `/products/${productSlug}`;
+
+    // Replace the current URL with the product URL
+    router.replace(productPath);
+  };
 
   // Detect screen size changes
   useEffect(() => {
@@ -386,35 +397,42 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                   <Row gutter={[20, 30]}>
                     {isSearching ? (
                       <p>Loading...</p>
-                    ) : searchResults && searchResults?.content?.length > 0 ? (
+                    ) : searchResults && searchResults.content?.length > 0 ? (
                       <Row gutter={[20, 30]}>
-                        {searchResults.content
-                          .slice(0, 3)
-                          .map((product: IProduct) => (
-                            <Col key={product.id} xs={24} sm={12} md={8}>
-                              {isMobile ? (
-                                // Render DrawerCartItem for mobile mode
-                                <DrawerCartItem
-                                  isSimplified={true}
-                                  id={product.id}
-                                  slug={product.slug}
-                                  title={product.nameRu}
-                                  price={Number(product.price)}
+                        {searchResults.content.slice(0, 3).map((product) => (
+                          <Col
+                            key={product.id}
+                            xs={24}
+                            sm={searchResults.content.length === 1 ? 24 : 12}
+                            md={searchResults.content.length === 1 ? 24 : 8}
+                            className="cursor-pointer"
+                          >
+                            {isMobile ? (
+                              // Render DrawerCartItem for mobile mode
+                              <DrawerCartItem
+                                isSimplified={true}
+                                id={product.id}
+                                slug={product.slug}
+                                title={product.nameRu}
+                                price={Number(product.price)}
+                                image={product.imagesList[0]}
+                                onClick={() => navigateToProduct(product.slug)}
+                              />
+                            ) : (
+                              // Render ProductCard for desktop mode
+                              <div
+                                onClick={() => navigateToProduct(product.slug)}
+                              >
+                                <ProductCard
                                   image={product.imagesList[0]}
+                                  title={product.nameRu}
+                                  originalPrice={product.price}
+                                  hasDiscount={product.discountPercent > 0}
                                 />
-                              ) : (
-                                // Render ProductCard for desktop mode
-                                <Link href={`products/${product.slug}`}>
-                                  <ProductCard
-                                    image={product.imagesList[0]}
-                                    title={product.nameRu}
-                                    originalPrice={product.price}
-                                    hasDiscount={product.discountPercent > 0}
-                                  />
-                                </Link>
-                              )}
-                            </Col>
-                          ))}
+                              </div>
+                            )}
+                          </Col>
+                        ))}
                       </Row>
                     ) : (
                       <p>No products found</p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { GrLocationPin } from "react-icons/gr";
 
 interface YandexMapProps {
@@ -9,13 +9,30 @@ const YandexMap: React.FC<YandexMapProps> = ({ onCoordinatesChange }) => {
   const [selectedCoordinates, setSelectedCoordinates] = useState<
     [number, number] | null
   >(null);
+  const mapRef = useRef<any>(null); // Ref to store map instance
+  const [userHasMovedMap, setUserHasMovedMap] = useState(false); // Flag to track if user has moved the map
+
+useEffect(() => {
+  // This code will run only once after the component is mounted
+  console.log("This runs only once after rendering.");
+
+  // You can put your one-time setup logic here, e.g., initializing a map or making an API call
+
+  // Cleanup function if needed (runs when the component is unmounted)
+  return () => {
+    console.log("Component unmounted.");
+  };
+}, []);
 
   useEffect(() => {
-    function initMap() {
+    const initMap = () => {
       const mapContainer = document.getElementById("map");
 
       // Prevent multiple map instances
-      if (!mapContainer || mapContainer.childElementCount > 0) return;
+      if (!mapContainer || mapContainer.childElementCount > 0) {
+        console.log("Map already initialized.");
+        return;
+      }
 
       // Initialize map centered at a default location (Tashkent)
       const myMap = new window.ymaps.Map(mapContainer, {
@@ -24,68 +41,87 @@ const YandexMap: React.FC<YandexMapProps> = ({ onCoordinatesChange }) => {
         controls: [],
       });
 
+      mapRef.current = myMap; // Store the map instance in ref
+
       const updateCenterCoordinates = () => {
         const coords = myMap.getCenter();
+        console.log("Map center updated to:", coords);
         setSelectedCoordinates(coords as [number, number]);
         onCoordinatesChange(coords[0], coords[1]);
       };
 
-      myMap.events.add("actionend", updateCenterCoordinates);
+      myMap.events.add("actionend", () => {
+        updateCenterCoordinates();
+        setUserHasMovedMap(true); // User has moved the map
+      });
 
       // Add geolocation control for user to find current location
       const geolocationControl = new window.ymaps.control.GeolocationControl({
         options: { float: "left" },
       });
 
+      // Handle location change by geolocation control
       geolocationControl.events.add("locationchange", (event: any) => {
-        const userCoords = event.get("position");
-        if (userCoords) {
-          // Set map center and zoom to user's location
-          myMap.setCenter(userCoords, 14, {
-            checkZoomRange: true,
-            duration: 300,
-          });
-          setSelectedCoordinates(userCoords as [number, number]);
-          onCoordinatesChange(userCoords[0], userCoords[1]);
+        const userPosition = event.get("position");
+        if (userPosition) {
+          console.log("User position found:", userPosition);
+          if (!userHasMovedMap) {
+            myMap.setCenter(userPosition, 16, {
+              checkZoomRange: true,
+              duration: 300,
+            });
+            setSelectedCoordinates(userPosition as [number, number]);
+            onCoordinatesChange(userPosition[0], userPosition[1]);
+          }
         }
       });
 
-      // Handle geolocation error (optional)
+      // Handle geolocation button press to re-enable centering if needed
+      geolocationControl.events.add("press", () => {
+        setUserHasMovedMap(false); // Allow centering on next location change
+      });
+
+      // Handle geolocation error
       geolocationControl.events.add("error", (error: any) => {
         console.error("Geolocation error:", error);
-        alert("Failed to retrieve your location. Please try again.");
+        alert(
+          "Failed to retrieve your location. Please check your permissions and try again."
+        );
       });
 
       // Add controls to the map
       myMap.controls.add(geolocationControl);
 
-      // Set initial coordinates when the map is loaded
+      // Initial coordinates update
       updateCenterCoordinates();
-    }
+    };
 
     // Load Yandex Maps script if not already loaded
-    if (!window.ymaps) {
+    const scriptId = "yandex-map-script";
+    if (!document.getElementById(scriptId)) {
       const script = document.createElement("script");
       script.src = `https://api-maps.yandex.ru/2.1/?apikey=${process.env.NEXT_PUBLIC_YANDEX_API_KEY}&lang=ru_RU`;
       script.async = true;
-      script.id = "yandex-map-script"; // ID to prevent multiple loads
+      script.id = scriptId;
       document.head.appendChild(script);
 
       script.onload = () => {
+        console.log("Yandex Maps script loaded successfully.");
         window.ymaps.ready(initMap);
       };
-    } else {
+    } else if (window.ymaps && window.ymaps.ready) {
+      console.log("Yandex Maps script already loaded, initializing map.");
       window.ymaps.ready(initMap);
     }
 
-    // Cleanup the script when the component unmounts
+    // Cleanup when the component unmounts
     return () => {
-      const scriptElement = document.getElementById("yandex-map-script");
-      if (scriptElement) {
-        document.head.removeChild(scriptElement);
+      if (mapRef.current) {
+        mapRef.current.destroy(); // Properly destroy the map instance on unmount
+        mapRef.current = null; // Clear the map instance ref
       }
     };
-  }, [onCoordinatesChange]);
+  }, [onCoordinatesChange, userHasMovedMap]); // Dependencies include userHasMovedMap
 
   return (
     <div className="yandex-map-container" style={{ position: "relative" }}>

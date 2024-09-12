@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Pagination, Autoplay, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -12,13 +12,31 @@ interface IMainCarouselProps {
 }
 
 export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  // Function to check if the screen is mobile size
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
+  };
+
+  useEffect(() => {
+    // Set initial value
+    handleResize();
+
+    // Add event listener to handle resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const pagination = {
     clickable: true,
     renderBullet: function (index: number, className: string) {
       return `<span class="${className}">` + "</span>";
     },
   };
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   return (
     <Swiper
@@ -37,7 +55,9 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
       {bannersData?.map((banner, index) => (
         <SwiperSlide key={index}>
           <img
-            src={`${baseUrl}/${banner.imageNameUz}`}
+            src={`${baseUrl}/${
+              isMobile ? banner.mobileImageNameUz : banner.desktopImageNameUz
+            }`}
             alt="carousel image"
             className="w-full h-full object-cover block"
           />

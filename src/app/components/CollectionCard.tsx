@@ -37,7 +37,7 @@ export const CollectionCard: React.FC<ICollectionCard> = ({
           {title}
         </h2>
         <AnimatedButton
-          width="w-full sm:w-48 md:w-56" // Adjust button width responsively
+          width="w-full sm:w-48 md:w-56"
           variant="lite"
           title="View the collection"
           onClick={() => router.push(link)}
