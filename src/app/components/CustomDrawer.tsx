@@ -8,6 +8,7 @@ import { useMutation } from "react-query";
 import { addToCart } from "../../services/cart";
 import { queryClient } from "../providers";
 import { useRouter } from "next/navigation";
+import { getToken } from "@chakra-ui/react";
 
 interface ICustomDrawerProps {
   isOpen: boolean;
@@ -59,7 +60,13 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
       }
     });
     handleClose();
-    router.push("/checkouts");
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      router.push("/checkouts");
+    } else {
+      message.error("Please log in!");
+    }
   }, [cart, apiQuantity, mutation, handleClose, router]);
 
   const totalPrice = totalSum();
