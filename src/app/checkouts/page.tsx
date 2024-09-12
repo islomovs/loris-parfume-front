@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { BiBasket } from "react-icons/bi";
 import { CustomDropdown } from "../components/CustomDropdown";
@@ -41,16 +42,25 @@ type FormData = {
 export default function Checkout() {
   const { cart, totalSum } = useCartStore((state) => state);
   const { addOrder } = useOrderStore();
-  const { handleSubmit, setValue, control, register } = useForm<FormData>();
+  const { handleSubmit, setValue, control, register, resetField, watch } =
+    useForm<FormData>();
   const [isDelivery, setIsDelivery] = useState(false);
   const [filteredPaymentOptions, setFilteredPaymentOptions] =
     useState(allPaymentOptions);
   const [latitude, setLatitude] = useState<number>(42.0);
   const [longitude, setLongitude] = useState<number>(43.0);
   const [branchName, setBranchName] = useState<string>(""); // State for branch name
+  const [clientTotalSum, setClientTotalSum] = useState<string>("0.00"); // State to hold client-calculated total sum
+  const [isMounted, setIsMounted] = useState(false); // State to check if component is mounted
   const router = useRouter();
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
   const initialRender = useRef(true);
+
+  // Effect to update the total sum only on the client side
+  useEffect(() => {
+    setIsMounted(true); // Set mounted state to true after component mounts
+    setClientTotalSum(totalSum().toFixed(2)); // Update the client-side total sum
+  }, [totalSum]);
 
   // Define the mutation for creating an order using React Query
   const orderMutation = useMutation(
@@ -125,6 +135,9 @@ export default function Checkout() {
       setFilteredPaymentOptions(
         allPaymentOptions.filter((option) => option.title !== "cash")
       );
+      if (watch("paymentType") === "cash") {
+        resetField("paymentType"); // Reset payment type if it was cash
+      }
     } else {
       setFilteredPaymentOptions(allPaymentOptions);
     }
@@ -274,7 +287,8 @@ export default function Checkout() {
               <div className="w-full flex flex-col gap-2">
                 <div className="flex flex-row justify-between text-base md:text-[19px] font-semibold text-[#454545]">
                   <p>Total</p>
-                  <p>UZS {totalSum().toFixed(2)} сум</p>
+                  <p>UZS {isMounted ? clientTotalSum : "0.00"} сум</p>{" "}
+                  {/* Conditional rendering */}
                 </div>
               </div>
             </div>

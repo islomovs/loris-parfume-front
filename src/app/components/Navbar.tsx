@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { DownOutlined, MenuOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  MenuOutlined,
+  PlusOutlined,
+  MinusOutlined,
+} from "@ant-design/icons";
 import {
   Dropdown,
   Space,
@@ -28,7 +33,6 @@ import { fetchProductsData, IData, IProduct } from "@/services/products";
 import { ProductCard } from "./ProductCard";
 import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CustomDrawer } from "./CustomDrawer";
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { DrawerCartItem } from "./DrawerCartItem";
 import { useRouter } from "next/navigation";
 
@@ -467,47 +471,50 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           >
             Home
           </Link>
-          {data?.collections?.map((collection: ICollectionItem) => (
-            <div key={collection.id} className="relative">
-              <div
-                className="flex justify-between items-center cursor-pointer"
-                style={{
-                  borderBottom: "1px solid white",
-                  paddingBottom: "10px",
-                }}
-              >
-                <Link
-                  href={`/collections/${collection.slug.toLowerCase()}`}
-                  className="text-lg font-semibold flex-1"
-                  onClick={toggleSidebar}
-                >
-                  {collection.nameRu}
-                </Link>
-                <button
-                  className="ml-2"
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevents the event from bubbling up to the link
-                    e.preventDefault(); // Prevents the default link action when the button is clicked
-                    toggleCollection(collection.id);
+          {data?.collections?.map((collection: ICollectionItem) => {
+            const filteredCategories = data.categories.filter(
+              (category: ICategoryItem) =>
+                category.collectionId === collection.id
+            );
+
+            return (
+              <div key={collection.id} className="relative">
+                <div
+                  className="flex justify-between items-center cursor-pointer"
+                  style={{
+                    borderBottom: "1px solid white",
+                    paddingBottom: "10px",
                   }}
                 >
-                  {expandedCollections[collection.id] ? (
-                    <MinusOutlined style={{ color: "white" }} />
-                  ) : (
-                    <PlusOutlined style={{ color: "white" }} />
+                  <Link
+                    href={`/collections/${collection.slug.toLowerCase()}`}
+                    className="text-lg font-semibold flex-1"
+                    onClick={toggleSidebar}
+                  >
+                    {collection.nameRu}
+                  </Link>
+                  {filteredCategories.length > 0 && (
+                    <button
+                      className="ml-2"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevents the event from bubbling up to the link
+                        e.preventDefault(); // Prevents the default link action when the button is clicked
+                        toggleCollection(collection.id);
+                      }}
+                    >
+                      {expandedCollections[collection.id] ? (
+                        <MinusOutlined style={{ color: "white" }} />
+                      ) : (
+                        <PlusOutlined style={{ color: "white" }} />
+                      )}
+                    </button>
                   )}
-                </button>
-              </div>
+                </div>
 
-              {/* Categories collapse */}
-              {expandedCollections[collection.id] && (
-                <div className="ml-4 mt-2">
-                  {data.categories
-                    .filter(
-                      (category: ICategoryItem) =>
-                        category.collectionId === collection.id
-                    )
-                    .map((category: ICategoryItem) => (
+                {/* Categories collapse */}
+                {expandedCollections[collection.id] && (
+                  <div className="ml-4 mt-2">
+                    {filteredCategories.map((category: ICategoryItem) => (
                       <Link
                         key={category.id}
                         href={`/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`}
@@ -518,10 +525,11 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                         {category.nameEng}
                       </Link>
                     ))}
-                </div>
-              )}
-            </div>
-          ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
           <Link
             href="/branches"
             className="text-lg font-semibold"
