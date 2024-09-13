@@ -1,10 +1,12 @@
 import { useState, forwardRef } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useController, Control, FieldValues, Path } from "react-hook-form";
+import Image from "next/image"; // Import Next.js Image component
 
 type Option = {
   id: number;
   title: string;
+  icon?: string; // Use string type for URL or path to image
 };
 
 interface ICustomDropdownProps<T extends FieldValues> {
@@ -63,10 +65,19 @@ export const CustomDropdown = forwardRef<
           {options.map((option) => (
             <li
               key={option.id}
-              className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+              className="px-4 py-2 cursor-pointer hover:bg-gray-200 flex items-center gap-2"
               onClick={() => selectOption(option.title)}
             >
-              {option.title}
+              {option.icon && (
+                <Image
+                  src={option.icon}
+                  alt={option.title}
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 object-contain"
+                />
+              )}
+              <span>{option.title}</span> {/* Display title */}
             </li>
           ))}
         </ul>

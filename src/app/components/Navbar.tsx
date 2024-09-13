@@ -556,13 +556,6 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           >
             Branches
           </Link>
-          <Link
-            href="/"
-            className="text-lg font-semibold"
-            onClick={toggleSidebar}
-          >
-            Contact
-          </Link>
         </div>
 
         {/* Account and Language Dropdown Moved to Bottom */}

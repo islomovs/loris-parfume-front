@@ -12,6 +12,7 @@ import { useQuery, useMutation } from "react-query";
 import { fetchUserInfo, updateUserInfo } from "../../services/user";
 import { fetchAllOrders } from "../../services/orders";
 import useCartStore from "@/services/store";
+import { Spin, message } from "antd"; // Import Spin and message from Ant Design
 
 type FormData = {
   fullName: string;
@@ -27,6 +28,7 @@ export default function Account() {
   // Fetch user info using useQuery
   const {
     data: userInfo,
+    isLoading: isLoadingUserInfo,
     error: userError,
     refetch: refetchUserInfo,
   } = useQuery("userInfo", fetchUserInfo, {
@@ -36,6 +38,7 @@ export default function Account() {
     },
     onError: (error: any) => {
       console.error("Error fetching user info:", error);
+      message.error("Failed to fetch user information.");
     },
   });
 
@@ -47,17 +50,23 @@ export default function Account() {
   } = useQuery("orders", () => fetchAllOrders(1), {
     onError: (error: any) => {
       console.error("Failed to fetch all orders:", error);
+      message.error("Failed to load orders.");
     },
   });
 
   // Update user info using useMutation
   const updateUserMutation = useMutation(updateUserInfo, {
+    onMutate: () => {
+      message.loading("Updating user information...");
+    },
     onSuccess: () => {
       setIsEditing(false); // End editing mode
       refetchUserInfo(); // Refetch user data to ensure UI updates with the latest data
+      message.success("User information updated successfully.");
     },
     onError: (error: any) => {
       console.error("Error updating user info:", error);
+      message.error("Failed to update user information.");
     },
   });
 
@@ -81,8 +90,10 @@ export default function Account() {
 
       // Use router to navigate to the login page
       router.push("/account/login");
+      message.success("Logged out successfully.");
     } catch (error) {
       console.error("Error during logout and cart clear:", error);
+      message.error("Failed to log out. Please try again.");
     }
   };
 
@@ -104,7 +115,11 @@ export default function Account() {
             MY ORDERS
           </h1>
           <div className="w-full text-[14px] text-[#454545] font-normal">
-            {ordersLoading && <p>Loading orders...</p>}
+            {ordersLoading && (
+              <div className="flex justify-center items-center py-4">
+                <Spin size="large" /> {/* Loading Spinner for orders */}
+              </div>
+            )}
             {ordersError && <p>Failed to load orders.</p>}
             {ordersData?.content.map((order: any) => (
               <div

@@ -17,6 +17,7 @@ import RecommendedSlider from "@/app/components/RecommendedSlider";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { BsBoxSeam } from "react-icons/bs";
 import LoadingBar from "react-top-loading-bar"; // Import the LoadingBar component
+import { Spinner } from "@chakra-ui/react"; // Import Spinner from Chakra UI
 
 export default function ProductDetailsPage({
   productSlug,
@@ -134,8 +135,13 @@ export default function ProductDetailsPage({
     },
   });
 
+  // Spinner for loading states
   if (isLoadingProduct) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner size="xl" color="#87754f" />
+      </div>
+    );
   }
 
   if (!product?.data) {
@@ -144,8 +150,7 @@ export default function ProductDetailsPage({
 
   return (
     <div className="flex flex-col px-4">
-      <LoadingBar color="#87754f" ref={loadingBarRef} />{" "}
-      {/* Loading bar component */}
+      <LoadingBar color="#87754f" ref={loadingBarRef} />
       <div className="flex flex-col lg:flex-row py-8 md:py-16">
         {open && <CustomDrawer onClose={onClose} isOpen={open} />}
         <div className="flex flex-col lg:flex-row lg:flex-[2] lg:pl-16 mb-6 lg:mb-0">
@@ -211,11 +216,17 @@ export default function ProductDetailsPage({
         <h1 className="uppercase font-normal text-center text-lg md:text-xl tracking-[.2em] text-[#454545] mb-10 md:mb-16">
           You may also like
         </h1>
-        <RecommendedSlider
-          items={recommendedProducts}
-          collectionSlug={product.data.collectionsItemsList[0].collectionSlug}
-          categorySlug={product.data.categorySlug}
-        />
+        {isLoadingRecProducts ? (
+          <div className="flex justify-center items-center py-10">
+            <Spinner size="lg" color="#87754f" />
+          </div>
+        ) : (
+          <RecommendedSlider
+            items={recommendedProducts}
+            collectionSlug={product.data.collectionsItemsList[0].collectionSlug}
+            categorySlug={product.data.categorySlug}
+          />
+        )}
       </div>
     </div>
   );

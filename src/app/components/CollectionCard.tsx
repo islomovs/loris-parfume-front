@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useState } from "react";
 import { AnimatedButton } from "./AnimatedButton";
 
 interface ICollectionCard {
@@ -16,14 +16,20 @@ export const CollectionCard: React.FC<ICollectionCard> = ({
   link = "/",
 }) => {
   const router = useRouter();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
     <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden group p-4 sm:p-6 md:p-8 lg:p-10">
-      <div className="absolute inset-0 transition-transform duration-[15000ms] ease-in-out group-hover:scale-125">
+      <div
+        className={`absolute inset-0 transition-transform duration-[15000ms] ease-in-out group-hover:scale-125`}
+      >
         <img
           src={image}
           alt="collection image"
-          className="object-cover w-full h-full transition-transform duration-500 ease-in-out"
+          className={`object-cover w-full h-full transition-all duration-500 ease-in-out ${
+            isImageLoaded ? "blur-0" : "blur-lg"
+          }`}
+          onLoad={() => setIsImageLoaded(true)}
         />
       </div>
       <div className="absolute inset-0 bg-black bg-opacity-30"></div>

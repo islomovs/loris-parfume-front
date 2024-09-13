@@ -11,6 +11,7 @@ import {
 import { CollectionCard } from "./components/CollectionCard";
 import { MainCarousel } from "./components/MainCarousel";
 import { useQuery } from "react-query";
+import { Spinner } from "@chakra-ui/react";
 
 export default function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -19,11 +20,13 @@ export default function Home() {
     useState<ICollectionBanner[]>();
   const [banners, setBanners] = useState<IBanner[]>();
 
+  // Fetch main banners data
   const { isLoading: isLoadingBanners } = useQuery("bannersData", async () => {
     const response = await fetchMainBannersData(page);
     setBanners(response);
   });
 
+  // Fetch collection banners data
   const { isLoading: isLoadingCBanners } = useQuery(
     "collectionBannersData",
     async () => {
@@ -34,14 +37,16 @@ export default function Home() {
 
   return (
     <>
+      {/* Main banners section */}
       {!isLoadingBanners ? (
         <MainCarousel bannersData={banners} />
       ) : (
-        <div className="h-[751px] w-full flex justify-center items-center text-center">
-          Loading Banners...
+        <div className="h-[751px] w-full flex justify-center items-center">
+          <Spinner size="xl" color="#87754f" />
         </div>
       )}
 
+      {/* Collection banners section */}
       <section className="m-5">
         <Row gutter={[30, 30]} className="justify-center">
           {!isLoadingCBanners ? (
@@ -60,7 +65,9 @@ export default function Home() {
               </Col>
             ))
           ) : (
-            <div className="text-center w-full">Loading...</div>
+            <div className="flex justify-center items-center w-full h-80">
+              <Spinner size="lg" color="#87754f" />
+            </div>
           )}
         </Row>
       </section>

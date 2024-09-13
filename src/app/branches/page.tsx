@@ -1,6 +1,7 @@
 "use client";
 
-import { Col, Row } from "antd";
+import { Col, Row, message } from "antd";
+import { Spinner } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { BranchCard } from "../components/BranchCard";
 import { fetchBranchesData, IBranchItem } from "@/services/branches";
@@ -14,9 +15,16 @@ export default function Contacts() {
 
   const page = 1;
 
+  // Fetch branches data using useQuery
   const { data, isLoading, isError } = useQuery<any, Error>(
     ["branchesData", page],
-    () => fetchBranchesData()
+    () => fetchBranchesData(),
+    {
+      onError: (error) => {
+        console.error("Error fetching branches data:", error);
+        message.error("Failed to load branches. Please try again.");
+      },
+    }
   );
 
   const branches = data?.data;
@@ -27,23 +35,34 @@ export default function Contacts() {
         Branches
       </h1>
       <Row gutter={[16, 16]}>
-        {isLoading
-          ? "Loading..."
-          : isError
-          ? "Error loading branches"
-          : branches?.map((branch: IBranchItem) => (
-              <Col xs={24} sm={12} md={8} lg={8} key={branch.id}>
-                <BranchCard
-                  title={branch.name}
-                  address={branch.name}
-                  phone={branch.phone}
-                  location={branch.redirectTo}
-                />
-              </Col>
-            ))}
+        {isLoading ? (
+          <div className="flex justify-center items-center w-full py-10">
+            <Spinner size="lg" color="#87754f" /> {/* Chakra UI Spinner */}
+          </div>
+        ) : isError ? (
+          <p className="text-center text-red-500">Error loading branches</p>
+        ) : (
+          branches?.map((branch: IBranchItem) => (
+            <Col xs={24} sm={12} md={8} lg={8} key={branch.id}>
+              <BranchCard
+                title={branch.name}
+                address={branch.name}
+                phone={branch.phone}
+                location={branch.redirectTo}
+              />
+            </Col>
+          ))
+        )}
       </Row>
       <div className="mt-8 md:mt-14">
-        <YandexMap branches={branches} />
+        {branches ? (
+          <YandexMap branches={branches} />
+        ) : (
+          <div className="flex justify-center items-center">
+            <Spinner size="lg" color="#87754f" />{" "}
+            {/* Chakra UI Spinner for the map */}
+          </div>
+        )}
       </div>
     </div>
   );

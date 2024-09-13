@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Image } from "antd";
 import { cn } from "../../helpers/mergeFunction";
+import { Spinner } from "@chakra-ui/react";
 
 interface IImagePaginationProps {
   images: string[];
@@ -11,6 +12,7 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
 }) => {
   const containersRef = useRef<HTMLDivElement[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loadedIndexes, setLoadedIndexes] = useState<Set<number>>(new Set());
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
@@ -41,6 +43,10 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
     containersRef.current[index].scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleImageLoad = (index: number) => {
+    setLoadedIndexes((prev) => new Set(prev).add(index)); // Mark image as loaded
+  };
+
   return (
     <div className="flex flex-col lg:flex-row lg:space-x-8 relative lg:h-full">
       {/* Image Carousel: Desktop and Mobile */}
@@ -53,12 +59,24 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
               ref={(el) => {
                 if (el) containersRef.current[index] = el;
               }}
-              className="flex-shrink-0 w-full lg:w-[730px] h-[360px] lg:h-[730px] flex justify-center items-center"
+              className="flex-shrink-0 w-full lg:w-[730px] h-[360px] lg:h-[730px] flex justify-center items-center relative"
             >
+              {!loadedIndexes.has(index) && (
+                <div className="absolute inset-0 flex justify-center items-center">
+                  <Spinner size="lg" color="#87754f" />
+                </div>
+              )}
               <Image
                 src={`${baseUrl}/${image}`}
-                alt={image}
-                className="h-full w-full object-cover"
+                alt={`Image ${index + 1}`}
+                className={cn(
+                  "h-full w-full object-cover transition-all duration-500 ease-in-out",
+                  {
+                    "blur-lg": !loadedIndexes.has(index), // Apply blur effect until loaded
+                    "blur-0": loadedIndexes.has(index), // Remove blur when loaded
+                  }
+                )}
+                onLoad={() => handleImageLoad(index)}
               />
             </div>
           ))}

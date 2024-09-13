@@ -1,6 +1,6 @@
 "use client";
 import { useQuery, useInfiniteQuery } from "react-query";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ProductsGrid } from "@/app/components/ProductsGrid";
 import { fetchProductsData, IProduct } from "@/services/products";
 import { CollectionsAndCategoriesData } from "@/services/collections";
@@ -11,19 +11,18 @@ export default function CategoriesPage({
 }: {
   params: { categorySlug: string; collectionSlug: string };
 }) {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [totalElements, setTotalElements] = useState<number>(0);
   const [sortOption, setSortOption] = useState<string | undefined>(undefined);
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { categorySlug, collectionSlug } = params;
 
+  // Use useInfiniteQuery to fetch products data incrementally
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    refetch,
-    remove,
+    isLoading,
+    isError,
   } = useInfiniteQuery(
     ["productsByCategory", collectionSlug, categorySlug, sortOption],
     async ({ pageParam = 1 }) => {
@@ -33,38 +32,28 @@ export default function CategoriesPage({
         categorySlug,
         sortOption
       );
-      const totalElements = res.data.page.totalElements;
-
-      return {
-        products: res.data.content,
-        totalElements,
-      };
+      return res.data; // Return the entire response for handling pages
     },
     {
-      getNextPageParam: (lastPage, allPages) =>
-        lastPage.products.length ? allPages.length + 1 : undefined,
-      onSuccess: (data) => {
-        const newProducts = data.pages.flatMap((page) => page.products);
-
-        // Set products only if new products have been fetched
-        if (newProducts.length > products.length || sortOption) {
-          setProducts(newProducts);
-        }
-
-        if (data.pages.length === 1) {
-          setTotalElements(data.pages[0].totalElements);
-        }
+      getNextPageParam: (lastPage) => {
+        // Correctly determine the next page number
+        const nextPage = lastPage.page.number + 2; // Adjust for 0-indexed pages
+        return nextPage <= lastPage.page.totalPages ? nextPage : undefined;
       },
+      keepPreviousData: true, // Maintain the previous data while fetching new
     }
   );
+
+  // Combine products from all fetched pages
+  const products = data?.pages.flatMap((page) => page.content) || [];
+  const totalElements = data?.pages[0]?.page.totalElements || 0;
 
   // Handle sort change
   const handleSortChange = (option: string) => {
     setSortOption(option);
-    remove(); // Clear previous data
-    refetch(); // Refetch data with the new sort option
   };
 
+  // Fetch collections and categories data
   const { data: categoriesData } = useQuery<CollectionsAndCategoriesData>(
     ["collectionsAndCategories", 1],
     async () => ({
@@ -77,6 +66,7 @@ export default function CategoriesPage({
     }
   );
 
+  // Match the current category to display its banner
   const matchedCategory = categoriesData?.categories.find(
     (category) => category.slug === categorySlug
   );
@@ -101,15 +91,21 @@ export default function CategoriesPage({
           <SortingDropdown onSortChange={handleSortChange} />
         </div>
         <hr className="border-t border-solid border-t-[#f0f0f0] mb-8" />
-        <ProductsGrid
-          products={products}
-          collectionSlug={collectionSlug}
-          categorySlug={categorySlug}
-          isLoading={isFetchingNextPage}
-          loadMore={() => fetchNextPage()}
-          hasMore={hasNextPage}
-          totalProducts={totalElements}
-        />
+        {isError ? (
+          <div className="text-center text-red-500">
+            Error loading products.
+          </div>
+        ) : (
+          <ProductsGrid
+            products={products}
+            collectionSlug={collectionSlug}
+            categorySlug={categorySlug}
+            isLoading={isFetchingNextPage || isLoading}
+            loadMore={() => fetchNextPage()}
+            hasMore={hasNextPage}
+            totalProducts={totalElements}
+          />
+        )}
       </div>
     </div>
   );

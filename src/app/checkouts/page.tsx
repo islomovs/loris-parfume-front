@@ -17,7 +17,13 @@ import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import YandexMap from "../components/TYandexMap";
 import debounce from "lodash/debounce";
-import { message } from "antd";
+import { message } from "antd"; // Import message for feedback
+import { Spinner } from "@chakra-ui/react"; // Use Chakra UI Spinner for loading
+
+// Importing icons
+import CashIcon from "../../../public/cash-icon.svg";
+import PaymeIcon from "../../../public/payme-logo.BdmkZoD4.svg";
+import ClickIcon from "../../../public/click-logo.jzgAXUV7.svg";
 
 const deliveryOptions = [
   { id: 0, title: "Самовывоз" },
@@ -25,9 +31,9 @@ const deliveryOptions = [
 ];
 
 const allPaymentOptions = [
-  { id: 0, title: "cash" },
-  { id: 1, title: "payme" },
-  { id: 2, title: "click" },
+  { id: 0, title: "cash", icon: CashIcon.src },
+  { id: 1, title: "payme", icon: PaymeIcon.src },
+  { id: 2, title: "click", icon: ClickIcon.src },
 ];
 
 type FormData = {
@@ -93,7 +99,7 @@ export default function Checkout() {
       onError: (error) => {
         loadingBarRef.current?.complete();
         console.error("Failed to create order:", error);
-        alert("Failed to create order, please try again.");
+        message.error("Failed to create order, please try again.");
       },
     }
   );
@@ -103,13 +109,18 @@ export default function Checkout() {
     ({ longitude, latitude }: { longitude: number; latitude: number }) =>
       fetchNearestBranch(longitude, latitude),
     {
+      onMutate: () => {
+        message.loading("Fetching nearest branch...");
+      },
       onSuccess: (data) => {
-        console.log("Nearest branch data:", data);
+        message.destroy(); // Remove loading message
         setBranchName(data?.name); // Set the branch name from the response
         setBranchId(data?.id); // Set the branch ID from the response
       },
       onError: (error) => {
+        message.destroy(); // Remove loading message
         console.error("Error fetching nearest branch:", error);
+        message.error("Failed to fetch nearest branch, please try again.");
       },
     }
   );
@@ -273,22 +284,28 @@ export default function Checkout() {
           </div>
           <div className="flex-[4] p-4 md:p-10 lg:h-[300px] lg:sticky top-0 right-0 left-0">
             <div className="w-full flex flex-col gap-5">
-              {cart.map((cartItem, index) => {
-                const discountPrice = cartItem.discountPercent
-                  ? cartItem.price -
-                    (cartItem.price * cartItem.discountPercent) / 100
-                  : cartItem.price;
-                return (
-                  <CheckoutCartItem
-                    key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
-                    title={cartItem.nameRu}
-                    subtitle={cartItem.sizeNameRu}
-                    price={discountPrice}
-                    quantity={cartItem.quantity}
-                    image={cartItem.imagesList[0]}
-                  />
-                );
-              })}
+              {nearestBranchMutation.isLoading ? (
+                <div className="flex justify-center items-center py-4">
+                  <Spinner size="lg" color="#87754f" /> {/* Loading Spinner */}
+                </div>
+              ) : (
+                cart.map((cartItem, index) => {
+                  const discountPrice = cartItem.discountPercent
+                    ? cartItem.price -
+                      (cartItem.price * cartItem.discountPercent) / 100
+                    : cartItem.price;
+                  return (
+                    <CheckoutCartItem
+                      key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
+                      title={cartItem.nameRu}
+                      subtitle={cartItem.sizeNameRu}
+                      price={discountPrice}
+                      quantity={cartItem.quantity}
+                      image={cartItem.imagesList[0]}
+                    />
+                  );
+                })
+              )}
               <div className="w-full flex flex-col gap-2">
                 <div className="flex flex-row justify-between text-base md:text-[19px] font-semibold text-[#454545]">
                   <p>Total</p>
