@@ -403,40 +403,59 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                       <p>Loading...</p>
                     ) : searchResults && searchResults.content?.length > 0 ? (
                       <Row gutter={[20, 30]}>
-                        {searchResults.content.slice(0, 3).map((product) => (
-                          <Col
-                            key={product.id}
-                            xs={24}
-                            sm={searchResults.content.length === 1 ? 24 : 12}
-                            md={searchResults.content.length === 1 ? 24 : 8}
-                            className="cursor-pointer"
-                          >
-                            {isMobile ? (
-                              // Render DrawerCartItem for mobile mode
-                              <DrawerCartItem
-                                isSimplified={true}
-                                id={product.id}
-                                slug={product.slug}
-                                title={product.nameRu}
-                                price={Number(product.price)}
-                                image={product.imagesList[0]}
-                                onClick={() => navigateToProduct(product.slug)}
-                              />
-                            ) : (
-                              // Render ProductCard for desktop mode
-                              <div
-                                onClick={() => navigateToProduct(product.slug)}
-                              >
-                                <ProductCard
-                                  image={product.imagesList[0]}
+                        {searchResults.content.slice(0, 3).map((product) => {
+                          const discountPrice = product.discountPercent
+                            ? (
+                                parseFloat(product.price) *
+                                (1 - product.discountPercent / 100)
+                              ).toFixed(2)
+                            : null;
+                          const discountPriceMobile = product.discountPercent
+                            ? product.price -
+                              (product.price * product.discountPercent) / 100
+                            : product.price;
+                          return (
+                            <Col
+                              key={product.id}
+                              xs={24}
+                              sm={searchResults.content.length === 1 ? 24 : 12}
+                              md={searchResults.content.length === 1 ? 24 : 8}
+                              className="cursor-pointer"
+                            >
+                              {isMobile ? (
+                                // Render DrawerCartItem for mobile mode
+                                <DrawerCartItem
+                                  isSimplified={true}
+                                  id={product.id}
+                                  slug={product.slug}
                                   title={product.nameRu}
-                                  originalPrice={product.price}
-                                  hasDiscount={product.discountPercent > 0}
+                                  price={Number(discountPrice)}
+                                  image={product.imagesList[0]}
+                                  onClick={() =>
+                                    navigateToProduct(product.slug)
+                                  }
                                 />
-                              </div>
-                            )}
-                          </Col>
-                        ))}
+                              ) : (
+                                // Render ProductCard for desktop mode
+                                <div
+                                  onClick={() =>
+                                    navigateToProduct(product.slug)
+                                  }
+                                >
+                                  <ProductCard
+                                    image={product.imagesList[0]}
+                                    title={product.nameRu}
+                                    originalPrice={product.price}
+                                    discountPrice={
+                                      discountPrice || product.price
+                                    }
+                                    hasDiscount={product.discountPercent > 0}
+                                  />
+                                </div>
+                              )}
+                            </Col>
+                          );
+                        })}
                       </Row>
                     ) : (
                       <p>No products found</p>

@@ -19,12 +19,8 @@ import { BsBoxSeam } from "react-icons/bs";
 import LoadingBar from "react-top-loading-bar"; // Import the LoadingBar component
 
 export default function ProductDetailsPage({
-  collectionSlug,
-  categorySlug,
   productSlug,
 }: {
-  collectionSlug?: string;
-  categorySlug?: string;
   productSlug: string;
 }) {
   const [selectedOption, setSelectedOption] = useState("");
@@ -87,7 +83,7 @@ export default function ProductDetailsPage({
       quantity,
       sizeId: selectedSizeId,
       price: productPrice,
-      collectionSlug: collectionSlug,
+      collectionSlug: product?.data.collectionsItemsList[0].collectionSlug,
     };
 
     const token = localStorage.getItem("token");
@@ -122,7 +118,7 @@ export default function ProductDetailsPage({
         nameRu: product?.data.nameRu,
         nameUz: product?.data.nameUz,
         imagesList: product?.data?.imagesList,
-        collectionSlug: collectionSlug,
+        collectionSlug: product?.data.collectionsItemsList[0].collectionSlug,
       };
 
       addOrUpdateCartItem(newItem);
@@ -217,8 +213,8 @@ export default function ProductDetailsPage({
         </h1>
         <RecommendedSlider
           items={recommendedProducts}
-          collectionSlug={collectionSlug}
-          categorySlug={categorySlug}
+          collectionSlug={product.data.collectionsItemsList[0].collectionSlug}
+          categorySlug={product.data.categorySlug}
         />
       </div>
     </div>

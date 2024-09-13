@@ -11,6 +11,7 @@ import { CheckoutCartItem } from "../components/CheckoutCartItem";
 import { useQuery, useMutation } from "react-query";
 import { fetchUserInfo, updateUserInfo } from "../../services/user";
 import { fetchAllOrders } from "../../services/orders";
+import useCartStore from "@/services/store";
 
 type FormData = {
   fullName: string;
@@ -69,9 +70,20 @@ export default function Account() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    router.push("/account/login");
+    try {
+      // Clear the cart using the clearCart method from useCartStore
+      const { clearCart } = useCartStore.getState();
+      clearCart();
+
+      // Remove authentication-related data from localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+
+      // Use router to navigate to the login page
+      router.push("/account/login");
+    } catch (error) {
+      console.error("Error during logout and cart clear:", error);
+    }
   };
 
   // Toggle order details

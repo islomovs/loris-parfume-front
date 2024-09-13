@@ -17,6 +17,7 @@ import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import YandexMap from "../components/TYandexMap";
 import debounce from "lodash/debounce";
+import { message } from "antd";
 
 const deliveryOptions = [
   { id: 0, title: "Самовывоз" },
@@ -55,6 +56,7 @@ export default function Checkout() {
   const router = useRouter();
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
   const initialRender = useRef(true);
+  const [branchId, setBranchId] = useState<number | null>(null); // State for branch ID
 
   // Effect to update the total sum only on the client side
   useEffect(() => {
@@ -75,14 +77,16 @@ export default function Checkout() {
 
         // Handle specific payment types
         if (data.paymentType.toLowerCase() === "uzum nasiya") {
-          alert("Answer for your request will be sent to your phone number");
+          message.success(
+            "Answer for your request will be sent to your phone number"
+          );
         } else if (
           data.paymentType.toLowerCase() === "click" ||
           data.paymentType.toLowerCase() === "payme"
         ) {
           window.location.href = data.paymentLink;
         } else {
-          alert("Order created successfully!");
+          message.success("Order created successfully!");
           router.push("/account");
         }
       },
@@ -102,6 +106,7 @@ export default function Checkout() {
       onSuccess: (data) => {
         console.log("Nearest branch data:", data);
         setBranchName(data?.name); // Set the branch name from the response
+        setBranchId(data?.id); // Set the branch ID from the response
       },
       onError: (error) => {
         console.error("Error fetching nearest branch:", error);
@@ -153,7 +158,7 @@ export default function Checkout() {
 
     const orderData: OrderData = {
       fullName: data.fullName,
-      branchId: parseInt(data.branch),
+      branchId: branchId ?? 0,
       address: data.address,
       addressLocationLink: `http://maps.google.com/?q=${encodeURIComponent(
         data.address
@@ -288,7 +293,6 @@ export default function Checkout() {
                 <div className="flex flex-row justify-between text-base md:text-[19px] font-semibold text-[#454545]">
                   <p>Total</p>
                   <p>UZS {isMounted ? clientTotalSum : "0.00"} сум</p>{" "}
-                  {/* Conditional rendering */}
                 </div>
               </div>
             </div>
