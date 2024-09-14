@@ -1,35 +1,37 @@
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { AnimatedButton } from "./AnimatedButton";
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { AnimatedButton } from './AnimatedButton'
+import Image from 'next/image'
 
 interface ICollectionCard {
-  title: string;
-  subtitle?: string;
-  image: string;
-  link: string;
+  title: string
+  subtitle?: string
+  image: string
+  link: string
 }
 
 export const CollectionCard: React.FC<ICollectionCard> = ({
   title,
   subtitle,
   image,
-  link = "/",
+  link = '/',
 }) => {
-  const router = useRouter();
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const router = useRouter()
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   return (
     <div className="relative w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] overflow-hidden group p-4 sm:p-6 md:p-8 lg:p-10">
       <div
         className={`absolute inset-0 transition-transform duration-[15000ms] ease-in-out group-hover:scale-125`}
       >
-        <img
+        <Image
           src={image}
           alt="collection image"
           className={`object-cover w-full h-full transition-all duration-500 ease-in-out ${
-            isImageLoaded ? "blur-0" : "blur-lg"
+            isImageLoaded ? 'blur-0' : 'blur-lg'
           }`}
           onLoad={() => setIsImageLoaded(true)}
+          fill
         />
       </div>
       <div className="absolute inset-0 bg-black bg-opacity-30"></div>
@@ -50,5 +52,5 @@ export const CollectionCard: React.FC<ICollectionCard> = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}

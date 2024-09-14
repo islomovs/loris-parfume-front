@@ -1,33 +1,33 @@
-"use client";
+'use client'
 
-import { Col, Row, message } from "antd";
-import { Spinner } from "@chakra-ui/react";
-import { useQuery } from "react-query";
-import { BranchCard } from "../components/BranchCard";
-import { fetchBranchesData, IBranchItem } from "@/services/branches";
-import YandexMap from "../components/YandexMap";
+import { Col, Row, message } from 'antd'
+import { Spinner } from '@chakra-ui/react'
+import { useQuery } from 'react-query'
+import { BranchCard } from '../components/BranchCard'
+import { fetchBranchesData, IBranchItem } from '@/services/branches'
+import YandexMap from '../components/BYandexMap'
 
 export default function Contacts() {
   const defaultState = {
     center: [55.751574, 37.573856],
     zoom: 5,
-  };
+  }
 
-  const page = 1;
+  const page = 1
 
   // Fetch branches data using useQuery
   const { data, isLoading, isError } = useQuery<any, Error>(
-    ["branchesData", page],
+    ['branchesData', page],
     () => fetchBranchesData(),
     {
       onError: (error) => {
-        console.error("Error fetching branches data:", error);
-        message.error("Failed to load branches. Please try again.");
+        console.error('Error fetching branches data:', error)
+        message.error('Failed to load branches. Please try again.')
       },
     }
-  );
+  )
 
-  const branches = data?.data;
+  const branches = data?.data
 
   return (
     <div className="flex flex-col py-5 px-4 md:px-8">
@@ -59,11 +59,11 @@ export default function Contacts() {
           <YandexMap branches={branches} />
         ) : (
           <div className="flex justify-center items-center">
-            <Spinner size="lg" color="#87754f" />{" "}
+            <Spinner size="lg" color="#87754f" />{' '}
             {/* Chakra UI Spinner for the map */}
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }
