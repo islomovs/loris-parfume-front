@@ -223,12 +223,7 @@ export default function Checkout() {
                 control={control}
                 onChange={handleDeliveryChange}
               />
-              <YandexMap
-                onCoordinatesChange={(lat, lng) => {
-                  setLatitude(lat);
-                  setLongitude(lng);
-                }}
-              />
+              <YandexMap />
 
               <CustomInput
                 {...register("fullName")}
