@@ -14,7 +14,9 @@ import { useTranslation } from "react-i18next";
 
 export default function CartPage() {
   const router = useRouter();
-  const { cart, apiQuantity, totalSum } = useCartStore((state) => state);
+  const { cart, apiQuantity, totalSum, getDiscountedTotal } = useCartStore(
+    (state) => state
+  );
   const [isClient, setIsClient] = useState(false);
   const { t } = useTranslation("common");
 
@@ -84,6 +86,11 @@ export default function CartPage() {
             : cartItem.price;
           const name =
             i18n.language == "ru" ? cartItem.nameRu : cartItem.nameUz;
+          const discountedTotal = getDiscountedTotal(
+            cartItem.collectionSlug || "",
+            Number(discountPrice),
+            Number(cartItem.quantity)
+          );
           return (
             <div
               key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
@@ -99,6 +106,7 @@ export default function CartPage() {
                   sizeId={cartItem.sizeId}
                   image={cartItem.imagesList[0]}
                   qty={cartItem.quantity}
+                  discountedTotal={discountedTotal}
                 />
               </div>
 

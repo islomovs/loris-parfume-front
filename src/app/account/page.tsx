@@ -11,7 +11,7 @@ import { CheckoutCartItem } from "../components/CheckoutCartItem";
 import { useQuery, useMutation } from "react-query";
 import { fetchUserInfo, updateUserInfo } from "../../services/user";
 import { fetchAllOrders } from "../../services/orders";
-import useCartStore from "@/services/store";
+import useCartStore from "@/services/store"; // Correctly import useCartStore
 import { message } from "antd";
 import { Spinner } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
@@ -28,6 +28,12 @@ export default function Account() {
   const { register, handleSubmit, setValue } = useForm<FormData>();
   const router = useRouter();
   const { t } = useTranslation("common");
+
+  // Access the necessary state and functions from Zustand store
+  const { clearCart, getDiscountedTotal } = useCartStore((state) => ({
+    clearCart: state.clearCart,
+    getDiscountedTotal: state.getDiscountedTotal,
+  }));
 
   // Fetch user info using useQuery
   const {
@@ -85,7 +91,6 @@ export default function Account() {
   const handleLogout = () => {
     try {
       // Clear the cart using the clearCart method from useCartStore
-      const { clearCart } = useCartStore.getState();
       clearCart();
 
       // Remove authentication-related data from localStorage
@@ -228,8 +233,31 @@ export default function Account() {
                           {t("orderDetails.orderItems")}
                         </h2>
                         {order.itemsList.map((item: any, index: number) => {
+                          const discountPrice = item.discountPercent
+                            ? item.price -
+                              (item.price * item.discountPercent) / 100
+                            : item.price;
+
                           const name =
-                            i18n.language == "ru" ? item.nameRu : item.nameUz;
+                            i18n.language === "ru" ? item.nameRu : item.nameUz;
+
+                          // Check values passed to getDiscountedTotal
+                          console.log(
+                            "collectionSlug:",
+                            item.collectionSlug,
+                            "price:",
+                            discountPrice,
+                            "quantity:",
+                            item.quantity
+                          );
+
+                          // Calculate discounted total using Zustand store function
+                          const discountedTotal = getDiscountedTotal(
+                            item.collectionSlug || "",
+                            Number(discountPrice),
+                            Number(item.quantity)
+                          );
+
                           return (
                             <CheckoutCartItem
                               key={index}
@@ -237,6 +265,7 @@ export default function Account() {
                               price={item.totalPrice}
                               quantity={item.quantity}
                               image={item.imageName}
+                              discountedTotal={discountedTotal}
                             />
                           );
                         })}

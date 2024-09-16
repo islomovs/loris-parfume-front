@@ -5,12 +5,15 @@ import { CustomDropdown } from "../components/CustomDropdown";
 import { CustomInput } from "../components/CustomInput";
 import { CheckoutCartItem } from "../components/CheckoutCartItem";
 import CustomTextArea from "../components/CustomTextArea";
-import useCartStore from "../../services/store";
+import useCartStore from "../../services/store"; // Import Zustand store
 import useOrderStore from "../../services/orderStore";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "react-query";
-import { createOrder, OrderData } from "../../services/orders";
-import { fetchNearestBranch } from "../../services/orders";
+import {
+  createOrder,
+  OrderData,
+  fetchNearestBranch,
+} from "../../services/orders";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
@@ -42,26 +45,28 @@ type FormData = {
 };
 
 export default function Checkout() {
-  const { cart, totalSum } = useCartStore((state) => state);
+  const { cart, totalSum, getDiscountedTotal } = useCartStore((state) => state); // Use getDiscountedTotal from store
   const { addOrder } = useOrderStore();
   const { handleSubmit, setValue, control, register, resetField, watch } =
     useForm<FormData>();
 
   const [filteredPaymentOptions, setFilteredPaymentOptions] =
     useState(allPaymentOptions);
-
   const [isDelivery, setDelivery] = useState<boolean>(true);
   const [deliveryData, setDeliveryData] = useState<{
     distance: number;
     deliverySum: number;
-  }>({ distance: 0, deliverySum: 0 });
-  const [branchName, setBranchName] = useState<string>(""); // State for branch name
+  }>({
+    distance: 0,
+    deliverySum: 0,
+  });
+  const [branchName, setBranchName] = useState<string>("");
   const [coords, setCoords] = useState([41.314472, 69.27991]);
 
   const router = useRouter();
   const timer = useRef(setTimeout(() => {}, 3000));
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
-  const [branchId, setBranchId] = useState<number | null>(null); // State for branch ID
+  const [branchId, setBranchId] = useState<number | null>(null);
   const { t } = useTranslation("common");
 
   const deliveryOptions = [
@@ -69,7 +74,6 @@ export default function Checkout() {
     { id: 1, title: t("checkout.deliveryOptions.delivery") },
   ];
 
-  // Define the mutation for creating an order using React Query
   const orderMutation = useMutation(
     (orderData: OrderData) => createOrder(orderData),
     {
@@ -79,8 +83,6 @@ export default function Checkout() {
       onSuccess: (data) => {
         loadingBarRef.current?.complete();
         addOrder(data);
-
-        // Handle specific payment types
         if (data.paymentType.toLowerCase() === "uzum nasiya") {
           message.success(
             "Answer for your request will be sent to your phone number"
@@ -103,7 +105,6 @@ export default function Checkout() {
     }
   );
 
-  // Define the mutation for fetching the nearest branch using React Query
   const nearestBranchMutation = useMutation(
     ({ longitude, latitude }: { longitude: number; latitude: number }) =>
       fetchNearestBranch(longitude, latitude),
@@ -112,16 +113,16 @@ export default function Checkout() {
         message.loading("Fetching nearest branch...");
       },
       onSuccess: (data) => {
-        message.destroy(); // Remove loading message
-        setBranchName(data?.name); // Set the branch name from the response
-        setBranchId(data?.id); // Set the branch ID from the response
+        message.destroy();
+        setBranchName(data?.name);
+        setBranchId(data?.id);
         setDeliveryData({
           distance: Number(data?.distance),
           deliverySum: Number(data?.deliverySum),
         });
       },
       onError: (error) => {
-        message.destroy(); // Remove loading message
+        message.destroy();
         console.error("Error fetching nearest branch:", error);
         message.error("Failed to fetch nearest branch, please try again.");
       },
@@ -130,14 +131,12 @@ export default function Checkout() {
 
   const handleDeliveryChange = (value: string) => {
     setValue("deliveryType", value);
-
-    // Filter payment options based on delivery type immediately after selection
     if (value === "Доставка") {
       setFilteredPaymentOptions(
         allPaymentOptions.filter((option) => option.title !== "cash")
       );
       if (watch("paymentType") === "cash") {
-        resetField("paymentType"); // Reset payment type if it was cash
+        resetField("paymentType");
       }
     } else {
       setFilteredPaymentOptions(allPaymentOptions);
@@ -151,7 +150,6 @@ export default function Checkout() {
   }) => {
     setValue("address", value?.address);
     setCoords([value?.location[0], value?.location[1]]);
-
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       nearestBranchMutation.mutate({
@@ -171,7 +169,6 @@ export default function Checkout() {
 
     const currentTotalSum = totalSum();
     const deliverySum = currentTotalSum > 500000 ? 0 : deliveryData.deliverySum;
-
     const finalTotalSum = deliverySum + currentTotalSum;
 
     const orderData: OrderData = {
@@ -190,7 +187,7 @@ export default function Checkout() {
       deliverySum: deliverySum,
       totalSum: finalTotalSum,
       paymentType: data.paymentType.toLowerCase(),
-      returnUrl: "",
+      returnUrl: "https://lorisparfume.uz/account",
       ordersItemsList: ordersItemsList,
     };
 
@@ -229,7 +226,6 @@ export default function Checkout() {
                 onChange={handleDeliveryChange}
               />
               <YandexMap onLocationChange={onLocationChange} />
-
               <CustomInput
                 {...register("fullName")}
                 type="text"
@@ -242,13 +238,12 @@ export default function Checkout() {
                 borders="rounded"
                 title={t("checkout.phoneNumber")}
               />
-              {/* Branch Name Input */}
               <CustomInput
                 value={branchName}
                 type="text"
                 borders="rounded"
                 title={t("checkout.branch")}
-                disabled // Make the input field unchangeable
+                disabled
               />
               <CustomInput
                 {...register("address")}
@@ -277,7 +272,6 @@ export default function Checkout() {
                   : t("checkout.makePayment")}
               </button>
             </form>
-
             <footer className="border-t border-solid border-t-[#DFDFDF] mt-4 lg:mt-16">
               <a href="#" className="mt-2 underline text-primary">
                 {t("checkout.privacy")}
@@ -298,20 +292,38 @@ export default function Checkout() {
                     : cartItem.price;
 
                   const name =
-                    i18n.language == "ru" ? cartItem.nameRu : cartItem.nameUz;
+                    i18n.language === "ru" ? cartItem.nameRu : cartItem.nameUz;
                   const sizeName =
-                    i18n.language == "ru"
+                    i18n.language === "ru"
                       ? cartItem.sizeNameRu
                       : cartItem.sizeNameUz;
+
+                  // Check values being passed to getDiscountedTotal
+                  console.log(
+                    "collectionSlug:",
+                    cartItem.collectionSlug,
+                    "price:",
+                    discountPrice,
+                    "quantity:",
+                    cartItem.quantity
+                  );
+
+                  // Calculate total with discount logic from Zustand
+                  const discountedTotal = getDiscountedTotal(
+                    cartItem.collectionSlug || "",
+                    Number(discountPrice),
+                    Number(cartItem.quantity)
+                  );
 
                   return (
                     <CheckoutCartItem
                       key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
                       title={name}
                       subtitle={sizeName}
-                      price={discountPrice}
+                      price={discountPrice} // Pass original price
                       quantity={cartItem.quantity}
                       image={cartItem.imagesList[0]}
+                      discountedTotal={discountedTotal} // Pass calculated total
                     />
                   );
                 })

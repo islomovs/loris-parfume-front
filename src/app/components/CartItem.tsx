@@ -17,6 +17,7 @@ interface ICartItemProps {
   qty: number;
   sizeId?: number;
   collectionSlug?: string;
+  discountedTotal: number;
 }
 
 export const CartItem: React.FC<ICartItemProps> = ({
@@ -27,7 +28,7 @@ export const CartItem: React.FC<ICartItemProps> = ({
   image,
   qty,
   sizeId,
-  collectionSlug,
+  discountedTotal,
 }) => {
   const [quantity, setQuantity] = useState(qty);
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -66,26 +67,8 @@ export const CartItem: React.FC<ICartItemProps> = ({
     }
   };
 
-  const calculateDiscountedTotal = () => {
-    const itemBasePrice = Number(price);
-    if (isNaN(itemBasePrice)) {
-      console.error(`Invalid price for item: ${slug}`, {
-        price: itemBasePrice,
-      });
-      return 0;
-    }
-
-    let discountedTotal = 0;
-    for (let i = 1; i <= quantity; i++) {
-      discountedTotal += i % 2 === 0 ? itemBasePrice / 2 : itemBasePrice;
-    }
-
-    return discountedTotal;
-  };
-
-  const discountedTotal = calculateDiscountedTotal();
-  const isDiscountApplied = quantity > 1;
   const originalTotal = price * quantity;
+  const isDiscountApplied = originalTotal !== discountedTotal;
 
   return (
     <div className="my-[30px]">

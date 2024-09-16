@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, PersistStorage } from "zustand/middleware";
 import { ICartItem } from "./cart";
+import { string } from "yup";
 
 interface CartState {
   cart: ICartItem[];
@@ -13,9 +14,14 @@ interface CartState {
     quantity: number,
     sizeId?: number
   ) => void;
-  removeCartItem: (id: number, sizeId?: number) => void; // Add this line
+  removeCartItem: (id: number, sizeId?: number) => void;
   clearCart: () => void;
   totalSum: () => number;
+  getDiscountedTotal: (
+    collectionSlug: string,
+    price: number,
+    quantity: number
+  ) => number; // New function to calculate discounted total
 }
 
 // Custom storage object that conforms to PersistStorage interface
@@ -70,7 +76,6 @@ const useCartStore = create<CartState>()(
         get().totalSum();
       },
       removeCartItem: (id, sizeId) => {
-        // Implement removeCartItem function
         set((state) => {
           const updatedCart = state.cart.filter(
             (item) => !(item.id === id && item.sizeId === sizeId)
@@ -87,43 +92,56 @@ const useCartStore = create<CartState>()(
           return total; // Returns 0 if cart is empty or undefined
         }
 
-        // Define a type for the accumulator
+        const discountExceptions = ["f-2-women", "excluded-collection-2"]; // Collections excluded from discounts
+
         type GroupedItems = {
           [key: string]: ICartItem[];
         };
 
-        // Group items by collectionSlug to identify same collection products
         const itemsGrouped = cart.reduce<GroupedItems>((acc, item) => {
-          const key = item.collectionSlug || "default-collection"; // Use a default key if collectionSlug is missing
+          const key = item.collectionSlug || "default-collection";
           if (!acc[key]) {
             acc[key] = [];
           }
           acc[key].push(item);
           return acc;
-        }, {}); // Initialize as an empty object of type GroupedItems
+        }, {});
 
-        // Calculate total with 50% discount for every second item in each collection group
         Object.values(itemsGrouped).forEach((groupItems: ICartItem[]) => {
-          // Flatten quantities to account for every second item regardless of item type
+          const collectionSlug =
+            groupItems[0].collectionSlug || "default-collection";
+          const isExcluded = discountExceptions.includes(collectionSlug);
+
           const expandedItems = groupItems.flatMap((item) =>
             Array(item.quantity).fill(item)
           );
 
-          // Apply 50% discount to every second item within the same collection group
           expandedItems.forEach((item, index) => {
             const price = item.discountPercent
               ? Number(item.price) -
                 (Number(item.price) * item.discountPercent) / 100
               : Number(item.price);
 
-            // Apply 50% discount to every second item
-            const effectivePrice = (index + 1) % 2 === 0 ? price / 2 : price;
+            const effectivePrice =
+              isExcluded || (index + 1) % 2 !== 0 ? price : price / 2;
 
             total += effectivePrice;
           });
         });
 
         return total || 0; // Ensure total is a number
+      },
+      getDiscountedTotal: (collectionSlug, price, quantity) => {
+        const discountExceptions = ["f-2-women", "excluded-collection-2"]; // Update with your actual exception list
+        const isExcluded = discountExceptions.includes(collectionSlug);
+
+        let total = 0;
+        for (let i = 1; i <= quantity; i++) {
+          // Apply discount logic only if the collection is not excluded
+          const effectivePrice = isExcluded || i % 2 !== 0 ? price : price / 2;
+          total += effectivePrice;
+        }
+        return total;
       },
     }),
     {

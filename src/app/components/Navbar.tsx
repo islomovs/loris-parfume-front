@@ -36,6 +36,7 @@ import { CustomDrawer } from "./CustomDrawer";
 import { DrawerCartItem } from "./DrawerCartItem";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { Spinner } from "@chakra-ui/react";
 
 interface INavbarProps {
   variant: "filled" | "transparent";
@@ -345,23 +346,25 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             {t("navbar.e-catalog")}
             {isHovered && (
               <ul className="absolute left-0 top-[40px] bg-white border text-[#454545] w-48 z-10 p-4">
-                {!isLoadingCatalogues
-                  ? catalogues?.map((catalogue: ICatalogueItem) => {
-                      const name =
-                        i18n.language == "ru"
-                          ? catalogue.nameRu
-                          : catalogue.nameUz;
-                      const file =
-                        i18n.language == "ru"
-                          ? catalogue.fileRu
-                          : catalogue.fileUz;
-                      return (
-                        <li key={catalogue.id} className="px-4 py-2">
-                          <Link href={`${baseUrl}/${file}`}>{name}</Link>
-                        </li>
-                      );
-                    })
-                  : "Loading..."}
+                {!isLoadingCatalogues ? (
+                  catalogues?.map((catalogue: ICatalogueItem) => {
+                    const name =
+                      i18n.language == "ru"
+                        ? catalogue.nameRu
+                        : catalogue.nameUz;
+                    const file =
+                      i18n.language == "ru"
+                        ? catalogue.fileRu
+                        : catalogue.fileUz;
+                    return (
+                      <li key={catalogue.id} className="px-4 py-2">
+                        <Link href={`${baseUrl}/${file}`}>{name}</Link>
+                      </li>
+                    );
+                  })
+                ) : (
+                  <Spinner color="#87754f" size="xl" />
+                )}
               </ul>
             )}
           </div>
@@ -400,20 +403,20 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               <div className="my-16 flex-1 w-full">
                 <div className="flex flex-row justify-between items-center">
                   <p className="text-xs text-[#9D9D9D] font-normal uppercase tracking-[.2em]">
-                    {searchResults?.page.totalElements} results
+                    {searchResults?.page.totalElements} {t("navbar.results")}
                   </p>
                   <Link
                     href={`/search/${searchValue}`}
                     className="text-xs text-[#454545] font-semibold uppercase tracking-[.2em]"
                   >
-                    see all
+                    {t("navbar.seeAll")}
                   </Link>
                 </div>
                 <hr className="border-t border-solid border-[#e3e3e3] mb-7 mt-[10px]" />
                 <div className="mx-auto">
                   <Row gutter={[20, 30]}>
                     {isSearching ? (
-                      <p>Loading...</p>
+                      <Spinner color="#87754f" size="xl" />
                     ) : searchResults && searchResults.content?.length > 0 ? (
                       <Row gutter={[20, 30]}>
                         {searchResults.content.slice(0, 3).map((product) => {
@@ -471,7 +474,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                         })}
                       </Row>
                     ) : (
-                      <p>No products found</p>
+                      <p>{t("navbar.noProductsFound")}</p>
                     )}
                   </Row>
                 </div>
@@ -488,7 +491,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         onClose={toggleSidebar}
         open={isSidebarOpen}
         width="80%"
-        className="flex flex-col justify-between md:hidden"
+        className="flex flex-col h-full justify-between md:hidden"
         style={{
           backgroundColor: "#454545",
           color: "white",
@@ -501,13 +504,16 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             className="text-lg font-semibold"
             onClick={toggleSidebar}
           >
-            Home
+            {t("mobileNavbar.home")}
           </Link>
           {data?.collections?.map((collection: ICollectionItem) => {
             const filteredCategories = data.categories.filter(
               (category: ICategoryItem) =>
                 category.collectionId === collection.id
             );
+
+            const collectionName =
+              i18n.language == "ru" ? collection.nameRu : collection.nameUz;
 
             return (
               <div key={collection.id} className="relative">
@@ -523,7 +529,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                     className="text-lg font-semibold flex-1"
                     onClick={toggleSidebar}
                   >
-                    {collection.nameRu}
+                    {collectionName}
                   </Link>
                   {filteredCategories.length > 0 && (
                     <button
@@ -546,17 +552,23 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                 {/* Categories collapse */}
                 {expandedCollections[collection.id] && (
                   <div className="ml-4 mt-2">
-                    {filteredCategories.map((category: ICategoryItem) => (
-                      <Link
-                        key={category.id}
-                        href={`/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`}
-                        className="block text-sm py-1 border-b border-white"
-                        style={{ color: "white" }}
-                        onClick={toggleSidebar}
-                      >
-                        {category.nameEng}
-                      </Link>
-                    ))}
+                    {filteredCategories.map((category: ICategoryItem) => {
+                      const categoryName =
+                        i18n.language == "ru"
+                          ? category.nameRu
+                          : category.nameUz;
+                      return (
+                        <Link
+                          key={category.id}
+                          href={`/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`}
+                          className="block text-sm py-1 border-b border-white"
+                          style={{ color: "white" }}
+                          onClick={toggleSidebar}
+                        >
+                          {categoryName}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -567,21 +579,21 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             className="text-lg font-semibold"
             onClick={toggleSidebar}
           >
-            Branches
+            {t("mobileNavbar.branches")}
           </Link>
         </div>
 
         {/* Account and Language Dropdown Moved to Bottom */}
-        <div className="flex flex-row justify-around items-end space-y-4 px-6">
+        <div className="flex flex-row justify-around items-end space-y-4 px-6 self-end">
           <Link
             href={token ? "/account" : "/account/login"}
             className="text-sm text-[#FFFFFF80] font-normal"
             onClick={toggleSidebar}
           >
-            Account
+            {t("mobileNavbar.account")}
           </Link>
           <Dropdown
-            className="hidden cursor-pointer md:block"
+            className="cursor-pointer md:hidden"
             menu={{ items }} // Attach the items to the Dropdown component
             trigger={["click"]}
           >

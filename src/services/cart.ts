@@ -13,7 +13,7 @@ export interface ICartItem {
   sizeNameRu?: string;
   sizeNameEng?: string;
   sizeId?: number;
-  collectionSlug?: string;
+  collectionSlug: string;
   collectionId?: number;
   discountPercent?: number;
 }

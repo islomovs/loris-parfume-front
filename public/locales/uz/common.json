@@ -1,11 +1,19 @@
 {
   "navbar": {
-    "account": "shahsiy",
+    "account": "akkaunt",
     "search": "IZLASH",
     "shoppingCart": "xarid savati",
     "branches": "filiallar",
     "e-catalog": "e-katalog",
-    "announcement": "Har ikkinchi mahsulotga 50% chegirma"
+    "announcement": "Har ikkinchi mahsulotga 50% chegirma",
+    "seeAll": "Hammasini ko'rish",
+    "noProductsFound": "Mahsulotlar topilmadi",
+    "results": "natijalar"
+  },
+  "mobileNavbar": {
+    "home": "Bosh sahifa",
+    "branches": "Filiallar",
+    "account": "akkaunt"
   },
   "home": { "viewCollection": "kolleksiyaga o'tish" },
   "account": {

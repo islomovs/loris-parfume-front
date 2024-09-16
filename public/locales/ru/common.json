@@ -5,7 +5,15 @@
     "shoppingCart": "корзина",
     "branches": "филиалы",
     "e-catalog": "е-каталог",
-    "announcement": "Скидка 50% на каждый второй товар"
+    "announcement": "Скидка 50% на каждый второй товар",
+    "seeAll": "Смотреть все",
+    "noProductsFound": "Товары не найдены",
+    "results": "результатов"
+  },
+  "mobileNavbar": {
+    "home": "Главная",
+    "branches": "Филиалы",
+    "account": "Аккаунт"
   },
   "home": { "viewCollection": "Посмотреть коллекцию" },
   "account": {

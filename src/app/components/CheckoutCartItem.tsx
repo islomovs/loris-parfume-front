@@ -1,5 +1,5 @@
 import { Image, Badge } from "antd";
-import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const CheckoutCartItem: React.FC<{
   title?: string;
@@ -7,35 +7,14 @@ export const CheckoutCartItem: React.FC<{
   price: number;
   quantity: number;
   image: string;
-}> = ({ title, subtitle, price, quantity, image }) => {
+  discountedTotal: number; // Accept the discounted total prop
+}> = ({ title, subtitle, price, quantity, image, discountedTotal }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const [discountedTotal, setDiscountedTotal] = useState(0);
+  const { t } = useTranslation("common");
 
-  useEffect(() => {
-    const calculateDiscountedTotal = () => {
-      const itemBasePrice = Number(price);
-      if (isNaN(itemBasePrice) || itemBasePrice < 0) {
-        console.error(`Invalid price: ${price}`);
-        return 0;
-      }
-
-      // Calculate the discounted total: every second item is half price
-      let total = 0;
-      for (let i = 1; i <= quantity; i++) {
-        total += i % 2 === 0 ? itemBasePrice / 2 : itemBasePrice;
-      }
-
-      return total;
-    };
-
-    setDiscountedTotal(calculateDiscountedTotal());
-  }, [price, quantity]);
-
-  // Check if a discount is applied
-  const isDiscountApplied = quantity > 1;
-
-  // Calculate original total without discount for display purposes
-  const originalTotal = Number(price) * quantity;
+  // Determine if a discount is applied by comparing the original total with the discounted total
+  const originalTotal = price * quantity;
+  const isDiscountApplied = originalTotal !== discountedTotal;
 
   return (
     <div className="flex flex-row items-center">
@@ -52,7 +31,7 @@ export const CheckoutCartItem: React.FC<{
       <div className="flex-1 flex flex-col justify-center pl-[14px]">
         <h1 className="text-[14px] font-normal">{title}</h1>
         <p className="text-xs font-normal text-[#0000008F] my-1">
-          {Number(price).toFixed(2)} сум
+          {Number(price).toFixed(2)} {t("productDetails.sum")}
         </p>
         <p className="text-xs font-normal text-[#0000008F]">{subtitle}</p>
       </div>
@@ -60,15 +39,15 @@ export const CheckoutCartItem: React.FC<{
         {isDiscountApplied ? (
           <>
             <p className="text-[12px] font-normal line-through text-[#0000008F]">
-              {originalTotal.toFixed(2)} сум
+              {originalTotal.toFixed(2)} {t("productDetails.sum")}
             </p>
             <p className="text-[14px] font-bold text-red-500">
-              {discountedTotal.toFixed(2)} сум
+              {Number(discountedTotal).toFixed(2)} {t("productDetails.sum")}
             </p>
           </>
         ) : (
           <p className="text-[14px] font-normal">
-            {originalTotal.toFixed(2)} сум
+            {originalTotal.toFixed(2)} {t("productDetails.sum")}
           </p>
         )}
       </div>
