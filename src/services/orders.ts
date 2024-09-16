@@ -17,7 +17,6 @@ export interface OrderData {
   comment: string;
   isDelivery: boolean;
   isSoonDeliveryTime: boolean;
-  scheduledDeliveryTime: string;
   longitude: number;
   latitude: number;
   deliverySum: number;

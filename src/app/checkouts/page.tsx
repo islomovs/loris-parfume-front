@@ -62,7 +62,7 @@ export default function Checkout() {
   });
   const [branchName, setBranchName] = useState<string>("");
   const [coords, setCoords] = useState([41.314472, 69.27991]);
-
+  console.log("COORDS: ", coords);
   const router = useRouter();
   const timer = useRef(setTimeout(() => {}, 3000));
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
@@ -153,8 +153,8 @@ export default function Checkout() {
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       nearestBranchMutation.mutate({
-        latitude: value?.location[0],
-        longitude: value?.location[1],
+        latitude: value?.location[1],
+        longitude: value?.location[0],
       });
     }, 2000);
   };
@@ -170,7 +170,6 @@ export default function Checkout() {
     const currentTotalSum = totalSum();
     const deliverySum = currentTotalSum > 500000 ? 0 : deliveryData.deliverySum;
     const finalTotalSum = deliverySum + currentTotalSum;
-    console.log("COORDS: ", coords);
     const orderData: OrderData = {
       fullName: data.fullName,
       branchId: branchId ?? 0,
@@ -181,7 +180,6 @@ export default function Checkout() {
       comment: data.comment,
       isDelivery: data.deliveryType === t("checkout.deliveryOptions.delivery"),
       isSoonDeliveryTime: false,
-      scheduledDeliveryTime: new Date().toISOString(),
       longitude: coords[1] || 0.0,
       latitude: coords[0] || 0.0,
       deliverySum: deliverySum,
