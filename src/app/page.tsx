@@ -15,19 +15,20 @@ import { Spinner } from "@chakra-ui/react";
 import "../utils/i18n";
 import { useTranslation } from "react-i18next";
 import i18n from "../utils/i18n";
-import { Helmet } from "react-helmet";
-
-<Helmet>
-  <title>Loris Parfume</title>
-  <meta name="description" content="Лучшие Парфюмы От Loris Parfume" />
-  <meta property="og:title" content="Loris Parfume" />
-  <meta property="og:description" content="Лучшие Парфюмы От Loris Parfume" />
-  <meta property="og:image" content={`${process.env.NEXT_PUBLIC_API_BASE_URL}/logo.png`} />
-  <meta property="og:url" content="https://lorisparfume.uz" />
-  <meta property="og:type" content="website" />
-</Helmet>
+import Head from "next/head";
 
 export default function Home() {
+
+  <Head>
+        <title>Loris Parfume</title>
+        <meta name="description" content="Лучшие Парфюмы От Loris Parfume" />
+        <meta property="og:title" content="Loris Parfume" />
+        <meta property="og:description" content="Лучшие Парфюмы От Loris Parfume" />
+        <meta property="og:image" content="/logo.png" />
+        <meta property="og:url" content="https://lorisparfume.uz" />
+        <meta property="og:type" content="website" />
+  </Head>
+
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const page = 1;
   const [collectionBanners, setCollectionBanners] =
