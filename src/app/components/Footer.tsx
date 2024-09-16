@@ -28,7 +28,7 @@ export default function Footer() {
             {t("about.description")}
           </p>
           <a
-            href="phone:998939119944"
+            href="tel:+998939119944"
             className="text-sm lg:text-[14px] font-normal"
           >
             +998 93 911 99 44
