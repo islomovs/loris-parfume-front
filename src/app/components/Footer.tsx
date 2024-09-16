@@ -5,6 +5,7 @@ import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { capitalizeFirstLetter } from "../../helpers/capitalizeString";
 import Link from "next/link";
 import i18n from "@/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
   const [collections, setCollections] = useState<ICollectionItem[]>();
@@ -13,6 +14,7 @@ export default function Footer() {
     const collectionsResponse = await fetchCollectionsData(page);
     setCollections(collectionsResponse.data.content);
   });
+  const { t } = useTranslation("common");
 
   return (
     <footer className="md:p-10 lg:p-20 border-t-[1px] border-solid border-[#e3e3e3]">
@@ -23,24 +25,22 @@ export default function Footer() {
             OVER LORIS
           </h1>
           <p className="text-sm lg:text-[14px] leading-6 font-normal mb-5">
-            Loris Parfum biedt kwalitatieve parfum voor aantrekkelijke prijzen.
-            Wij hebben verschillende lijnen, van oosters tot westers, waar ieder
-            zijn eigen stijl in terug kan vinden. Je bent welkom om kennis te
-            maken van onze exclusieve geuren die je zintuigen prikkelen. Naast
-            onze parfums kun je ook terecht voor geurstokjes en geurkaarsen en
-            luxe roomsprays. Dankzij onze beveiligde betaalmethodes, gaat het
-            bestellen bij Loris Parfum veilig en snel. Volg Loris Parfum
-            Nederland ook op Social Media. Zo mis je geen aanbiedingen en kan je
-            kans maken op diverse acties.
+            {t("about.description")}
           </p>
-          <h2 className="text-sm lg:text-[14px] font-normal">
-            Whatsapp +316 22 07 77 30
-          </h2>
+          <a
+            href="phone:998939119944"
+            className="text-sm lg:text-[14px] font-normal"
+          >
+            +998 93 911 99 44
+          </a>
           <div className="flex flex-row gap-5 mt-3 lg:mt-[14px]">
             <a href="https://facebook.com" className="hover:text-primary">
               <FaFacebookF />
             </a>
-            <a href="https://instagram.com" className="hover:text-primary">
+            <a
+              href="https://www.instagram.com/lorisparfum_uz"
+              className="hover:text-primary"
+            >
               <FaInstagram />
             </a>
           </div>
