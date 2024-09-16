@@ -1,11 +1,16 @@
 "use client";
-import { Montserrat } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { RootChildren } from "./components/RootChildren";
 import { Providers } from "./providers";
 import PageTransition from "./components/PageTransition";
 
-const montserrat = Montserrat({ subsets: ["latin", "cyrillic"] });
+// Load Poppins font with Latin and Cyrillic subsets
+const poppins = Poppins({
+  subsets: ["latin", "latin-ext"], // Note: Poppins currently supports latin and latin-ext subsets
+  weight: ["400", "500", "600", "700"], // Include the weights you need
+  display: "swap", // Optional: for better font loading performance
+});
 
 export default function RootLayout({
   children,
@@ -14,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` ${montserrat.className}`}>
+      <body className={poppins.className}>
         <Providers>
           <PageTransition>
             <RootChildren>{children}</RootChildren>

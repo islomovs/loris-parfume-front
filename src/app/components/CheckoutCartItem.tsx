@@ -7,15 +7,28 @@ export const CheckoutCartItem: React.FC<{
   price: number;
   quantity: number;
   image: string;
-  discountedTotal: number; // Accept the discounted total prop
-}> = ({ title, subtitle, price, quantity, image, discountedTotal }) => {
+  discountedTotal?: number; // Accept the discounted total prop
+  isOrderHistory?: boolean;
+}> = ({
+  title,
+  subtitle,
+  price,
+  quantity,
+  image,
+  discountedTotal,
+  isOrderHistory = false,
+}) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { t } = useTranslation("common");
 
   // Determine if a discount is applied by comparing the original total with the discounted total
-  const originalTotal = price * quantity;
+  let originalTotal = 0;
+  if (isOrderHistory) {
+    originalTotal = price;
+  } else {
+    originalTotal = price * quantity;
+  }
   const isDiscountApplied = originalTotal !== discountedTotal;
-
   return (
     <div className="flex flex-row items-center">
       <Badge count={quantity} color="#0000008F" offset={[-6, 0]}>
@@ -31,7 +44,11 @@ export const CheckoutCartItem: React.FC<{
       <div className="flex-1 flex flex-col justify-center pl-[14px]">
         <h1 className="text-[14px] font-normal">{title}</h1>
         <p className="text-xs font-normal text-[#0000008F] my-1">
-          {Number(price).toFixed(2)} {t("productDetails.sum")}
+          {!isOrderHistory ? (
+            <>{`${Number(price).toFixed(2)} ${t("productDetails.sum")}`}</>
+          ) : (
+            " "
+          )}
         </p>
         <p className="text-xs font-normal text-[#0000008F]">{subtitle}</p>
       </div>
@@ -47,7 +64,8 @@ export const CheckoutCartItem: React.FC<{
           </>
         ) : (
           <p className="text-[14px] font-normal">
-            {originalTotal.toFixed(2)} {t("productDetails.sum")}
+            {!isOrderHistory ? originalTotal.toFixed(2) : price}{" "}
+            {t("productDetails.sum")}
           </p>
         )}
       </div>

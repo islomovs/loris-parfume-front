@@ -37,7 +37,7 @@
     "register": {
       "title": "регистрация",
       "subtitle": "Введите информацию ниже:",
-      "fullName": "фио",
+      "fullName": "ФИО",
       "phoneNumber": "Номер телефона",
       "password": "Пароль",
       "repassword": "Введите пароль заново",
@@ -96,7 +96,9 @@
     "deliveryOptions": {
       "pickup": "Самовывоз",
       "delivery": "Доставка"
-    }
+    },
+    "products": "Товары",
+    "payment": "К оплате"
   },
   "cart": {
     "cartUpdatedSuccess": "Корзина успешно обновлена!",

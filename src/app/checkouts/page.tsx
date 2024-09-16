@@ -27,9 +27,8 @@ import i18n from "@/utils/i18n";
 import { Box, HStack, Spinner } from "@chakra-ui/react";
 
 const allPaymentOptions = [
-  { id: 0, title: "cash", icon: CashIcon.src },
-  { id: 1, title: "payme", icon: PaymeIcon.src },
-  { id: 2, title: "click", icon: ClickIcon.src },
+  { id: 0, title: "payme", icon: PaymeIcon.src },
+  { id: 1, title: "click", icon: ClickIcon.src },
 ];
 
 type FormData = {
@@ -48,7 +47,11 @@ export default function Checkout() {
   const { cart, totalSum, getDiscountedTotal } = useCartStore((state) => state); // Use getDiscountedTotal from store
   const { addOrder } = useOrderStore();
   const { handleSubmit, setValue, control, register, resetField, watch } =
-    useForm<FormData>();
+    useForm<FormData>({
+      defaultValues: {
+        deliveryType: "Доставка", // Set Доставка as default
+      },
+    });
 
   const [filteredPaymentOptions, setFilteredPaymentOptions] =
     useState(allPaymentOptions);
@@ -62,7 +65,6 @@ export default function Checkout() {
   });
   const [branchName, setBranchName] = useState<string>("");
   const [coords, setCoords] = useState([41.314472, 69.27991]);
-  console.log("COORDS: ", coords);
   const router = useRouter();
   const timer = useRef(setTimeout(() => {}, 3000));
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
@@ -70,8 +72,7 @@ export default function Checkout() {
   const { t } = useTranslation("common");
 
   const deliveryOptions = [
-    { id: 0, title: t("checkout.deliveryOptions.pickup") },
-    { id: 1, title: t("checkout.deliveryOptions.delivery") },
+    { id: 1, title: t("checkout.deliveryOptions.delivery") }, // Only include "Доставка"
   ];
 
   const orderMutation = useMutation(
@@ -99,7 +100,7 @@ export default function Checkout() {
       },
       onError: (error) => {
         loadingBarRef.current?.complete();
-        console.error("Failed to create order:", error);
+        // console.error("Failed to create order:", error);
         message.error("Failed to create order, please try again.");
       },
     }
@@ -123,7 +124,7 @@ export default function Checkout() {
       },
       onError: (error) => {
         message.destroy();
-        console.error("Error fetching nearest branch:", error);
+        // console.error("Error fetching nearest branch:", error);
         message.error("Failed to fetch nearest branch, please try again.");
       },
     }
@@ -153,8 +154,8 @@ export default function Checkout() {
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       nearestBranchMutation.mutate({
-        latitude: value?.location[1],
-        longitude: value?.location[0],
+        latitude: value?.location[0],
+        longitude: value?.location[1],
       });
     }, 2000);
   };
@@ -162,13 +163,14 @@ export default function Checkout() {
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const ordersItemsList = cart.map((item) => ({
       itemId: item.id,
-      sizeId: item.sizeId ?? 0,
+      sizeId: item.sizeId ?? 1,
       quantity: item.quantity,
       collectionId: item.collectionId ?? 0,
     }));
 
     const currentTotalSum = totalSum();
-    const deliverySum = currentTotalSum > 500000 ? 0 : deliveryData.deliverySum;
+    const deliverySum =
+      currentTotalSum >= 500000 ? 0 : deliveryData.deliverySum;
     const finalTotalSum = deliverySum + currentTotalSum;
     const orderData: OrderData = {
       fullName: data.fullName,
@@ -180,8 +182,8 @@ export default function Checkout() {
       comment: data.comment,
       isDelivery: data.deliveryType === t("checkout.deliveryOptions.delivery"),
       isSoonDeliveryTime: false,
-      longitude: coords[1] || 0.0,
-      latitude: coords[0] || 0.0,
+      longitude: coords[0] || 0.0,
+      latitude: coords[1] || 0.0,
       deliverySum: deliverySum,
       totalSum: finalTotalSum,
       paymentType: data.paymentType.toLowerCase(),
@@ -296,16 +298,6 @@ export default function Checkout() {
                       ? cartItem.sizeNameRu
                       : cartItem.sizeNameUz;
 
-                  // Check values being passed to getDiscountedTotal
-                  console.log(
-                    "collectionSlug:",
-                    cartItem.collectionSlug,
-                    "price:",
-                    discountPrice,
-                    "quantity:",
-                    cartItem.quantity
-                  );
-
                   // Calculate total with discount logic from Zustand
                   const discountedTotal = getDiscountedTotal(
                     cartItem.collectionSlug || "",
@@ -328,18 +320,29 @@ export default function Checkout() {
               )}
               <Box fontSize={{ md: "20px" }} color="#454545">
                 <HStack justify="space-between">
-                  <p>Товары</p>
-                  <p>{totalSum().toFixed(2)} сум</p>{" "}
+                  <p>{t("checkout.products")}</p>
+                  <p>
+                    {totalSum().toFixed(2)} {t("productDetails.sum")}
+                  </p>
                 </HStack>
                 <HStack justify="space-between" my={5}>
-                  <p>Доставка</p>
-                  <p>{deliveryData?.deliverySum} сум</p>{" "}
+                  <p>{t("checkout.delivery")}</p>
+                  <p>
+                    {totalSum() >= 500
+                      ? "0.00"
+                      : deliveryData?.deliverySum.toFixed(2)}{" "}
+                    {t("productDetails.sum")}
+                  </p>
                 </HStack>
                 <HStack justify="space-between" fontWeight={600}>
-                  <p>К оплате</p>
+                  <p>{t("checkout.payment")}</p>
                   <p>
-                    {(totalSum() + deliveryData?.deliverySum).toFixed(2)} сум
-                  </p>{" "}
+                    {(
+                      totalSum() +
+                      (totalSum() >= 500 ? 0 : deliveryData?.deliverySum)
+                    ).toFixed(2)}{" "}
+                    {t("productDetails.sum")}
+                  </p>
                 </HStack>
               </Box>
             </div>

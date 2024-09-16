@@ -233,39 +233,29 @@ export default function Account() {
                           {t("orderDetails.orderItems")}
                         </h2>
                         {order.itemsList.map((item: any, index: number) => {
-                          const discountPrice = item.discountPercent
-                            ? item.price -
-                              (item.price * item.discountPercent) / 100
-                            : item.price;
+                          console.log("ITEM: ", item);
 
                           const name =
                             i18n.language === "ru" ? item.nameRu : item.nameUz;
+                          const sizeName =
+                            i18n.language === "ru"
+                              ? item.sizeNameRu
+                              : item.sizeNameUz;
 
                           // Check values passed to getDiscountedTotal
-                          console.log(
-                            "collectionSlug:",
-                            item.collectionSlug,
-                            "price:",
-                            discountPrice,
-                            "quantity:",
-                            item.quantity
-                          );
 
                           // Calculate discounted total using Zustand store function
-                          const discountedTotal = getDiscountedTotal(
-                            item.collectionSlug || "",
-                            Number(discountPrice),
-                            Number(item.quantity)
-                          );
 
                           return (
                             <CheckoutCartItem
                               key={index}
                               title={name}
+                              subtitle={sizeName}
                               price={item.totalPrice}
                               quantity={item.quantity}
                               image={item.imageName}
-                              discountedTotal={discountedTotal}
+                              discountedTotal={item.totalPrice}
+                              isOrderHistory={true}
                             />
                           );
                         })}
