@@ -18,13 +18,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import { message } from "antd";
-import { Spinner } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import CashIcon from "../../../public/cash-icon.svg";
 import PaymeIcon from "../../../public/payme-logo.BdmkZoD4.svg";
 import ClickIcon from "../../../public/click-logo.jzgAXUV7.svg";
 import YandexMap from "../components/YandexMap";
 import i18n from "@/utils/i18n";
+import { Box, HStack, Spinner } from "@chakra-ui/react";
 
 const allPaymentOptions = [
   { id: 0, title: "cash", icon: CashIcon.src },
@@ -170,7 +170,7 @@ export default function Checkout() {
     const currentTotalSum = totalSum();
     const deliverySum = currentTotalSum > 500000 ? 0 : deliveryData.deliverySum;
     const finalTotalSum = deliverySum + currentTotalSum;
-
+    console.log("COORDS: ", coords);
     const orderData: OrderData = {
       fullName: data.fullName,
       branchId: branchId ?? 0,
@@ -328,14 +328,22 @@ export default function Checkout() {
                   );
                 })
               )}
-              <div className="w-full flex flex-col gap-2">
-                <div className="flex flex-row justify-between text-base md:text-[19px] font-semibold text-[#454545]">
-                  <p>{t("checkout.total")}</p>
+              <Box fontSize={{ md: "20px" }} color="#454545">
+                <HStack justify="space-between">
+                  <p>Товары</p>
+                  <p>{totalSum().toFixed(2)} сум</p>{" "}
+                </HStack>
+                <HStack justify="space-between" my={5}>
+                  <p>Доставка</p>
+                  <p>{deliveryData?.deliverySum} сум</p>{" "}
+                </HStack>
+                <HStack justify="space-between" fontWeight={600}>
+                  <p>К оплате</p>
                   <p>
-                    {totalSum().toFixed(2)} {t("productDetails.sum")}
-                  </p>
-                </div>
-              </div>
+                    {(totalSum() + deliveryData?.deliverySum).toFixed(2)} сум
+                  </p>{" "}
+                </HStack>
+              </Box>
             </div>
           </div>
         </div>
