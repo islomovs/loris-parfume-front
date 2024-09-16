@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 export function ProductDetailsHeader({
   category,
   name,
@@ -9,6 +11,8 @@ export function ProductDetailsHeader({
   price: number;
   originalPrice?: number; // Optional original price if there's a discount
 }) {
+  const { t } = useTranslation("common");
+
   return (
     <div className="flex flex-col gap-5">
       <p className="text-xs text-[#454545] tracking-[.2em] font-light">
@@ -20,15 +24,15 @@ export function ProductDetailsHeader({
       {originalPrice && originalPrice > price ? (
         <div className="flex items-center gap-2">
           <p className="text-[14px] text-[#9D9D9D] tracking-[.2em] font-normal line-through">
-            {originalPrice} сум
+            {originalPrice} {t("productDetails.sum")}
           </p>
           <p className="text-[14px] text-red-500 tracking-[.2em] font-normal">
-            {price} сум
+            {price} {t("productDetails.sum")}
           </p>
         </div>
       ) : (
         <p className="text-[14px] text-[#9D9D9D] tracking-[.2em] font-normal">
-          {price} сум
+          {price} {t("productDetails.sum")}
         </p>
       )}
     </div>

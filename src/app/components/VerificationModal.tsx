@@ -10,6 +10,7 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
 interface VerificationModalProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [countdown, setCountdown] = useState(30);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     // Reset the countdown and disable the resend button when the modal opens
@@ -97,17 +99,17 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
       <ModalOverlay />
       <ModalContent
         borderRadius={0}
-        maxW="90vw"
+        maxW={["90vw", null, "fit-content"]}
         className="mx-4 sm:mx-0 sm:w-fit"
       >
         <ModalHeader color="#454545" className="text-center">
-          Verification Required
+          {t("account.verification.title")}
         </ModalHeader>
         <ModalCloseButton borderRadius={0} />
         <ModalBody>
           <div>
             <p className="text-sm sm:text-[16px] text-[#454545] text-center">
-              Please enter the code sent to your number
+              {t("account.verification.subtitle")}
             </p>
             <div className="flex flex-row justify-between my-5 gap-2">
               {code.map((digit, index) => (
@@ -140,7 +142,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
         >
           <div className="w-full flex flex-col justify-start items-start text-sm sm:text-[14px] font-normal text-[#9d9d9d]">
             <div className="flex flex-row">
-              Didn&apos;t receive code?
+              {t("account.verification.resendQ")}
               <Button
                 onClick={handleResendClick}
                 isDisabled={isResendDisabled}
@@ -150,12 +152,12 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
                 color="#454545"
                 ml="2"
               >
-                Resend
+                {t("account.verification.resend")}
               </Button>
             </div>
             {isResendDisabled && (
               <Text fontSize="xs" color="#454545">
-                Available in {countdown} seconds
+                {t("account.verification.availableInSeconds", { countdown })}
               </Text>
             )}
           </div>
@@ -171,7 +173,7 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
             _hover={{ bg: "#5a5a5a" }}
             className="w-full sm:w-auto"
           >
-            Close
+            {t("account.verification.close")}
           </Button>
         </ModalFooter>
       </ModalContent>

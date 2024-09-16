@@ -5,6 +5,8 @@ import { ProductsGrid } from "@/app/components/ProductsGrid";
 import { fetchProductsData, IProduct } from "@/services/products";
 import { CollectionsAndCategoriesData } from "@/services/collections";
 import SortingDropdown from "@/app/components/SortingDropdown";
+import i18n from "@/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 export default function CollectionsPage({
   params,
@@ -14,6 +16,7 @@ export default function CollectionsPage({
   const [sortOption, setSortOption] = useState<string | undefined>(undefined);
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { collectionSlug: slug } = params;
+  const { t } = useTranslation("common");
 
   const {
     data,
@@ -69,6 +72,10 @@ export default function CollectionsPage({
   );
 
   const bannerImage = matchedCollection?.bannerImage || "";
+  const title =
+    i18n.language == "ru"
+      ? matchedCollection?.nameRu
+      : matchedCollection?.nameUz;
 
   return (
     <div>
@@ -78,14 +85,12 @@ export default function CollectionsPage({
           backgroundImage: `url(${baseUrl}/${bannerImage})`,
         }}
       >
-        <p className="text-xl text-white font-semibold mb-[30vh]">
-          {matchedCollection?.nameRu}
-        </p>
+        <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
       </div>
       <div className="md:mx-16 mx-5">
         <div className="flex flex-row justify-between items-center my-8">
           <p className="text-[15px] text-[#454545] font-normal">
-            {totalElements} products
+            {totalElements} {t("products")}
           </p>
           <SortingDropdown onSortChange={handleSortChange} />
         </div>

@@ -1,0 +1,135 @@
+{
+  "navbar": {
+    "account": "аккаунт",
+    "search": "ПОИСК",
+    "shoppingCart": "корзина",
+    "branches": "филиалы",
+    "e-catalog": "е-каталог",
+    "announcement": "Скидка 50% на каждый второй товар"
+  },
+  "home": { "viewCollection": "Посмотреть коллекцию" },
+  "account": {
+    "login": {
+      "titleL": "Логин",
+      "titleR": "Сбросить пароль",
+      "subtitleL": "Введите свой номер телефона и пароль:",
+      "subtitleR": "Введите свой номер телефона:",
+      "phoneNumber": "Номер телефона",
+      "password": "Пароль",
+      "show": "показать",
+      "hide": "скрыть",
+      "login": "войти",
+      "forgotPassword": "Забыли пароль?",
+      "sendCode": "отправить код",
+      "forgotQ": "Помните свой пароль?",
+      "backToLogin": "Зайдите",
+      "regQ": "Все еще нет аккаунта?",
+      "regGoToPage": "Создайте"
+    },
+    "register": {
+      "title": "регистрация",
+      "subtitle": "Введите информацию ниже:",
+      "fullName": "фио",
+      "phoneNumber": "Номер телефона",
+      "password": "Пароль",
+      "repassword": "Введите пароль заново",
+      "createAccount": "Создать акканут"
+    },
+    "verification": {
+      "title": "Требуется проверка",
+      "subtitle": "Введите код, отправленный на ваш номер",
+      "resendQ": "Не получили код?",
+      "resend": "Повторно отправить",
+      "availableInSeconds": "Доступно через {{countdown}} секунд",
+      "close": "Закрыть"
+    }
+  },
+  "products": "товаров",
+  "sortBy": "Сортировать по",
+  "sortOptions": {
+    "a-z": "А-Я",
+    "z-a": "Я-А",
+    "low-high": "Цена: от низкой к высокой",
+    "high-low": "Цена: от высокой к низкой"
+  },
+  "showingItems": "Показано товаров {{current}} из {{total}}",
+  "allItemsLoaded": "Все товары загружены.",
+  "loadMore": "Загрузить еще",
+  "productDetails": {
+    "sum": "сум",
+    "sale": "скидка",
+    "addToCart": "Добавить в корзину",
+    "freeShipping": "Бесплатная доставка при заказе от 500000 сум",
+    "estimatedDelivery": "Предполагаемая доставка в течение 3 дней",
+    "youMayAlsoLike": "Вам также может понравиться"
+  },
+  "cartDetails": {
+    "shoppingCart": "Корзина",
+    "shippingCalculated": "Доставка рассчитывается при оформлении заказа",
+    "cartEmpty": "Ваша корзина пуста.",
+    "checkoutTotal": "Оформление заказа - ",
+    "remove": "удалить"
+  },
+  "checkout": {
+    "pickup": "Самовывоз",
+    "delivery": "Доставка",
+    "deliveryType": "Тип доставки",
+    "fullName": "ФИО",
+    "phoneNumber": "Номер телефона",
+    "branch": "Филиал",
+    "address": "Адрес",
+    "comment": "Комментарий",
+    "paymentType": "Тип оплаты",
+    "processing": "Обработка...",
+    "makePayment": "Сделать оплату",
+    "privacy": "Конфиденциальность",
+    "total": "Итого",
+    "selectOption": "Выберите вариант",
+    "deliveryOptions": {
+      "pickup": "Самовывоз",
+      "delivery": "Доставка"
+    }
+  },
+  "cart": {
+    "cartUpdatedSuccess": "Корзина успешно обновлена!",
+    "shoppingCart": "Корзина",
+    "product": "ТОВАР",
+    "number": "КОЛИЧЕСТВО",
+    "total": "ИТОГО",
+    "cartEmpty": "Ваша корзина пуста."
+  },
+  "branches": "филиалы",
+  "orderDetails": {
+    "payForOrder": "Оплатить заказ",
+    "myAccount": "МОЙ АККАУНТ",
+    "myOrders": "МОИ ЗАКАЗЫ",
+    "orderDetails": "Детали заказа",
+    "fullName": "ФИО",
+    "phone": "Телефон",
+    "address": "Адрес",
+    "deliveryType": "Тип доставки",
+    "delivery": "Доставка",
+    "pickup": "Самовывоз",
+    "comments": "Комментарии",
+    "paymentInformation": "Информация об оплате",
+    "cash": "НАЛИЧНЫМИ",
+    "paymentLink": "Ссылка для оплаты",
+    "orderItems": "Товары в заказе",
+    "total": "Итого",
+    "profile": "ПРОФИЛЬ",
+    "name": "Имя",
+    "phoneNumber": "Номер телефона",
+    "save": "Сохранить",
+    "logOut": "Выйти",
+    "edit": "изменить"
+  },
+  "messages": {
+    "updateSuccess": "Информация о пользователе успешно обновлена.",
+    "updateError": "Не удалось обновить информацию о пользователе.",
+    "fetchUserError": "Не удалось получить информацию о пользователе.",
+    "fetchOrdersError": "Не удалось загрузить заказы.",
+    "logoutSuccess": "Вы успешно вышли из системы.",
+    "logoutError": "Не удалось выйти из системы. Пожалуйста, попробуйте еще раз.",
+    "updating": "Обновление информации о пользователе..."
+  }
+}

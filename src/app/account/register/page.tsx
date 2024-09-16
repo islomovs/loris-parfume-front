@@ -19,6 +19,7 @@ import { VerificationModal } from "../../components/VerificationModal";
 import useCartStore from "@/services/store";
 import { addToCart } from "@/services/cart";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
   const {
@@ -35,6 +36,7 @@ export default function Register() {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { cart, clearCart } = useCartStore();
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -149,10 +151,10 @@ export default function Register() {
       <LoadingBar color="#87754f" ref={loadingBarRef} />
       <div className="text-center mb-4 sm:mb-6">
         <h1 className="uppercase font-normal text-center text-lg sm:text-xl tracking-[.2em] text-[#454545] mb-4">
-          Register
+          {t("account.register.title")}
         </h1>
         <h2 className="text-[#454545] text-sm sm:text-[14px] text-center font-normal">
-          Please enter the information below:
+          {t("account.register.subtitle")}
         </h2>
       </div>
 
@@ -180,7 +182,7 @@ export default function Register() {
           <CustomInput
             {...register("fullName")}
             className="w-full"
-            title="ФИО"
+            title={t("account.register.fullName")}
             borders="no-rounded"
             type="text"
           />
@@ -194,7 +196,7 @@ export default function Register() {
           <CustomInput
             {...register("phone")}
             className="w-full"
-            title="Номер телефона"
+            title={t("account.register.phoneNumber")}
             borders="no-rounded"
             type="text"
           />
@@ -208,7 +210,7 @@ export default function Register() {
           <CustomInput
             {...register("password")}
             className="w-full"
-            title="Пароль"
+            title={t("account.register.password")}
             borders="no-rounded"
             type="password"
           />
@@ -222,7 +224,7 @@ export default function Register() {
           <CustomInput
             {...register("rePassword")}
             className="w-full"
-            title="Repassword"
+            title={t("account.register.repassword")}
             borders="no-rounded"
             type="password"
           />
@@ -233,7 +235,7 @@ export default function Register() {
           )}
         </div>
         <AnimatedButton
-          title="Create my account"
+          title={t("account.register.createAccount")}
           variant="dark"
           width="w-full"
           type="submit"

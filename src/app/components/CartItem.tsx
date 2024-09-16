@@ -6,6 +6,7 @@ import useCartStore from "@/services/store";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { removeFromCart, getCartItems } from "../../services/cart";
 import { ICartItem } from "@/services/cart"; // Import your ICartItem type if needed
+import { useTranslation } from "react-i18next";
 
 interface ICartItemProps {
   id: number;
@@ -32,6 +33,7 @@ export const CartItem: React.FC<ICartItemProps> = ({
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { setCartItems, updateCartItemQuantity, removeCartItem, cart } =
     useCartStore((state) => state);
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     updateCartItemQuantity(id, quantity, sizeId);
@@ -131,21 +133,26 @@ export const CartItem: React.FC<ICartItemProps> = ({
             </button>
           </div>
           <div className="flex justify-center">
-            <UnderlinedButton title="remove" onClick={handleRemove} />
+            <UnderlinedButton
+              title={t("cartDetails.remove")}
+              onClick={handleRemove}
+            />
           </div>
         </div>
         <div className="flex flex-col items-end justify-center flex-[4] text-end text-[11px] tracking-[.2em] uppercase text-[#9d9d9d]">
           {isDiscountApplied ? (
             <>
               <span className="line-through text-[#9d9d9d]">
-                {originalTotal.toFixed(2)} сум
+                {originalTotal.toFixed(2)} {t("productDetails.sum")}
               </span>
               <span className="text-red-500 font-bold">
-                {discountedTotal.toFixed(2)} сум
+                {discountedTotal.toFixed(2)} {t("productDetails.sum")}
               </span>
             </>
           ) : (
-            <span>{discountedTotal.toFixed(2)} сум</span>
+            <span>
+              {discountedTotal.toFixed(2)} {t("productDetails.sum")}
+            </span>
           )}
         </div>
       </div>

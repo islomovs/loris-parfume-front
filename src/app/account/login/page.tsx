@@ -21,6 +21,7 @@ import { addToCart } from "@/services/cart";
 import { useDisclosure } from "@chakra-ui/react";
 import { VerificationModal } from "../../components/VerificationModal";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 // Define schemas
 const loginSchema = yup.object({
@@ -53,6 +54,7 @@ export default function Login() {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const { cart, clearCart } = useCartStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation("common");
 
   const toggleResetPassword = () => {
     setIsResetPassword((prev) => !prev);
@@ -210,12 +212,14 @@ export default function Login() {
             className="text-center mb-4 sm:mb-6"
           >
             <h1 className="uppercase font-normal text-center text-lg sm:text-xl tracking-[.2em] text-[#454545] mb-4">
-              {isResetPassword ? "Reset Password" : "Log in"}
+              {isResetPassword
+                ? `${t("account.login.titleR")}`
+                : `${t("account.login.titleL")}`}
             </h1>
             <h2 className="text-[#454545] text-sm sm:text-[14px] text-center font-normal">
               {isResetPassword
-                ? "Enter your phone number:"
-                : "Enter your email address and password:"}
+                ? `${t("account.login.subtitleL")}`
+                : `${t("account.login.subtitleR")}`}
             </h2>
           </motion.div>
 
@@ -245,7 +249,7 @@ export default function Login() {
               <CustomInput
                 className="sm:w-[400px] w-full"
                 {...register("phone")}
-                title="Номер телефона"
+                title={t("account.login.phoneNumber")}
                 borders="no-rounded"
                 type="text"
               />
@@ -260,7 +264,7 @@ export default function Login() {
                 <CustomInput
                   className="sm:w-[400px] w-full"
                   {...register("password")}
-                  title="Пароль"
+                  title={t("account.login.password")}
                   borders="no-rounded"
                   type="password"
                 />
@@ -274,13 +278,17 @@ export default function Login() {
                   onClick={toggleResetPassword}
                   className="mt-1 text-sm sm:text-[14px] text-[#9d9d9d] font-normal self-end cursor-pointer hover:text-[#454545] transition-colors"
                 >
-                  Forgot your password?
+                  {t("account.login.forgotPassword")}
                 </button>
               </div>
             )}
 
             <AnimatedButton
-              title={isResetPassword ? "Send Code" : "Log In"}
+              title={
+                isResetPassword
+                  ? t("account.login.sendCode")
+                  : t("account.login.login")
+              }
               variant="dark"
               width="w-full sm:w-[400px]"
               type="submit"
@@ -290,22 +298,22 @@ export default function Login() {
           <p className="my-4 sm:my-6 text-[#9D9D9D] text-sm sm:text-[14px] font-normal">
             {isResetPassword ? (
               <>
-                Remember your password?{" "}
+                {t(`account.login.forgotQ`)}{" "}
                 <button
                   onClick={toggleResetPassword}
                   className="text-[#454545] hover:text-[#454545]"
                 >
-                  Back to Log in
+                  {t(`account.login.backToLogin`)}
                 </button>
               </>
             ) : (
               <>
-                Don&apos;t have an account yet?{" "}
+                {t("account.login.regQ")}{" "}
                 <a
                   href="/account/register"
                   className="text-[#454545] hover:text-[#454545]"
                 >
-                  Create one
+                  {t("account.login.regGoToPage")}
                 </a>
               </>
             )}

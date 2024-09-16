@@ -12,7 +12,10 @@ import { useQuery, useMutation } from "react-query";
 import { fetchUserInfo, updateUserInfo } from "../../services/user";
 import { fetchAllOrders } from "../../services/orders";
 import useCartStore from "@/services/store";
-import { Spin, message } from "antd"; // Import Spin and message from Ant Design
+import { message } from "antd";
+import { Spinner } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/utils/i18n";
 
 type FormData = {
   fullName: string;
@@ -24,6 +27,7 @@ export default function Account() {
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const { register, handleSubmit, setValue } = useForm<FormData>();
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   // Fetch user info using useQuery
   const {
@@ -38,7 +42,7 @@ export default function Account() {
     },
     onError: (error: any) => {
       console.error("Error fetching user info:", error);
-      message.error("Failed to fetch user information.");
+      message.error(t("messages.fetchUserError"));
     },
   });
 
@@ -50,23 +54,23 @@ export default function Account() {
   } = useQuery("orders", () => fetchAllOrders(1), {
     onError: (error: any) => {
       console.error("Failed to fetch all orders:", error);
-      message.error("Failed to load orders.");
+      message.error(t("messages.fetchOrdersError"));
     },
   });
 
   // Update user info using useMutation
   const updateUserMutation = useMutation(updateUserInfo, {
     onMutate: () => {
-      message.loading("Updating user information...");
+      message.loading(t("messages.updating"));
     },
     onSuccess: () => {
       setIsEditing(false); // End editing mode
       refetchUserInfo(); // Refetch user data to ensure UI updates with the latest data
-      message.success("User information updated successfully.");
+      message.success(t("messages.updateSuccess"));
     },
     onError: (error: any) => {
       console.error("Error updating user info:", error);
-      message.error("Failed to update user information.");
+      message.error(t("messages.updateError"));
     },
   });
 
@@ -90,10 +94,10 @@ export default function Account() {
 
       // Use router to navigate to the login page
       router.push("/account/login");
-      message.success("Logged out successfully.");
+      message.success(t("messages.logoutSuccess"));
     } catch (error) {
       console.error("Error during logout and cart clear:", error);
-      message.error("Failed to log out. Please try again.");
+      message.error(t("messages.logoutError"));
     }
   };
 
@@ -106,21 +110,21 @@ export default function Account() {
     <div className="flex flex-col items-start py-8 px-4 md:py-20 md:px-20">
       <div className="flex flex-col my-4 md:my-10">
         <h1 className="text-[#454545] font-normal uppercase tracking-[.2em] text-lg md:text-xl mb-[14px]">
-          MY ACCOUNT
+          {t("orderDetails.myAccount")}
         </h1>
       </div>
       <div className="flex flex-col md:flex-row w-full gap-4 md:gap-16">
         <div className="flex flex-col w-full my-4 md:my-[50px] flex-[6]">
           <h1 className="w-full block text-[11px] font-light uppercase tracking-[.2em] text-[#9D9D9D] pb-[10px] mb-[34px] border-b border-solid border-b-[#e3e3e3]">
-            MY ORDERS
+            {t("orderDetails.myOrders")}
           </h1>
           <div className="w-full text-[14px] text-[#454545] font-normal">
             {ordersLoading && (
               <div className="flex justify-center items-center py-4">
-                <Spin size="large" /> {/* Loading Spinner for orders */}
+                <Spinner size="xl" color="#87754f" />
               </div>
             )}
-            {ordersError && <p>Failed to load orders.</p>}
+            {ordersError && <p>{t("messages.fetchOrdersError")}</p>}
             {ordersData?.content.map((order: any) => (
               <div
                 key={order.id}
@@ -168,42 +172,46 @@ export default function Account() {
                     >
                       <div className="flex flex-col">
                         <h1 className="text-[14px] font-semibold text-[#454545]">
-                          Order Details
+                          {t("orderDetails.orderDetails")}
                         </h1>
                         <OrderDetailsItem
-                          title="Full Name"
+                          title={t("orderDetails.fullName")}
                           description={order.userFullName}
                         />
                         <OrderDetailsItem
-                          title="Phone"
+                          title={t("orderDetails.phone")}
                           description={order.phone}
                         />
                         <OrderDetailsItem
-                          title="Address"
+                          title={t("orderDetails.address")}
                           description={order.address}
                         />
                         <OrderDetailsItem
-                          title="Delivery Type"
-                          description={order.isDelivery ? "Delivery" : "Pickup"}
+                          title={t("orderDetails.deliveryType")}
+                          description={
+                            order.isDelivery
+                              ? t("orderDetails.delivery")
+                              : t("orderDetails.pickup")
+                          }
                         />
                         <OrderDetailsItem
-                          title="Comments"
+                          title={t("orderDetails.comments")}
                           description={order.comments}
                         />
                       </div>
                       <div className="flex flex-col">
                         <h1 className="text-[14px] font-semibold text-[#454545]">
-                          Payment Information
+                          {t("orderDetails.paymentInformation")}
                         </h1>
                         <OrderDetailsItem
-                          title="Payment Type"
+                          title={t("orderDetails.paymentType")}
                           description={order.paymentType}
                         />
-                        {order.paymentType === "CASH" ? (
+                        {order.paymentType === t("orderDetails.cash") ? (
                           " "
                         ) : (
                           <OrderDetailsItem
-                            title="Payment Link"
+                            title={t("orderDetails.paymentLink")}
                             description={order.paymentLink}
                             isDescriptionLink
                           />
@@ -217,20 +225,24 @@ export default function Account() {
                       </div>
                       <div className="flex flex-col mt-2 gap-3">
                         <h2 className="text-[14px] font-semibold text-[#454545]">
-                          Order Items
+                          {t("orderDetails.orderItems")}
                         </h2>
-                        {order.itemsList.map((item: any, index: number) => (
-                          <CheckoutCartItem
-                            key={index}
-                            title={item.nameRu}
-                            price={item.totalPrice}
-                            quantity={item.quantity}
-                            image={item.imageName}
-                          />
-                        ))}
+                        {order.itemsList.map((item: any, index: number) => {
+                          const name =
+                            i18n.language == "ru" ? item.nameRu : item.nameUz;
+                          return (
+                            <CheckoutCartItem
+                              key={index}
+                              title={name}
+                              price={item.totalPrice}
+                              quantity={item.quantity}
+                              image={item.imageName}
+                            />
+                          );
+                        })}
                         <div className="w-full flex flex-col gap-2">
                           <div className="flex flex-row justify-between text-[19px] font-semibold text-[#454545]">
-                            <p>Total</p>
+                            <p>{t("orderDetails.total")}</p>
                             <p>{order.totalSum} UZS</p>
                           </div>
                         </div>
@@ -247,19 +259,22 @@ export default function Account() {
         <div className="flex flex-col my-4 md:my-[50px] flex-[4]">
           <div className="w-full">
             <h1 className="w-full block text-[11px] font-light uppercase tracking-[.2em] text-[#9D9D9D] pb-[10px] mb-[34px] border-b border-solid border-b-[#e3e3e3]">
-              PROFILE
+              {t("orderDetails.profile")}
             </h1>
             {!isEditing ? (
               <div className="flex flex-col md:flex-row items-start justify-between">
                 <div className="mb-4 md:mr-6">
                   <p className="text-[#454545] font-normal text-[14px]">
-                    Name: {userInfo?.fullName}
+                    {t("orderDetails.name")}: {userInfo?.fullName}
                   </p>
                   <p className="text-[#1c1313] font-normal text-[14px]">
-                    Phone number: {userInfo?.phone}
+                    {t("orderDetails.phoneNumber")}: {userInfo?.phone}
                   </p>
                 </div>
-                <UnderlinedButton title="Edit" onClick={handleEditClick} />
+                <UnderlinedButton
+                  title={t("orderDetails.edit")}
+                  onClick={handleEditClick}
+                />
               </div>
             ) : (
               <form
@@ -268,13 +283,13 @@ export default function Account() {
               >
                 <CustomInput
                   {...register("fullName")}
-                  title="ФИО"
+                  title={t("orderDetails.fullName")}
                   borders="no-rounded"
                   type="text"
                 />
                 <CustomInput
                   {...register("phone", { required: true })}
-                  title="Номер телефона"
+                  title={t("orderDetails.phone")}
                   borders="no-rounded"
                   type="text"
                 />
@@ -282,7 +297,7 @@ export default function Account() {
                   type="submit"
                   className="w-full bg-[#454545] p-[14px] font-semibold text-xl text-white"
                 >
-                  Save
+                  {t("orderDetails.save")}
                 </button>
               </form>
             )}
@@ -291,7 +306,7 @@ export default function Account() {
                 onClick={handleLogout}
                 className="uppercase text-[11px] text-[#9D9D9D] tracking-[.2em] font-normal mb-[25px] text-start"
               >
-                Log out
+                {t("orderDetails.logOut")}
               </button>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { ProductCard } from "./ProductCard";
 import { SlArrowRight } from "react-icons/sl";
 import { SlArrowLeft } from "react-icons/sl";
 import Link from "next/link";
+import i18n from "@/utils/i18n";
 
 // Custom Arrow Components
 const CustomNextArrow: React.FC<{
@@ -42,6 +43,7 @@ type RecommendedSliderProps = {
     imagesList: string[];
     discountPercent: number;
     nameRu: string;
+    nameUz: string;
   }[];
   collectionSlug?: string;
   categorySlug?: string;
@@ -61,10 +63,10 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
         breakpoints={{
           // Configure slides per view for different screen sizes
           320: {
-            slidesPerView: 1.2, // Slightly more than 1 to show part of the next slide
+            slidesPerView: 2, // Slightly more than 1 to show part of the next slide
           },
           480: {
-            slidesPerView: 1.5,
+            slidesPerView: 2,
           },
           640: {
             slidesPerView: 2,
@@ -91,6 +93,7 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
                 (1 - product.discountPercent / 100)
               ).toFixed(2)
             : null;
+          const name = i18n.language == "ru" ? product.nameRu : product.nameUz;
           return (
             <SwiperSlide key={product.id}>
               <Link
@@ -99,10 +102,11 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
                     ? `/collections/${collectionSlug}/categories/${categorySlug}/products/${product.slug}`
                     : `/collections/${collectionSlug}/products/${product.slug}`
                 }
+                className="w-fit"
               >
                 <ProductCard
                   image={product.imagesList[0]}
-                  title={product.nameRu}
+                  title={name}
                   originalPrice={product.price}
                   discountPrice={discountPrice || product.price}
                   hasDiscount={product.discountPercent > 0}

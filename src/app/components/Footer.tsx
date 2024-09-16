@@ -4,6 +4,7 @@ import { fetchCollectionsData, ICollectionItem } from "@/services/collections";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import { capitalizeFirstLetter } from "../../helpers/capitalizeString";
 import Link from "next/link";
+import i18n from "@/utils/i18n";
 
 export default function Footer() {
   const [collections, setCollections] = useState<ICollectionItem[]>();
@@ -50,16 +51,20 @@ export default function Footer() {
             LORIS PARFUM
           </h1>
           <ul className="text-sm lg:text-[14px] leading-[21px] font-normal">
-            {collections?.map((collection: ICollectionItem) => (
-              <Link
-                href={`/collections/${collection.slug}`}
-                key={collection.id}
-              >
-                <li className="mb-2 lg:mb-3 text-black hover:text-primary cursor-pointer">
-                  {capitalizeFirstLetter(collection.nameEng)}
-                </li>
-              </Link>
-            ))}
+            {collections?.map((collection: ICollectionItem) => {
+              const collectioName =
+                i18n.language == "ru" ? collection.nameRu : collection.nameUz;
+              return (
+                <Link
+                  href={`/collections/${collection.slug}`}
+                  key={collection.id}
+                >
+                  <li className="mb-2 lg:mb-3 text-black hover:text-primary cursor-pointer">
+                    {capitalizeFirstLetter(collectioName)}
+                  </li>
+                </Link>
+              );
+            })}
           </ul>
         </div>
 

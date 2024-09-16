@@ -1,0 +1,135 @@
+{
+  "navbar": {
+    "account": "shahsiy",
+    "search": "IZLASH",
+    "shoppingCart": "xarid savati",
+    "branches": "filiallar",
+    "e-catalog": "e-katalog",
+    "announcement": "Har ikkinchi mahsulotga 50% chegirma"
+  },
+  "home": { "viewCollection": "kolleksiyaga o'tish" },
+  "account": {
+    "login": {
+      "titleL": "Login",
+      "titleR": "Parolni tiklash",
+      "subtitleL": "Telefon raqamingiz va parolingizni kiriting:",
+      "subtitleR": "Telefon raqamingizni kiriting:",
+      "phoneNumber": "Telefon raqami",
+      "password": "Parol",
+      "show": "korsatish",
+      "hide": "yashirish",
+      "login": "kirish",
+      "forgotPassword": "Parolingiz esdan chiqdimi?",
+      "sendCode": "Kod yuboring",
+      "forgotQ": "Parolingiz yodingizga tushdimi?",
+      "backToLogin": "Kiring",
+      "regQ": "Hali ham akkauntingiz yoqmi?",
+      "regGoToPage": "Ro'yxatdan o'ting"
+    },
+    "register": {
+      "title": "Ro'yxatdan o'tish",
+      "subtitle": "Iltimos, quyidagi ma'lumotlarni kiriting:",
+      "fullName": "FIO",
+      "phoneNumber": "Telefon raqami",
+      "password": "Parol",
+      "repassword": "Parolingizni qayta kiriting",
+      "createAccount": "Ro'yxatdan o'tish"
+    },
+    "verification": {
+      "title": "Tasdiqlash talab qilinadi",
+      "subtitle": "Raqamingizga yuborilgan kodni kiriting",
+      "resendQ": "Kodni olmadingizmi?",
+      "resend": "Qayta yuborish",
+      "availableInSeconds": "{{countdown}} soniyadan keyin mavjud",
+      "close": "Yopish"
+    }
+  },
+  "products": "tovarlar",
+  "sortBy": "Saralash",
+  "sortOptions": {
+    "a-z": "A-Z",
+    "z-a": "Z-A",
+    "low-high": "Narx: Pastdan yuqoriga",
+    "high-low": "Narx: Yuqoridan pastga"
+  },
+  "showingItems": "Ko'rsatilmoqda {{current}} ta mahsulotdan {{total}} tasi",
+  "allItemsLoaded": "Barcha mahsulotlar yuklandi.",
+  "loadMore": "Yana yuklash",
+  "productDetails": {
+    "sum": "sum",
+    "sale": "chegirma",
+    "addToCart": "Savatchaga qo'shish",
+    "freeShipping": "500000 so'mdan ortiq buyurtmalarga bepul yetkazib berish",
+    "estimatedDelivery": "Yetkazib berish 3 kun ichida amalga oshiriladi",
+    "youMayAlsoLike": "Sizga ham yoqishi mumkin"
+  },
+  "cartDetails": {
+    "shoppingCart": "Savatcha",
+    "shippingCalculated": "Yetkazib berish narxi buyurtma berishda hisoblanadi",
+    "cartEmpty": "Sizning savatchangiz bo'sh.",
+    "checkoutTotal": "Xarid qilish - ",
+    "remove": "o'chirish"
+  },
+  "checkout": {
+    "pickup": "Olib ketish",
+    "delivery": "Yetkazib berish",
+    "deliveryType": "Yetkazib berish turi",
+    "fullName": "To'liq ism",
+    "phoneNumber": "Telefon raqami",
+    "branch": "Filial",
+    "address": "Manzil",
+    "comment": "Izoh",
+    "paymentType": "To'lov turi",
+    "processing": "Qayta ishlanmoqda...",
+    "makePayment": "To'lovni amalga oshirish",
+    "privacy": "Maxfiylik",
+    "total": "Jami",
+    "selectOption": "Variantni tanlang",
+    "deliveryOptions": {
+      "pickup": "Olib ketish",
+      "delivery": "Yetkazib berish"
+    }
+  },
+  "cart": {
+    "cartUpdatedSuccess": "Savatcha muvaffaqiyatli yangilandi!",
+    "shoppingCart": "Savatcha",
+    "product": "MAHSULOT",
+    "number": "SONI",
+    "total": "JAMI",
+    "cartEmpty": "Sizning savatchangiz bo'sh."
+  },
+  "branches": "filiallar",
+  "orderDetails": {
+    "payForOrder": "Buyurtma uchun to'lash",
+    "myAccount": "MENING AKKAUNTIM",
+    "myOrders": "MENING BUYURTMALARIM",
+    "orderDetails": "Buyurtma tafsilotlari",
+    "fullName": "To'liq ism",
+    "phone": "Telefon",
+    "address": "Manzil",
+    "deliveryType": "Yetkazib berish turi",
+    "delivery": "Yetkazib berish",
+    "pickup": "Olib ketish",
+    "comments": "Izohlar",
+    "paymentInformation": "To'lov ma'lumotlari",
+    "cash": "NAQD PUL",
+    "paymentLink": "To'lov havolasi",
+    "orderItems": "Buyurtma mahsulotlari",
+    "total": "Jami",
+    "profile": "PROFIL",
+    "name": "Ism",
+    "phoneNumber": "Telefon raqami",
+    "save": "Saqlash",
+    "logOut": "Chiqish",
+    "edit": "o'zgartirish"
+  },
+  "messages": {
+    "updateSuccess": "Foydalanuvchi ma'lumotlari muvaffaqiyatli yangilandi.",
+    "updateError": "Foydalanuvchi ma'lumotlarini yangilashda xatolik yuz berdi.",
+    "fetchUserError": "Foydalanuvchi ma'lumotlarini olishda xatolik yuz berdi.",
+    "fetchOrdersError": "Buyurtmalarni yuklashda xatolik yuz berdi.",
+    "logoutSuccess": "Siz muvaffaqiyatli tizimdan chiqdingiz.",
+    "logoutError": "Chiqishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring.",
+    "updating": "Foydalanuvchi ma'lumotlari yangilanmoqda..."
+  }
+}

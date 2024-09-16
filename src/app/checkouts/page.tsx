@@ -1,107 +1,107 @@
-'use client'
-
-import React, { useState, useRef } from 'react'
-import { BiBasket } from 'react-icons/bi'
-import { CustomDropdown } from '../components/CustomDropdown'
-import { CustomInput } from '../components/CustomInput'
-import { CheckoutCartItem } from '../components/CheckoutCartItem'
-import CustomTextArea from '../components/CustomTextArea'
-import useCartStore from '../../services/store'
-import useOrderStore from '../../services/orderStore'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useMutation } from 'react-query'
-import { createOrder, OrderData } from '../../services/orders'
-import { fetchNearestBranch } from '../../services/orders'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar'
-import { message } from 'antd' // Import message for feedback
-import { Spinner } from '@chakra-ui/react' // Use Chakra UI Spinner for loading
-
-// Importing icons
-import CashIcon from '../../../public/cash-icon.svg'
-import PaymeIcon from '../../../public/payme-logo.BdmkZoD4.svg'
-import ClickIcon from '../../../public/click-logo.jzgAXUV7.svg'
-import YandexMap from '../components/YandexMap'
-
-const deliveryOptions = [
-  { id: 0, title: 'Самовывоз' },
-  { id: 1, title: 'Доставка' },
-]
+"use client";
+import React, { useState, useRef } from "react";
+import { BiBasket } from "react-icons/bi";
+import { CustomDropdown } from "../components/CustomDropdown";
+import { CustomInput } from "../components/CustomInput";
+import { CheckoutCartItem } from "../components/CheckoutCartItem";
+import CustomTextArea from "../components/CustomTextArea";
+import useCartStore from "../../services/store";
+import useOrderStore from "../../services/orderStore";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation } from "react-query";
+import { createOrder, OrderData } from "../../services/orders";
+import { fetchNearestBranch } from "../../services/orders";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
+import { message } from "antd";
+import { Spinner } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
+import CashIcon from "../../../public/cash-icon.svg";
+import PaymeIcon from "../../../public/payme-logo.BdmkZoD4.svg";
+import ClickIcon from "../../../public/click-logo.jzgAXUV7.svg";
+import YandexMap from "../components/YandexMap";
+import i18n from "@/utils/i18n";
 
 const allPaymentOptions = [
-  { id: 0, title: 'cash', icon: CashIcon.src },
-  { id: 1, title: 'payme', icon: PaymeIcon.src },
-  { id: 2, title: 'click', icon: ClickIcon.src },
-]
+  { id: 0, title: "cash", icon: CashIcon.src },
+  { id: 1, title: "payme", icon: PaymeIcon.src },
+  { id: 2, title: "click", icon: ClickIcon.src },
+];
 
 type FormData = {
-  fullName: string
-  phone: string
-  branch: string
-  address: string
-  comment: string
-  paymentType: string
-  deliveryType: string
-  distance: number
-  deliverySum: number
-}
+  fullName: string;
+  phone: string;
+  branch: string;
+  address: string;
+  comment: string;
+  paymentType: string;
+  deliveryType: string;
+  distance: number;
+  deliverySum: number;
+};
 
 export default function Checkout() {
-  const { cart, totalSum } = useCartStore((state) => state)
-  const { addOrder } = useOrderStore()
+  const { cart, totalSum } = useCartStore((state) => state);
+  const { addOrder } = useOrderStore();
   const { handleSubmit, setValue, control, register, resetField, watch } =
-    useForm<FormData>()
+    useForm<FormData>();
 
   const [filteredPaymentOptions, setFilteredPaymentOptions] =
-    useState(allPaymentOptions)
+    useState(allPaymentOptions);
 
-  const [isDelivery, setDelivery] = useState<boolean>(true)
+  const [isDelivery, setDelivery] = useState<boolean>(true);
   const [deliveryData, setDeliveryData] = useState<{
-    distance: number
-    deliverySum: number
-  }>({ distance: 0, deliverySum: 0 })
-  const [branchName, setBranchName] = useState<string>('') // State for branch name
-  const [coords, setCoords] = useState([41.314472, 69.27991])
+    distance: number;
+    deliverySum: number;
+  }>({ distance: 0, deliverySum: 0 });
+  const [branchName, setBranchName] = useState<string>(""); // State for branch name
+  const [coords, setCoords] = useState([41.314472, 69.27991]);
 
-  const router = useRouter()
-  const timer = useRef(setTimeout(() => {}, 3000))
-  const loadingBarRef = useRef<LoadingBarRef | null>(null)
-  const [branchId, setBranchId] = useState<number | null>(null) // State for branch ID
+  const router = useRouter();
+  const timer = useRef(setTimeout(() => {}, 3000));
+  const loadingBarRef = useRef<LoadingBarRef | null>(null);
+  const [branchId, setBranchId] = useState<number | null>(null); // State for branch ID
+  const { t } = useTranslation("common");
+
+  const deliveryOptions = [
+    { id: 0, title: t("checkout.deliveryOptions.pickup") },
+    { id: 1, title: t("checkout.deliveryOptions.delivery") },
+  ];
 
   // Define the mutation for creating an order using React Query
   const orderMutation = useMutation(
     (orderData: OrderData) => createOrder(orderData),
     {
       onMutate: () => {
-        loadingBarRef.current?.continuousStart()
+        loadingBarRef.current?.continuousStart();
       },
       onSuccess: (data) => {
-        loadingBarRef.current?.complete()
-        addOrder(data)
+        loadingBarRef.current?.complete();
+        addOrder(data);
 
         // Handle specific payment types
-        if (data.paymentType.toLowerCase() === 'uzum nasiya') {
+        if (data.paymentType.toLowerCase() === "uzum nasiya") {
           message.success(
-            'Answer for your request will be sent to your phone number'
-          )
+            "Answer for your request will be sent to your phone number"
+          );
         } else if (
-          data.paymentType.toLowerCase() === 'click' ||
-          data.paymentType.toLowerCase() === 'payme'
+          data.paymentType.toLowerCase() === "click" ||
+          data.paymentType.toLowerCase() === "payme"
         ) {
-          window.location.href = data.paymentLink
+          window.location.href = data.paymentLink;
         } else {
-          message.success('Order created successfully!')
-          router.push('/account')
+          message.success("Order created successfully!");
+          router.push("/account");
         }
       },
       onError: (error) => {
-        loadingBarRef.current?.complete()
-        console.error('Failed to create order:', error)
-        message.error('Failed to create order, please try again.')
+        loadingBarRef.current?.complete();
+        console.error("Failed to create order:", error);
+        message.error("Failed to create order, please try again.");
       },
     }
-  )
+  );
 
   // Define the mutation for fetching the nearest branch using React Query
   const nearestBranchMutation = useMutation(
@@ -109,57 +109,57 @@ export default function Checkout() {
       fetchNearestBranch(longitude, latitude),
     {
       onMutate: () => {
-        message.loading('Fetching nearest branch...')
+        message.loading("Fetching nearest branch...");
       },
       onSuccess: (data) => {
-        message.destroy() // Remove loading message
-        setBranchName(data?.name) // Set the branch name from the response
-        setBranchId(data?.id) // Set the branch ID from the response
+        message.destroy(); // Remove loading message
+        setBranchName(data?.name); // Set the branch name from the response
+        setBranchId(data?.id); // Set the branch ID from the response
         setDeliveryData({
           distance: Number(data?.distance),
           deliverySum: Number(data?.deliverySum),
-        })
+        });
       },
       onError: (error) => {
-        message.destroy() // Remove loading message
-        console.error('Error fetching nearest branch:', error)
-        message.error('Failed to fetch nearest branch, please try again.')
+        message.destroy(); // Remove loading message
+        console.error("Error fetching nearest branch:", error);
+        message.error("Failed to fetch nearest branch, please try again.");
       },
     }
-  )
+  );
 
   const handleDeliveryChange = (value: string) => {
-    setValue('deliveryType', value)
+    setValue("deliveryType", value);
 
     // Filter payment options based on delivery type immediately after selection
-    if (value === 'Доставка') {
+    if (value === "Доставка") {
       setFilteredPaymentOptions(
-        allPaymentOptions.filter((option) => option.title !== 'cash')
-      )
-      if (watch('paymentType') === 'cash') {
-        resetField('paymentType') // Reset payment type if it was cash
+        allPaymentOptions.filter((option) => option.title !== "cash")
+      );
+      if (watch("paymentType") === "cash") {
+        resetField("paymentType"); // Reset payment type if it was cash
       }
     } else {
-      setFilteredPaymentOptions(allPaymentOptions)
+      setFilteredPaymentOptions(allPaymentOptions);
     }
-  }
+  };
 
   const onLocationChange = (value: {
-    address: string
-    city: string
-    location: [number, number]
+    address: string;
+    city: string;
+    location: [number, number];
   }) => {
-    setValue('address', value?.address)
-    setCoords([value?.location[0], value?.location[1]])
+    setValue("address", value?.address);
+    setCoords([value?.location[0], value?.location[1]]);
 
-    clearTimeout(timer.current)
+    clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       nearestBranchMutation.mutate({
         latitude: value?.location[0],
         longitude: value?.location[1],
-      })
-    }, 2000)
-  }
+      });
+    }, 2000);
+  };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const ordersItemsList = cart.map((item) => ({
@@ -167,7 +167,12 @@ export default function Checkout() {
       sizeId: item.sizeId ?? 0,
       quantity: item.quantity,
       collectionId: item.collectionId ?? 0,
-    }))
+    }));
+
+    const currentTotalSum = totalSum();
+    const deliverySum = currentTotalSum > 500000 ? 0 : deliveryData.deliverySum;
+
+    const finalTotalSum = deliverySum + currentTotalSum;
 
     const orderData: OrderData = {
       fullName: data.fullName,
@@ -177,20 +182,20 @@ export default function Checkout() {
       distance: 5.0,
       phone: data.phone,
       comment: data.comment,
-      isDelivery: data.deliveryType === 'Доставка',
+      isDelivery: data.deliveryType === t("checkout.deliveryOptions.delivery"),
       isSoonDeliveryTime: false,
       scheduledDeliveryTime: new Date().toISOString(),
       longitude: coords[1] || 0.0,
       latitude: coords[0] || 0.0,
-      deliverySum: 0.0,
-      totalSum: totalSum(),
+      deliverySum: deliverySum,
+      totalSum: finalTotalSum,
       paymentType: data.paymentType.toLowerCase(),
-      returnUrl: '/',
+      returnUrl: "",
       ordersItemsList: ordersItemsList,
-    }
+    };
 
-    orderMutation.mutate(orderData)
-  }
+    orderMutation.mutate(orderData);
+  };
 
   return (
     <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
@@ -210,7 +215,7 @@ export default function Checkout() {
         <div className="relative flex flex-col lg:flex-row md:px-16 md:py-4">
           <div className="flex-[6] flex flex-col gap-4 border-b lg:border-b-0 lg:border-r-[1px] border-solid border-[#DFDFDF] md:p-10">
             <h1 className="text-lg md:text-xl lg:text-[21px] font-medium text-[#454545]">
-              Доставка
+              {t("checkout.delivery")}
             </h1>
             <form
               className="flex flex-col gap-4"
@@ -219,47 +224,47 @@ export default function Checkout() {
               <CustomDropdown
                 name="deliveryType"
                 options={deliveryOptions}
-                title="Тип доставки"
+                title={t("checkout.deliveryType")}
                 control={control}
                 onChange={handleDeliveryChange}
               />
               <YandexMap onLocationChange={onLocationChange} />
 
               <CustomInput
-                {...register('fullName')}
+                {...register("fullName")}
                 type="text"
                 borders="rounded"
-                title="ФИО"
+                title={t("checkout.fullName")}
               />
               <CustomInput
-                {...register('phone')}
+                {...register("phone")}
                 type="text"
                 borders="rounded"
-                title="Номер телефона"
+                title={t("checkout.phoneNumber")}
               />
               {/* Branch Name Input */}
               <CustomInput
                 value={branchName}
                 type="text"
                 borders="rounded"
-                title="Филиал"
+                title={t("checkout.branch")}
                 disabled // Make the input field unchangeable
               />
               <CustomInput
-                {...register('address')}
+                {...register("address")}
                 type="text"
                 borders="rounded"
-                title="Адрес"
+                title={t("checkout.address")}
               />
               <CustomTextArea
-                {...register('comment')}
+                {...register("comment")}
                 borders="rounded"
-                title="Комментарий"
+                title={t("checkout.comment")}
               />
               <CustomDropdown
                 name="paymentType"
                 options={filteredPaymentOptions}
-                title="Тип оплаты"
+                title={t("checkout.paymentType")}
                 control={control}
               />
               <button
@@ -267,13 +272,15 @@ export default function Checkout() {
                 className="w-full bg-[#454545] p-[14px] font-semibold text-lg md:text-xl text-white rounded-[5px]"
                 disabled={orderMutation.isLoading}
               >
-                {orderMutation.isLoading ? 'Processing...' : 'Сделать оплату'}
+                {orderMutation.isLoading
+                  ? t("checkout.processing")
+                  : t("checkout.makePayment")}
               </button>
             </form>
 
             <footer className="border-t border-solid border-t-[#DFDFDF] mt-4 lg:mt-16">
               <a href="#" className="mt-2 underline text-primary">
-                Privacy
+                {t("checkout.privacy")}
               </a>
             </footer>
           </div>
@@ -281,30 +288,40 @@ export default function Checkout() {
             <div className="w-full flex flex-col gap-5">
               {nearestBranchMutation.isLoading ? (
                 <div className="flex justify-center items-center py-4">
-                  <Spinner size="lg" color="#87754f" /> {/* Loading Spinner */}
+                  <Spinner size="lg" color="#87754f" />
                 </div>
               ) : (
                 cart.map((cartItem, index) => {
                   const discountPrice = cartItem.discountPercent
                     ? cartItem.price -
                       (cartItem.price * cartItem.discountPercent) / 100
-                    : cartItem.price
+                    : cartItem.price;
+
+                  const name =
+                    i18n.language == "ru" ? cartItem.nameRu : cartItem.nameUz;
+                  const sizeName =
+                    i18n.language == "ru"
+                      ? cartItem.sizeNameRu
+                      : cartItem.sizeNameUz;
+
                   return (
                     <CheckoutCartItem
                       key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
-                      title={cartItem.nameRu}
-                      subtitle={cartItem.sizeNameRu}
+                      title={name}
+                      subtitle={sizeName}
                       price={discountPrice}
                       quantity={cartItem.quantity}
                       image={cartItem.imagesList[0]}
                     />
-                  )
+                  );
                 })
               )}
               <div className="w-full flex flex-col gap-2">
                 <div className="flex flex-row justify-between text-base md:text-[19px] font-semibold text-[#454545]">
-                  <p>Total</p>
-                  <p>UZS {totalSum().toFixed(2)} сум</p>{' '}
+                  <p>{t("checkout.total")}</p>
+                  <p>
+                    {totalSum().toFixed(2)} {t("productDetails.sum")}
+                  </p>
                 </div>
               </div>
             </div>
@@ -312,5 +329,5 @@ export default function Checkout() {
         </div>
       </div>
     </section>
-  )
+  );
 }

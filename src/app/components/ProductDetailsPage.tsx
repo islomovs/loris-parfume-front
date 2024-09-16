@@ -18,6 +18,8 @@ import { LiaShippingFastSolid } from "react-icons/lia";
 import { BsBoxSeam } from "react-icons/bs";
 import LoadingBar from "react-top-loading-bar"; // Import the LoadingBar component
 import { Spinner } from "@chakra-ui/react"; // Import Spinner from Chakra UI
+import i18n from "@/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 export default function ProductDetailsPage({
   productSlug,
@@ -34,7 +36,8 @@ export default function ProductDetailsPage({
   const [productId, setProductId] = useState<number>(0);
   const { addOrUpdateCartItem } = useCartStore((state) => state);
   const [open, setOpen] = useState(false);
-  const loadingBarRef = useRef<any>(null); // Reference for the loading bar
+  const loadingBarRef = useRef<any>(null);
+  const { t } = useTranslation("common");
 
   const showDrawer = () => {
     setOpen(true);
@@ -148,6 +151,17 @@ export default function ProductDetailsPage({
     return <div>Product not found.</div>;
   }
 
+  const name =
+    i18n.language == "ru" ? product?.data.nameRu : product?.data.nameUz;
+  const category =
+    i18n.language == "ru"
+      ? product?.data.categoryNameRu
+      : product?.data.categoryNameUz;
+  const description =
+    i18n.language == "ru"
+      ? product?.data.descriptionRu
+      : product?.data.descriptionUz;
+
   return (
     <div className="flex flex-col px-4">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
@@ -158,14 +172,14 @@ export default function ProductDetailsPage({
         </div>
         <div className="flex-1 lg:mr-[100px] lg:ml-[50px] mt-6 lg:mt-0 sticky top-0 lg:h-[400px]">
           <ProductDetailsHeader
-            category={product?.data.categoryNameRu}
-            name={product?.data.nameRu}
+            category={category}
+            name={name}
             price={productPrice}
             originalPrice={originalPrice}
           />
           <div className="border-t my-6 pt-6 border-t-[#e3e3e3] border-solid">
             <p className="text-[#454545] text-sm md:text-[14px] leading-[1.65] font-normal">
-              {product?.data.descriptionRu}
+              {description}
             </p>
           </div>
           <div>
@@ -190,7 +204,7 @@ export default function ProductDetailsPage({
             )}
             <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
             <AnimatedButton
-              title="Add to Shopping Cart"
+              title={t("productDetails.addToCart")}
               variant="dark"
               width="w-full"
               onClick={handleAddToCart}
@@ -199,13 +213,13 @@ export default function ProductDetailsPage({
               <div className="flex flex-row items-center mb-4 md:mb-0">
                 <LiaShippingFastSolid className="w-[35px] h-[35px] mr-[15px]" />
                 <p className="text-[#454545] text-xs md:text-sm leading-[1.65] font-normal">
-                  Free Shipping Over 500000 soum
+                  {t("productDetails.freeShipping")}
                 </p>
               </div>
               <div className="flex flex-row items-center">
                 <BsBoxSeam className="w-[30px] h-[30px] mr-[15px]" />
                 <p className="text-[#454545] text-xs md:text-sm leading-[1.65] font-normal">
-                  Estimated Delivery Within 3 Days
+                  {t("productDetails.estimatedDelivery")}
                 </p>
               </div>
             </div>
@@ -214,7 +228,7 @@ export default function ProductDetailsPage({
       </div>
       <div className="border-t border-solid border-[#e3e3e3] py-10 md:my-20">
         <h1 className="uppercase font-normal text-center text-lg md:text-xl tracking-[.2em] text-[#454545] mb-10 md:mb-16">
-          You may also like
+          {t("productDetails.youMayAlsoLike")}
         </h1>
         {isLoadingRecProducts ? (
           <div className="flex justify-center items-center py-10">

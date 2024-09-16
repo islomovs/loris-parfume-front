@@ -8,7 +8,8 @@ import { useMutation } from "react-query";
 import { addToCart } from "../../services/cart";
 import { queryClient } from "../providers";
 import { useRouter } from "next/navigation";
-import { getToken } from "@chakra-ui/react";
+import i18n from "@/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface ICustomDrawerProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
 }) => {
   const { cart, apiQuantity, totalSum } = useCartStore((state) => state);
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   const mutation = useMutation(
     (cartItem: {
@@ -79,7 +81,7 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
       title={
         <div className="flex flex-row items-center justify-between">
           <div className="text-base uppercase font-normal tracking-[.2em]">
-            Shopping Cart
+            {t("cartDetails.shoppingCart")}
           </div>
           <Button
             type="text"
@@ -93,12 +95,12 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
         <footer>
           <div className="flex flex-col items-start">
             <div className="mt-1 mb-2 text-[#9d9d9d]">
-              Shipping & taxes calculated at checkout
+              {t("cartDetails.shippingCalculated")}
             </div>
             <div className="w-full">
               <AnimatedButton
                 width="w-full"
-                title={`Checkout - ${formattedTotal}`}
+                title={`${t("cartDetails.checkoutTotal")} ${formattedTotal}`}
                 variant="dark"
                 onClick={handleCheckout}
               />
@@ -118,7 +120,10 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
               ? cartItem.price -
                 (cartItem.price * cartItem.discountPercent) / 100
               : cartItem.price;
-
+            const name =
+              i18n.language == "ru" ? cartItem.nameRu : cartItem.nameUz;
+            const sizeName =
+              i18n.language == "ru" ? cartItem.sizeNameRu : cartItem.sizeNameUz;
             return (
               <DrawerCartItem
                 key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
@@ -126,16 +131,16 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
                 slug={cartItem.slug}
                 price={discountPrice}
                 qty={cartItem.quantity}
-                title={cartItem.nameRu}
+                title={name}
                 sizeId={cartItem.sizeId}
                 image={cartItem.imagesList[0]}
-                sizeName={cartItem.sizeNameRu}
+                sizeName={sizeName}
               />
             );
           })
         ) : (
           <div className="text-center text-[#9d9d9d] mt-10">
-            Your cart is empty.
+            {t("cartDetails.cartEmpty")}
           </div>
         )}
       </div>

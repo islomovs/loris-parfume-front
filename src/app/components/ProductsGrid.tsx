@@ -5,6 +5,8 @@ import { ProductCard } from "@/app/components/ProductCard";
 import { AnimatedButton } from "./AnimatedButton";
 import { Spinner } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/utils/i18n";
 
 interface ProductsGridProps {
   products: IProduct[];
@@ -27,6 +29,7 @@ export const ProductsGrid = ({
 }: ProductsGridProps) => {
   const allItemsLoaded = products.length >= totalProducts;
   const scrollPositionRef = useRef<number>(0);
+  const { t } = useTranslation("common");
 
   const handleLoadMore = () => {
     scrollPositionRef.current = window.scrollY;
@@ -49,6 +52,7 @@ export const ProductsGrid = ({
                 (1 - product.discountPercent / 100)
               ).toFixed(2)
             : null;
+          const name = i18n.language == "ru" ? product.nameRu : product.nameUz;
 
           return (
             <Col key={product.id} xs={12} sm={12} md={8} lg={8} xl={8}>
@@ -61,7 +65,7 @@ export const ProductsGrid = ({
               >
                 <ProductCard
                   image={product.imagesList[0]}
-                  title={product.nameRu}
+                  title={name}
                   originalPrice={product.price}
                   discountPrice={discountPrice || product.price}
                   hasDiscount={product.discountPercent > 0}
@@ -74,10 +78,13 @@ export const ProductsGrid = ({
 
       <div className="text-center my-8">
         <p className="text-sm text-[#454545] mb-4">
-          Showing items {products.length} of {totalProducts}.
+          {t("showingItems", {
+            current: products.length,
+            total: totalProducts,
+          })}
         </p>
         {allItemsLoaded ? (
-          <p className="text-xs text-[#454545]">All items are loaded.</p>
+          <p className="text-xs text-[#454545]">{t("allItemsLoaded")}</p>
         ) : (
           hasMore && (
             <>
@@ -87,7 +94,7 @@ export const ProductsGrid = ({
                 </div>
               ) : (
                 <AnimatedButton
-                  title="Load More"
+                  title={t("loadMore")}
                   variant="dark"
                   width="w-full sm:w-[300px]"
                   onClick={handleLoadMore}

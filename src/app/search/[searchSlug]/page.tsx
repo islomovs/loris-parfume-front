@@ -55,7 +55,7 @@ export default function SearchResultsPage({
   );
 
   return (
-    <div className="flex flex-col mb-6 mx-16">
+    <div className="flex flex-col mb-6 md:mx-16 mx-5">
       <div className="my-8">
         <h1 className="uppercase font-normal text-center text-xl tracking-[.2em] text-[#454545] mb-4">
           search results

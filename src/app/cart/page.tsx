@@ -9,11 +9,14 @@ import { useMutation } from "react-query";
 import { addToCart } from "../../services/cart";
 import { queryClient } from "../providers";
 import { DrawerCartItem } from "../components/DrawerCartItem";
+import i18n from "@/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 export default function CartPage() {
   const router = useRouter();
   const { cart, apiQuantity, totalSum } = useCartStore((state) => state);
   const [isClient, setIsClient] = useState(false);
+  const { t } = useTranslation("common");
 
   const mutation = useMutation(
     (cartItem: {
@@ -25,10 +28,10 @@ export default function CartPage() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("cartItemsData");
-        message.success("Cart updated successfully!");
+        message.success(t("cart.cartUpdatedSuccess"));
       },
       onError: () => {
-        message.error("Failed to update cart.");
+        message.error(t("cart.cartUpdatedError"));
       },
     }
   );
@@ -59,19 +62,19 @@ export default function CartPage() {
   const formattedTotal = isClient ? totalSum().toFixed(2) : "0.00";
 
   return (
-    <div className="py-10 md:py-20 px-4 md:px-40">
+    <div className="py-10 md:py-5 px-4 md:px-40">
       <h1 className="uppercase font-normal text-center text-lg md:text-xl tracking-[.2em] text-[#454545] my-[30px] md:my-[50px]">
-        shopping cart
+        {t("cart.shoppingCart")}
       </h1>
       <div className="hidden md:flex md:flex-row border-b border-solid border-b-[#e3e3e3] pb-[10px]">
         <h1 className="text-[#9D9D9D] text-[11px] font-light flex-[12]">
-          PRODUCT
+          {t("cart.product")}
         </h1>
         <h1 className="text-[#9D9D9D] text-[11px] font-light flex-[4] text-center">
-          NUMBER
+          {t("cart.number")}
         </h1>
         <h1 className="text-[#9D9D9D] text-[11px] font-light flex-[4] text-end">
-          TOTAL
+          {t("cart.total")}
         </h1>
       </div>
       {cart.length > 0 ? (
@@ -79,7 +82,8 @@ export default function CartPage() {
           const discountPrice = cartItem.discountPercent
             ? cartItem.price - (cartItem.price * cartItem.discountPercent) / 100
             : cartItem.price;
-
+          const name =
+            i18n.language == "ru" ? cartItem.nameRu : cartItem.nameUz;
           return (
             <div
               key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
@@ -90,7 +94,7 @@ export default function CartPage() {
                   id={cartItem.id}
                   slug={cartItem.slug}
                   collectionSlug={cartItem.collectionSlug}
-                  title={cartItem.nameRu}
+                  title={name}
                   price={discountPrice}
                   sizeId={cartItem.sizeId}
                   image={cartItem.imagesList[0]}
@@ -105,7 +109,7 @@ export default function CartPage() {
                   slug={cartItem.slug}
                   price={discountPrice}
                   qty={cartItem.quantity}
-                  title={cartItem.nameRu}
+                  title={name}
                   sizeId={cartItem.sizeId}
                   image={cartItem.imagesList[0]}
                   sizeName={cartItem.sizeNameRu}
@@ -116,17 +120,17 @@ export default function CartPage() {
         })
       ) : (
         <div className="text-center text-[#9d9d9d] mt-10">
-          Your cart is empty.
+          {t("cart.cartEmpty")}
         </div>
       )}
 
       <div className="flex flex-col md:flex-row justify-end items-center border-t border-solid border-t-[#e3e3e3] pt-[25px]">
         <div className="flex flex-col items-end w-full">
           <div className="text-xs tracking-[.2em] text-[#454545] font-normal mb-4">
-            TOTAL: {formattedTotal} сум
+            {t("cart.total")}: {formattedTotal} {t("productDetails.sum")}
           </div>
           <AnimatedButton
-            title="checkout"
+            title={t("checkout.makePayment")}
             variant="dark"
             width="w-full md:w-[140px]"
             onClick={handleCheckout}

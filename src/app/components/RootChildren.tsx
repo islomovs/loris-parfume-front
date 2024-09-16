@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Navbar } from "./Navbar";
 import Footer from "./Footer";
 import { useQuery } from "react-query";
 import { getCartItems } from "../../services/cart";
 import useCartStore from "../../services/store";
+import { useTranslation } from "react-i18next";
 
 interface IRootLayout {
   children: any;
@@ -87,6 +88,18 @@ export const RootChildren: React.FC<IRootLayout> = ({ children }) => {
 
   // Check if the current path is the checkout page
   const isCheckoutPage = pathname === "/checkouts";
+  const { i18n } = useTranslation("common");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadNamespace = async () => {
+      await i18n.loadNamespaces("common");
+      setIsLoaded(true);
+    };
+    loadNamespace();
+  }, [i18n]);
+
+  if (!isLoaded) return "";
 
   return (
     <>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface SortingDropdownProps {
   onSortChange: (sortOption: string) => void;
@@ -6,13 +7,14 @@ interface SortingDropdownProps {
 
 const SortingDropdown: React.FC<SortingDropdownProps> = ({ onSortChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Sort by");
+  const [selectedOption, setSelectedOption] = useState("sortBy");
+  const { t } = useTranslation("common");
 
   const options = [
-    { label: "A-Z", value: "a-z" },
-    { label: "Z-A", value: "z-a" },
-    { label: "Price: Low to High", value: "low-high" },
-    { label: "Price: High to Low", value: "high-low" },
+    { label: t("sortOptions.a-z"), value: "a-z" },
+    { label: t("sortOptions.z-a"), value: "z-a" },
+    { label: t("sortOptions.low-high"), value: "low-high" },
+    { label: t("sortOptions.high-low"), value: "high-low" },
   ];
 
   const handleOptionClick = (option: any) => {
@@ -28,7 +30,7 @@ const SortingDropdown: React.FC<SortingDropdownProps> = ({ onSortChange }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex justify-between items-center w-[220px] h-12 rounded-[3px] border border-[#f0f0f0] text-[15px] font-medium text-[#454545] px-3"
       >
-        {selectedOption}
+        {t(selectedOption)}
         <svg
           className="ml-2 h-5 w-5"
           xmlns="http://www.w3.org/2000/svg"

@@ -7,6 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { IBanner } from "@/services/collectionBanners";
 import Image from "next/image";
+import i18n from "@/utils/i18n";
 
 interface IMainCarouselProps {
   bannersData?: IBanner[];
@@ -67,21 +68,31 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
       pagination={pagination}
       className="w-full h-screen sm:h-[500px] md:h-[600px] lg:h-[751px]"
     >
-      {bannersData?.map((banner, index) => (
-        <SwiperSlide key={index}>
-          <div className="relative w-full h-full">
-            <Image
-              src={`${baseUrl}/${
-                isMobile ? banner.mobileImageNameUz : banner.desktopImageNameUz
-              }`}
-              alt="carousel image"
-              className={`w-full h-full object-cover transition-all duration-500 ease-in-out`}
-              onLoad={() => handleImageLoad(index)}
-              fill
-            />
-          </div>
-        </SwiperSlide>
-      ))}
+      {bannersData?.map((banner, index) => {
+        const desktopImageName =
+          i18n.language == "ru"
+            ? banner.desktopImageNameRu
+            : banner.desktopImageNameUz;
+        const mobileImageName =
+          i18n.language == "ru"
+            ? banner.mobileImageNameRu
+            : banner.mobileImageNameUz;
+        return (
+          <SwiperSlide key={index}>
+            <div className="relative w-full h-full">
+              <Image
+                src={`${baseUrl}/${
+                  isMobile ? mobileImageName : desktopImageName
+                }`}
+                alt="carousel image"
+                className={`w-full h-full object-cover transition-all duration-500 ease-in-out`}
+                onLoad={() => handleImageLoad(index)}
+                fill
+              />
+            </div>
+          </SwiperSlide>
+        );
+      })}
     </Swiper>
   );
 };

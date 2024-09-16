@@ -35,10 +35,7 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import { CustomDrawer } from "./CustomDrawer";
 import { DrawerCartItem } from "./DrawerCartItem";
 import { useRouter } from "next/navigation";
-
-const items: MenuProps["items"] = [];
-
-const doprdownItems = {};
+import { useTranslation } from "react-i18next";
 
 interface INavbarProps {
   variant: "filled" | "transparent";
@@ -63,6 +60,21 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
 
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+  const { t, i18n } = useTranslation("common");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const items: MenuProps["items"] = [
+    {
+      key: "uz",
+      label: "Uzbek",
+      onClick: () => i18n.changeLanguage("uz"),
+    },
+    {
+      key: "ru",
+      label: "Russian",
+      onClick: () => i18n.changeLanguage("ru"),
+    },
+  ];
 
   // Function to handle navigation to product page
   const navigateToProduct = (productSlug: string) => {
@@ -199,22 +211,23 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         <div className="flex flex-row items-center px-4 md:px-[50px] pb-4 md:pb-[18px] justify-between">
           <div className="flex-1 flex items-center justify-between">
             <button
-              className="block md:hidden text-xl p-2 focus:outline-none"
+              className="block md:hidden text-[#454545] text-xl p-2 focus:outline-none"
               onClick={toggleSidebar}
             >
               <MenuOutlined />
             </button>
             <Dropdown
-              className="hidden md:block"
-              menu={{ items }}
+              className="hidden cursor-pointer md:block"
+              menu={{ items }} // Attach the items to the Dropdown component
               trigger={["click"]}
             >
               <a
-                className="text-xs md:text-[10px] uppercase hover:text-white"
+                className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
                 onClick={(e) => e.preventDefault()}
               >
                 <Space>
-                  uzb
+                  {i18n.language.toUpperCase()}{" "}
+                  {/* Display the current language */}
                   <DownOutlined />
                 </Space>
               </a>
@@ -236,21 +249,21 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               className="hidden text-[10px] uppercase tracking-[.2em] md:block"
               link={token ? "/account" : "/account/login"}
             >
-              Account
+              {t(`navbar.account`)}
             </NavButton>
             <NavButton
               type="sm"
               className="hidden text-[10px] uppercase tracking-[.2em] md:block cursor-pointer"
               onClick={handleSearchToggle}
             >
-              Search
+              {t("navbar.search")}
             </NavButton>
             <NavButton
               type="md"
-              className="hidden text-xs uppercase tracking-[.2em] md:block cursor-pointer "
+              className="hidden text-xs uppercase tracking-[.2em] md:block cursor-pointer"
               onClick={showDrawer}
             >
-              Shopping cart
+              {t("navbar.shoppingCart")}
               {cart && cart.length > 0 && (
                 <span className="ml-1">({totalQuantity})</span>
               )}
@@ -261,38 +274,23 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               className="md:hidden text-xl p-2 focus:outline-none flex justify-center items-center"
               onClick={handleSearchToggle}
             >
-              <FiSearch
-                className={cn("w-5 h-5 text-white", {
-                  "text-black": variant == "filled",
-                })}
-              />
+              <FiSearch className="w-5 h-5 text-[#454545] hover:text-[#454545]" />
             </button>
             <button
-              className="md:hidden text-xl p-2 focus:outline-none flex justify-center items-center"
+              className="md:hidden text-xl p-2 focus:outline-none flex justify-center items-center group"
               onClick={showDrawer}
             >
               {cart && cart.length > 0 ? (
                 <Badge
                   dot={true}
-                  style={{
-                    backgroundColor: variant === "filled" ? "black" : "white", // Conditional badge color
-                    color: variant === "filled" ? "black" : "white", // Adjust text color if necessary
-                  }}
-                  color="white"
+                  className="group-hover:text-[#454545] transition-colors"
+                  color="#454545"
                   offset={[-2, 6]}
                 >
-                  <LiaShoppingBagSolid
-                    className={cn("w-5 h-5 text-white", {
-                      "text-black": variant == "filled",
-                    })}
-                  />
+                  <LiaShoppingBagSolid className="w-5 h-5 group-hover:text-[#454545] transition-colors" />
                 </Badge>
               ) : (
-                <LiaShoppingBagSolid
-                  className={cn("w-5 h-5 text-white", {
-                    "text-black": variant == "filled",
-                  })}
-                />
+                <LiaShoppingBagSolid className="w-5 h-5 text-[#454545] hover:text-[#454545] transition-colors" />
               )}
             </button>
           </div>
@@ -306,6 +304,9 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                 category.collectionId === collection.id
             );
 
+            const collectionName =
+              i18n.language === "ru" ? collection.nameRu : collection.nameUz;
+
             return (
               <NavButton
                 key={collection.id}
@@ -315,39 +316,51 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                 dropdown={filteredCategories && filteredCategories.length > 0}
                 dropdownItems={
                   filteredCategories
-                    ? filteredCategories.map((category: ICategoryItem) => ({
-                        label: category.nameEng,
-                        link: `/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`,
-                      }))
+                    ? filteredCategories.map((category: ICategoryItem) => {
+                        const categoryName =
+                          i18n.language === "ru"
+                            ? category.nameRu
+                            : category.nameUz;
+
+                        return {
+                          label: categoryName,
+                          link: `/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`,
+                        };
+                      })
                     : []
                 }
               >
-                {collection.nameRu}
+                {collectionName}
               </NavButton>
             );
           })}
-          <NavButton type="md" link="/" isUnderline={true}>
-            Contact
-          </NavButton>
           <NavButton type="md" link="/branches" isUnderline={true}>
-            Branches
+            {t("navbar.branches")}
           </NavButton>
           <div
             className="relative py-[9px] text-xs tracking-[.2em] uppercase my-2 md:my-[6px] mx-2 md:mx-[14px] font-montserrat bg-transparent cursor-pointer group after:bg-black after:absolute after:h-[2px] after:w-0 after:top-[38px] after:left-0 hover:after:w-full after:transition-all after:duration-300"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            e-catalog
+            {t("navbar.e-catalog")}
             {isHovered && (
               <ul className="absolute left-0 top-[40px] bg-white border text-[#454545] w-48 z-10 p-4">
                 {!isLoadingCatalogues
-                  ? catalogues?.map((catalogue: ICatalogueItem) => (
-                      <li key={catalogue.id} className="px-4 py-2">
-                        <Link href={`${baseUrl}/${catalogue.fileUz}`}>
-                          {catalogue.nameEng}
-                        </Link>
-                      </li>
-                    ))
+                  ? catalogues?.map((catalogue: ICatalogueItem) => {
+                      const name =
+                        i18n.language == "ru"
+                          ? catalogue.nameRu
+                          : catalogue.nameUz;
+                      const file =
+                        i18n.language == "ru"
+                          ? catalogue.fileRu
+                          : catalogue.fileUz;
+                      return (
+                        <li key={catalogue.id} className="px-4 py-2">
+                          <Link href={`${baseUrl}/${file}`}>{name}</Link>
+                        </li>
+                      );
+                    })
                   : "Loading..."}
               </ul>
             )}
@@ -355,7 +368,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         </div>
         <Marquee className="border-y-2 bg-primary border-y-primary py-1 text-center">
           <div className="text-sm md:text-lg font-semibold text-white">
-            Скидка 5% в корзине для новых участников при первой покупке
+            {t("navbar.announcement")}
           </div>
         </Marquee>
 
@@ -375,7 +388,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                   onChange={handleSearchChange}
                   autoFocus
                   className="w-full px-4 py-2 text-sm md:text-[18px] text-[#454545] focus:outline-none focus:ring-0 placeholder-[#9d9d9d] placeholder:tracking-[.2em]"
-                  placeholder="SEARCH..."
+                  placeholder={`${t("navbar.search")}...`}
                 />
                 <button onClick={closeSearch}>
                   <TfiClose className="text-xl text-[#454545]" />
@@ -429,7 +442,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                                   id={product.id}
                                   slug={product.slug}
                                   title={product.nameRu}
-                                  price={Number(discountPrice)}
+                                  price={Number(discountPriceMobile)}
                                   image={product.imagesList[0]}
                                   onClick={() =>
                                     navigateToProduct(product.slug)
@@ -567,13 +580,18 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           >
             Account
           </Link>
-          <Dropdown menu={{ items }} trigger={["click"]}>
+          <Dropdown
+            className="hidden cursor-pointer md:block"
+            menu={{ items }} // Attach the items to the Dropdown component
+            trigger={["click"]}
+          >
             <a
-              className="text-xs md:text-[10px] uppercase hover:text-white"
+              className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
               onClick={(e) => e.preventDefault()}
             >
               <Space>
-                uzb
+                {i18n.language.toUpperCase()}{" "}
+                {/* Display the current language */}
                 <DownOutlined />
               </Space>
             </a>

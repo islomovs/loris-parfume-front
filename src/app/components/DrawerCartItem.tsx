@@ -7,6 +7,7 @@ import { BiMinus, BiPlus } from "react-icons/bi";
 import useCartStore from "@/services/store";
 import { ICartItem } from "@/services/cart"; // Adjust the import path if needed
 import { message } from "antd"; // Import message from Ant Design
+import { useTranslation } from "react-i18next";
 
 interface IDrawerCartItemProps {
   id: number;
@@ -41,6 +42,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
   useEffect(() => {
     updateCartItemQuantity(id, quantity, sizeId);
   }, [quantity, id, sizeId, updateCartItemQuantity]);
+  const { t } = useTranslation("common");
 
   const handleRemove = async () => {
     const token = localStorage.getItem("token");
@@ -78,7 +80,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
             {title}
           </h1>
           <h2 className="text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
-            {price} сум
+            {price} {t("productDetails.sum")}
           </h2>
         </div>
       </div>
@@ -101,7 +103,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
           </h2>
         )}
         <h2 className="mb-4 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
-          {price} сум
+          {price} {t("productDetails.sum")}
         </h2>
         <div className="flex flex-row items-center justify-between w-full">
           <Flex className="border-solid border border-[#e3e3e3] w-fit md:w-[106px] h-[40px]">
@@ -125,7 +127,10 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
               <BiPlus />
             </button>
           </Flex>
-          <UnderlinedButton title="remove" onClick={handleRemove} />
+          <UnderlinedButton
+            title={t("cartDetails.remove")}
+            onClick={handleRemove}
+          />
         </div>
       </div>
     </div>

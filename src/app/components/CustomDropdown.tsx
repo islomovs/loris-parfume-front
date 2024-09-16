@@ -2,6 +2,7 @@ import { useState, forwardRef } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useController, Control, FieldValues, Path } from "react-hook-form";
 import Image from "next/image"; // Import Next.js Image component
+import { useTranslation } from "react-i18next";
 
 type Option = {
   id: number;
@@ -29,7 +30,7 @@ export const CustomDropdown = forwardRef<
   });
 
   const [isOpen, setIsOpen] = useState(false);
-
+  const { t } = useTranslation("common");
   const selectOption = (option: string) => {
     formOnChange(option); // Update form state via react-hook-form
     if (onChange) onChange(option); // Call the external onChange if provided
@@ -53,7 +54,7 @@ export const CustomDropdown = forwardRef<
               value ? "text-primary" : ""
             }`}
           >
-            {value || "Select an option"}
+            {value || t("checkout.selectOption")}
           </span>
           <FaChevronDown className="text-[#707070]" />
         </div>
@@ -77,7 +78,7 @@ export const CustomDropdown = forwardRef<
                   className="w-6 h-6 object-contain"
                 />
               )}
-              <span>{option.title}</span> {/* Display title */}
+              <span>{option.title}</span>
             </li>
           ))}
         </ul>

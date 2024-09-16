@@ -5,6 +5,8 @@ import { ProductsGrid } from "@/app/components/ProductsGrid";
 import { fetchProductsData, IProduct } from "@/services/products";
 import { CollectionsAndCategoriesData } from "@/services/collections";
 import SortingDropdown from "@/app/components/SortingDropdown";
+import { useTranslation } from "react-i18next";
+import i18n from "@/utils/i18n";
 
 export default function CategoriesPage({
   params,
@@ -14,6 +16,7 @@ export default function CategoriesPage({
   const [sortOption, setSortOption] = useState<string | undefined>(undefined);
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { categorySlug, collectionSlug } = params;
+  const { t } = useTranslation("common");
 
   // Use useInfiniteQuery to fetch products data incrementally
   const {
@@ -72,6 +75,8 @@ export default function CategoriesPage({
   );
 
   const bannerImage = matchedCategory?.bannerImage || "";
+  const title =
+    i18n.language == "ru" ? matchedCategory?.nameRu : matchedCategory?.nameUz;
 
   return (
     <div>
@@ -79,14 +84,12 @@ export default function CategoriesPage({
         className="bg-center bg-cover bg-no-repeat bg-fixed h-[90vh] flex justify-center items-end tracking-[.2em]"
         style={{ backgroundImage: `url(${baseUrl}/${bannerImage})` }}
       >
-        <p className="text-xl text-white font-semibold mb-[30vh]">
-          {matchedCategory?.nameRu}
-        </p>
+        <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
       </div>
       <div className="md:mx-16 mx-5">
         <div className="flex flex-row md:flex-row justify-between items-center my-8">
           <p className="text-[15px] text-[#454545] font-normal">
-            {totalElements} products
+            {totalElements} {t("products")}
           </p>
           <SortingDropdown onSortChange={handleSortChange} />
         </div>
