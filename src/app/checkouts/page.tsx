@@ -69,6 +69,8 @@ export default function Checkout() {
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
   const [branchId, setBranchId] = useState<number | null>(null);
   const { t } = useTranslation("common");
+  const currentTotalSum = totalSum();
+  const [deliverySum, setDeliverySum] = useState<number>(0);
 
   const deliveryOptions = [
     { id: 1, title: t("checkout.deliveryOptions.delivery") }, // Only include "Доставка"
@@ -119,6 +121,13 @@ export default function Checkout() {
           distance: Number(data?.distance),
           deliverySum: Number(data?.deliverySum),
         });
+
+        // Calculate the deliverySum based on the total sum and set it using setDeliverySum
+        const currentTotalSum = totalSum(); // Ensure totalSum() is available in this scope
+        setDeliverySum(
+          currentTotalSum >= 500000 ? 0 : Number(data?.deliverySum)
+        );
+
         // Check if the values are correctly fetched and set
         console.log("Fetched Delivery Data: ", {
           distance: data?.distance,
@@ -161,9 +170,6 @@ export default function Checkout() {
       });
     }, 2000);
   };
-
-  const currentTotalSum = totalSum();
-  const deliverySum = currentTotalSum >= 500000 ? 0 : deliveryData.deliverySum;
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const ordersItemsList = cart.map((item) => ({
@@ -335,18 +341,14 @@ export default function Checkout() {
                 <HStack justify="space-between" my={5}>
                   <p>{t("checkout.delivery")}</p>
                   <p>
-                    {totalSum() >= 500000
-                      ? "0.00"
-                      : deliveryData?.deliverySum.toFixed(2)}{" "}
-                    {t("productDetails.sum")}
+                    {deliverySum.toFixed(2)} {t("productDetails.sum")}
                   </p>
                 </HStack>
                 <HStack justify="space-between" fontWeight={600}>
                   <p>{t("checkout.payment")}</p>
                   <p>
                     {(
-                      totalSum() +
-                      (totalSum() >= 500 ? 0 : deliveryData?.deliverySum)
+                      currentTotalSum + (deliverySum > 0 ? deliverySum : 0)
                     ).toFixed(2)}{" "}
                     {t("productDetails.sum")}
                   </p>
