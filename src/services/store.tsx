@@ -92,7 +92,7 @@ const useCartStore = create<CartState>()(
           return total; // Returns 0 if cart is empty or undefined
         }
 
-        const discountExceptions = ["others"]; // Collections excluded from discounts
+        const discountExceptions = ["creation"]; // Collections excluded from discounts
 
         type GroupedItems = {
           [key: string]: ICartItem[];

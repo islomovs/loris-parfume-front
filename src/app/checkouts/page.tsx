@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BiBasket } from "react-icons/bi";
 import { CustomDropdown } from "../components/CustomDropdown";
 import { CustomInput } from "../components/CustomInput";
@@ -19,7 +19,6 @@ import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
-import CashIcon from "../../../public/cash-icon.svg";
 import PaymeIcon from "../../../public/payme-logo.BdmkZoD4.svg";
 import ClickIcon from "../../../public/click-logo.jzgAXUV7.svg";
 import YandexMap from "../components/YandexMap";
@@ -100,7 +99,6 @@ export default function Checkout() {
       },
       onError: (error) => {
         loadingBarRef.current?.complete();
-        // console.error("Failed to create order:", error);
         message.error("Failed to create order, please try again.");
       },
     }
@@ -108,7 +106,7 @@ export default function Checkout() {
 
   const nearestBranchMutation = useMutation(
     ({ longitude, latitude }: { longitude: number; latitude: number }) =>
-      fetchNearestBranch(longitude, latitude),
+      fetchNearestBranch(latitude, longitude),
     {
       onMutate: () => {
         message.loading("Fetching nearest branch...");
@@ -121,10 +119,14 @@ export default function Checkout() {
           distance: Number(data?.distance),
           deliverySum: Number(data?.deliverySum),
         });
+        // Check if the values are correctly fetched and set
+        console.log("Fetched Delivery Data: ", {
+          distance: data?.distance,
+          deliverySum: data?.deliverySum,
+        });
       },
       onError: (error) => {
         message.destroy();
-        // console.error("Error fetching nearest branch:", error);
         message.error("Failed to fetch nearest branch, please try again.");
       },
     }
@@ -160,6 +162,9 @@ export default function Checkout() {
     }, 2000);
   };
 
+  const currentTotalSum = totalSum();
+  const deliverySum = currentTotalSum >= 500000 ? 0 : deliveryData.deliverySum;
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
     const ordersItemsList = cart.map((item) => ({
       itemId: item.id,
@@ -168,9 +173,6 @@ export default function Checkout() {
       collectionId: item.collectionId ?? 0,
     }));
 
-    const currentTotalSum = totalSum();
-    const deliverySum =
-      currentTotalSum >= 500000 ? 0 : deliveryData.deliverySum;
     const finalTotalSum = deliverySum + currentTotalSum;
     const orderData: OrderData = {
       fullName: data.fullName,
@@ -193,6 +195,11 @@ export default function Checkout() {
 
     orderMutation.mutate(orderData);
   };
+
+  useEffect(() => {
+    // Check the delivery data state updates
+    console.log("Updated Delivery Data:", deliveryData);
+  }, [deliveryData]);
 
   return (
     <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
@@ -328,7 +335,7 @@ export default function Checkout() {
                 <HStack justify="space-between" my={5}>
                   <p>{t("checkout.delivery")}</p>
                   <p>
-                    {totalSum() >= 500
+                    {totalSum() >= 500000
                       ? "0.00"
                       : deliveryData?.deliverySum.toFixed(2)}{" "}
                     {t("productDetails.sum")}
