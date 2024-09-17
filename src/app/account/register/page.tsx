@@ -14,14 +14,30 @@ import {
 import { useMutation } from "react-query";
 import { useDisclosure } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { registerSchema } from "../../../utils/schemas";
 import { VerificationModal } from "../../components/VerificationModal";
 import useCartStore from "@/services/store";
 import { addToCart } from "@/services/cart";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import { useTranslation } from "react-i18next";
+import * as yup from "yup";
 
 export default function Register() {
+  const { t } = useTranslation("common");
+  const registerSchema = yup.object({
+    fullName: yup.string().required(t("validation.fullNameRequired")),
+    phone: yup
+      .string()
+      .matches(/^\+998\d{9}$/, t("validation.phoneFormat"))
+      .required(t("validation.phoneNumberRequired")),
+    password: yup
+      .string()
+      .min(8, t("validation.passwordMinLength"))
+      .required(t("validation.passwordRequired")),
+    rePassword: yup
+      .string()
+      .oneOf([yup.ref("password")], t("validation.passwordsMatch"))
+      .required(t("validation.rePasswordRequired")),
+  });
   const {
     register,
     handleSubmit,
@@ -36,12 +52,9 @@ export default function Register() {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { cart, clearCart } = useCartStore();
-  const { t } = useTranslation("common");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("TOKEN VALUE: ", token, " TYPE: ", typeof token);
-
     if (token && token !== "undefined" && token !== "") {
       syncLocalCartWithServer();
       router.push("/account");
@@ -53,7 +66,7 @@ export default function Register() {
       console.log("Successfully Registered!", data);
       setErrorMessage(null);
       onOpen(); // Open the verification modal
-      loadingBarRef.current?.complete(); // Complete the loading bar when registration is successful
+      loadingBarRef.current?.complete();
     },
     onError: (error) => {
       console.error("Error during registration:", error);

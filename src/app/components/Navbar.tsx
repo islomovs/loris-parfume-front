@@ -369,8 +369,11 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             )}
           </div>
         </div>
-        <Marquee className="border-y-2 bg-primary border-y-primary py-1 text-center">
-          <div className="text-sm md:text-lg font-semibold text-white">
+        <Marquee
+          speed={150}
+          className="border-y-2 bg-primary border-y-primary py-1 text-center"
+        >
+          <div className="text-sm md:text-sm font-semibold tracking-[.2em] text-white">
             {t("navbar.announcement")}
           </div>
         </Marquee>
