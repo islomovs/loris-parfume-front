@@ -156,10 +156,10 @@ export default function Account() {
                       } uppercase`}
                     >
                       {order.isPaid
-                        ? "Paid"
+                        ? t("orderDetails.paid")
                         : !order.isPaid && order.paymentType === "uzum nasiya"
-                        ? "Pending"
-                        : "Not Paid"}
+                        ? t("orderDetails.pending")
+                        : t("orderDetails.notPaid")}
                     </p>
                   </div>
                 </div>
@@ -233,18 +233,12 @@ export default function Account() {
                           {t("orderDetails.orderItems")}
                         </h2>
                         {order.itemsList.map((item: any, index: number) => {
-                          console.log("ITEM: ", item);
-
                           const name =
                             i18n.language === "ru" ? item.nameRu : item.nameUz;
                           const sizeName =
                             i18n.language === "ru"
                               ? item.sizeNameRu
                               : item.sizeNameUz;
-
-                          // Check values passed to getDiscountedTotal
-
-                          // Calculate discounted total using Zustand store function
 
                           return (
                             <CheckoutCartItem

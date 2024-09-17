@@ -34,9 +34,9 @@ export default function Footer() {
             +998 93 911 99 44
           </a>
           <div className="flex flex-row gap-5 mt-3 lg:mt-[14px]">
-            <a href="https://facebook.com" className="hover:text-primary">
+            {/* <a href="https://facebook.com" className="hover:text-primary">
               <FaFacebookF />
-            </a>
+            </a> */}
             <a
               href="https://www.instagram.com/lorisparfum_uz"
               className="hover:text-primary"
@@ -79,10 +79,7 @@ export default function Footer() {
       </div>
 
       <div className="flex flex-col items-center mt-8">
-        <a
-          href="#"
-          className="text-xs font-normal uppercase tracking-[.2em] mt-4 lg:mt-0"
-        >
+        <a className="text-xs font-normal uppercase tracking-[.2em] mt-4 lg:mt-0">
           COPYRIGHT© LORIS PARFUM
         </a>
       </div>

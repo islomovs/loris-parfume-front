@@ -14,7 +14,7 @@ import {
 } from "@/services/authService";
 import { useMutation } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup"; // Import yup for conditional schemas
+import * as yup from "yup";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import useCartStore from "@/services/store";
 import { addToCart } from "@/services/cart";
@@ -23,21 +23,33 @@ import { VerificationModal } from "../../components/VerificationModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-// Define schemas
-const loginSchema = yup.object({
-  phone: yup.string().required("Phone number is required"),
-  password: yup.string().required("Password is required"),
-});
-
-const resetPasswordSchema = yup.object({
-  phone: yup.string().required("Phone number is required"),
-});
-
 // Utility function to sanitize phone number
 const sanitizePhoneNumber = (phone: string) => phone.replace(/^\+/, "");
 
 export default function Login() {
   const [isResetPassword, setIsResetPassword] = useState(false);
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const loadingBarRef = useRef<LoadingBarRef | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const { cart, clearCart } = useCartStore();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation("common");
+  const loginSchema = yup.object({
+    phone: yup
+      .string()
+      .matches(/^\+998\d{9}$/, t("validation.phoneFormat"))
+      .required(t("validation.phoneNumberRequired")),
+    password: yup
+      .string()
+      .min(8, t("validation.passwordMinLength"))
+      .required(t("validation.passwordRequired")),
+  });
+
+  const resetPasswordSchema = yup.object({
+    phone: yup.string().required(t("validation.phoneNumber")),
+  });
+
   const [verificationCode, setVerificationCode] = useState<string>(""); // State for verification code
   const {
     register,
@@ -47,15 +59,6 @@ export default function Login() {
   } = useForm<TLoginFormData>({
     resolver: yupResolver(isResetPassword ? resetPasswordSchema : loginSchema),
   });
-
-  const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const loadingBarRef = useRef<LoadingBarRef | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const { cart, clearCart } = useCartStore();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t } = useTranslation("common");
-
   const toggleResetPassword = () => {
     setIsResetPassword((prev) => !prev);
     setErrorMessage(null); // Clear error message when toggling states
@@ -254,7 +257,7 @@ export default function Login() {
                 type="text"
               />
               {errors.phone && (
-                <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
+                <p className="text-sm text-start sm:text-[14px] text-[#CB2B2B] mt-1">
                   {errors.phone.message}
                 </p>
               )}
@@ -269,7 +272,7 @@ export default function Login() {
                   type="password"
                 />
                 {errors.password && (
-                  <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
+                  <p className="text-sm text-start sm:text-[14px] text-[#CB2B2B] mt-1">
                     {errors.password.message}
                   </p>
                 )}

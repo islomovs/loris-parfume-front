@@ -114,6 +114,9 @@
     "payForOrder": "Buyurtma uchun to'lash",
     "myAccount": "MENING AKKAUNTIM",
     "myOrders": "MENING BUYURTMALARIM",
+    "paid": "To'langan",
+    "pending": "Kutilmoqda",
+    "notPaid": "To'lanmagan",
     "orderDetails": "Buyurtma tafsilotlari",
     "fullName": "F.I.SH",
     "phone": "Telefon",
@@ -145,5 +148,17 @@
   },
   "about": {
     "description": "LORIS, 2006-yildan buyon innovatsion hidlari bilan tanilgan, 500 dan ortiq do‘kon va kiosk orqali o‘ziga xos xushbo‘yliklarni dunyo bo‘ylab tarqatmoqda. LORIS, global ilmiy-tadqiqot laboratoriyalarida ishlab chiqarilgan parfyumeriya, xona xushbo‘yligi va shaxsiy parvarish mahsulotlari bilan har kuni millionlab insonlarga yetib boradi; ishlab chiqarish Istanbulda amalga oshiriladi. Brend, asosan Yaqin Sharq, Yevropa va Afrika bozorlariga eksport qilib, kosmetika sohasida global yetakchiga aylanmoqda. LORIS, ISO 22716:2007 GMP va IFRA standartlariga mos ishlab chiqarish orqali gigiena va sifatni ta’minlaydi. Mijozlarning mamnuniyatini ta'minlash va yuqori sifatni saqlashga doimo e'tibor qaratadi."
-  }
+  },
+  "validation": {
+    "phoneNumber": "Telefon raqami majburiy",
+    "password": "Parol majburiy",
+    "fullNameRequired": "To'liq ism majburiy",
+    "phoneFormat": "Telefon raqami +9980000000 formatida bo'lishi kerak",
+    "phoneNumberRequired": "Telefon raqami majburiy",
+    "passwordMinLength": "Parol kamida 8 ta belgidan iborat bo'lishi kerak",
+    "passwordRequired": "Parol majburiy",
+    "passwordsMatch": "Parollar mos kelishi kerak",
+    "rePasswordRequired": "Iltimos, parolni tasdiqlang"
+  },
+  "new": "just for test"
 }
