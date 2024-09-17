@@ -156,10 +156,10 @@ export default function Account() {
                       } uppercase`}
                     >
                       {order.isPaid
-                        ? "Paid"
+                        ? t("orderDetails.paid")
                         : !order.isPaid && order.paymentType === "uzum nasiya"
-                        ? "Pending"
-                        : "Not Paid"}
+                        ? t("orderDetails.pending")
+                        : t("orderDetails.notPaid")}
                     </p>
                   </div>
                 </div>

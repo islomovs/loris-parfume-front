@@ -110,9 +110,13 @@
   },
   "branches": "filiallar",
   "orderDetails": {
+    "paymentType": "To'lov turi",
     "payForOrder": "Buyurtma uchun to'lash",
     "myAccount": "MENING AKKAUNTIM",
     "myOrders": "MENING BUYURTMALARIM",
+    "paid": "To'langan",
+    "pending": "Kutilmoqda",
+    "notPaid": "To'lanmagan",
     "orderDetails": "Buyurtma tafsilotlari",
     "fullName": "F.I.SH",
     "phone": "Telefon",
@@ -143,6 +147,18 @@
     "updating": "Foydalanuvchi ma'lumotlari yangilanmoqda..."
   },
   "about": {
-    "description": "LORIS, 2006-yildan buyon xushbo'ylik tendentsiyalari bo'yicha o'zining AR-GE tadqiqotlari bilan nom qozongan va yangi tendentsiyalarga imzo chekkan brend sifatida, 500 dan ortiq kontseptual do'kon va kiosklar bilan o'zi qayd etgan hidlarni butun dunyoga tarqatmoqda. Loris dunyo miqyosidagi ilmiy-tadqiqot laboratoriyalarida ishlab chiqilgan parfyumeriya, xona xushbo'yligi va shaxsiy parvarishlash mahsulotlari bilan har kuni millionlab odamlarning qalbiga tegishni uddalaydi; U o'z faoliyatini ISTANBUL shahrida joylashgan ishlab chiqarish korxonalarida amalga oshiradi. LORIS innovatsion ijodlari va raqobatbardosh mahsulot assortimenti bilan global kosmetika brendi sifatida oldinga kuchli qadam tashlamoqda va shu nuqtai nazardan, ko'plab mamlakatlarga, ayniqsa Yaqin Sharq, Yevropa va Afrika qit'asiga eksport qilish orqali o'sishda davom etmoqda. Sog'liqni saqlash vazirligining ruxsati bilan amalga oshiriladigan ularni ishlab chiqarish ISO 22716:2007 GMP (Yaxshi ishlab chiqarish amaliyotlari) va IFRA (Xalqaro Essence Association) standartlariga muvofiq gigiena va sifatni buzmasdan tayyorlanadi va organoleptik, fizik va kimyoviy testlar (Purity Test GCMS Device) o'zining to'liq jihozlangan laboratoriyasida sotiladi. Mijozlarning qoniqishi va umidlarini doimo yuqori ushlab turish uchun mo'ljallangan brendni ko'rishdagi asosiy tamoyil sifatni tushunishdir. Shu munosabat bilan, brend doirasida mijozlarning fikr-mulohazalari ISO 10002: 2004 Sifat standartiga muvofiq mijozlarning fikr-mulohazalari o'rganib chiqiladi va xabar qilinadi. Anadolu Sifat sammitida olingan 'Yuqori sifat belgisi' bu mavzuda olib borilgan nozik ishlarning yaxshi aksidir. LORIS o'zining 17 yillik sanoat tajribasi va har doim yuqori sifatni maqsad qilgan va doimiy takomillashtirishga ochiq bo'lgan ilmiy-tadqiqot yondashuvi bilan yangi xushbo'y tendentsiyalarni yo'lga qo'yish orqali kosmetika sanoatidagi sayohatini davom ettiradi."
-  }
+    "description": "LORIS, 2006-yildan buyon innovatsion hidlari bilan tanilgan, 500 dan ortiq do‘kon va kiosk orqali o‘ziga xos xushbo‘yliklarni dunyo bo‘ylab tarqatmoqda. LORIS, global ilmiy-tadqiqot laboratoriyalarida ishlab chiqarilgan parfyumeriya, xona xushbo‘yligi va shaxsiy parvarish mahsulotlari bilan har kuni millionlab insonlarga yetib boradi; ishlab chiqarish Istanbulda amalga oshiriladi. Brend, asosan Yaqin Sharq, Yevropa va Afrika bozorlariga eksport qilib, kosmetika sohasida global yetakchiga aylanmoqda. LORIS, ISO 22716:2007 GMP va IFRA standartlariga mos ishlab chiqarish orqali gigiena va sifatni ta’minlaydi. Mijozlarning mamnuniyatini ta'minlash va yuqori sifatni saqlashga doimo e'tibor qaratadi."
+  },
+  "validation": {
+    "phoneNumber": "Telefon raqami majburiy",
+    "password": "Parol majburiy",
+    "fullNameRequired": "To'liq ism majburiy",
+    "phoneFormat": "Telefon raqami +9980000000 formatida bo'lishi kerak",
+    "phoneNumberRequired": "Telefon raqami majburiy",
+    "passwordMinLength": "Parol kamida 8 ta belgidan iborat bo'lishi kerak",
+    "passwordRequired": "Parol majburiy",
+    "passwordsMatch": "Parollar mos kelishi kerak",
+    "rePasswordRequired": "Iltimos, parolni tasdiqlang"
+  },
+  "new": "just for test"
 }

@@ -68,6 +68,7 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
       router.push("/checkouts");
     } else {
       message.error("Please log in!");
+      router.push("/account/login");
     }
   }, [cart, apiQuantity, mutation, handleClose, router]);
 

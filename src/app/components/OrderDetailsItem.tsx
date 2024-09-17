@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface IOrderDetailsItem {
   title: string;
@@ -11,6 +12,8 @@ export const OrderDetailsItem: React.FC<IOrderDetailsItem> = ({
   description,
   isDescriptionLink = false, // Default to false if not provided
 }) => {
+  const { t } = useTranslation("common");
+
   return (
     <div className="flex flex-row justify-between my-1">
       <p className="text-[14px] font-normal text-[#454545] mr-5">{title}:</p>
@@ -21,7 +24,7 @@ export const OrderDetailsItem: React.FC<IOrderDetailsItem> = ({
           rel="noopener noreferrer"
           className="text-[14px] font-medium text-[#1c7ed6] break-words max-w-[400px] "
         >
-          Pay for the order
+          {t("orderDetails.payForOrder")}
         </a>
       ) : (
         <p className="text-[14px] font-medium text-[#454545] break-words max-w-[400px]">

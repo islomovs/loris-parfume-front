@@ -34,9 +34,9 @@ export default function Footer() {
             +998 93 911 99 44
           </a>
           <div className="flex flex-row gap-5 mt-3 lg:mt-[14px]">
-            <a href="https://facebook.com" className="hover:text-primary">
+            {/* <a href="https://facebook.com" className="hover:text-primary">
               <FaFacebookF />
-            </a>
+            </a> */}
             <a
               href="https://www.instagram.com/lorisparfum_uz"
               className="hover:text-primary"
@@ -69,28 +69,17 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col lg:basis-[460px] p-5 lg:p-10">
-          <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]">
-            ALGEMENE VOORWAARDEN
-          </h1>
+          <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]"></h1>
           <ul>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
-              - Snelle levering
-            </li>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
-              - Online veilig & snel besteld
-            </li>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
-              - Gratis verzending vanaf €50
-            </li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
           </ul>
         </div>
       </div>
 
       <div className="flex flex-col items-center mt-8">
-        <a
-          href="#"
-          className="text-xs font-normal uppercase tracking-[.2em] mt-4 lg:mt-0"
-        >
+        <a className="text-xs font-normal uppercase tracking-[.2em] mt-4 lg:mt-0">
           COPYRIGHT© LORIS PARFUM
         </a>
       </div>

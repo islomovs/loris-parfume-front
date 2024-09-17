@@ -18,7 +18,7 @@ const options: InitOptions = {
     order: ["cookie", "localStorage", "querystring", "navigator"], // Language detection order
     caches: ["cookie"], // Cache the language selection in cookies
   },
-  debug: true, // Enable debugging in development mode
+  debug: true, // Enable debugging in development mode // to console log
 };
 
 i18n
