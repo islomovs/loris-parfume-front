@@ -55,6 +55,7 @@ export default function Register() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    
     if (token && token !== "undefined" && token !== "") {
       syncLocalCartWithServer();
       router.push("/account");

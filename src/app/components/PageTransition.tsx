@@ -1,11 +1,11 @@
-// components/PageTransition.tsx
+'use client'
 
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation"; // Use usePathname to get the current path
-import React, { ReactNode } from "react";
+import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname } from 'next/navigation' // Use usePathname to get the current path
+import React, { ReactNode } from 'react'
 
 interface PageTransitionProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const pageVariants = {
@@ -21,19 +21,19 @@ const pageVariants = {
     opacity: 0,
     x: 20,
   },
-};
+}
 
 const pageTransition = {
-  type: "tween",
-  ease: "easeInOut",
+  type: 'tween',
+  ease: 'easeInOut',
   duration: 0.3,
-};
+}
 
 const PageTransition = ({ children }: PageTransitionProps) => {
-  const pathname = usePathname(); // Use usePathname to get the current route path
+  const pathname = usePathname() // Use usePathname to get the current route path
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="wait" initial={true}>
       <motion.div
         key={pathname}
         initial="initial"
@@ -46,7 +46,7 @@ const PageTransition = ({ children }: PageTransitionProps) => {
         {children}
       </motion.div>
     </AnimatePresence>
-  );
-};
+  )
+}
 
-export default PageTransition;
+export default PageTransition

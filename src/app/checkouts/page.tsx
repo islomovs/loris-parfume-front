@@ -127,12 +127,6 @@ export default function Checkout() {
         setDeliverySum(
           currentTotalSum >= 500000 ? 0 : Number(data?.deliverySum)
         );
-
-        // Check if the values are correctly fetched and set
-        console.log("Fetched Delivery Data: ", {
-          distance: data?.distance,
-          deliverySum: data?.deliverySum,
-        });
       },
       onError: (error) => {
         message.destroy();
@@ -202,10 +196,6 @@ export default function Checkout() {
     orderMutation.mutate(orderData);
   };
 
-  useEffect(() => {
-    // Check the delivery data state updates
-    console.log("Updated Delivery Data:", deliveryData);
-  }, [deliveryData]);
 
   return (
     <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
@@ -214,7 +204,7 @@ export default function Checkout() {
         <header className="flex flex-row justify-between items-center md:px-[104px] py-4 md:py-[21px]">
           <Link href="/">
             <h1 className="text-lg md:text-xl lg:text-[21px] font-medium text-[#454545]">
-              Loris Parfume
+              Loris Parfum
             </h1>
           </Link>
           <Link href={`/cart`}>
