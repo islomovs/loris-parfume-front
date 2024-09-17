@@ -69,19 +69,11 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col lg:basis-[460px] p-5 lg:p-10">
-          <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]">
-            ALGEMENE VOORWAARDEN
-          </h1>
+          <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]"></h1>
           <ul>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
-              - Snelle levering
-            </li>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
-              - Online veilig & snel besteld
-            </li>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
-              - Gratis verzending vanaf €50
-            </li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
           </ul>
         </div>
       </div>
