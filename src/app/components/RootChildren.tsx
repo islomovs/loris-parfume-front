@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Navbar } from "./Navbar";
@@ -29,11 +31,10 @@ export const RootChildren: React.FC<IRootLayout> = ({ children }) => {
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   // Conditionally fetch cart items only if token exists
-  const { data: cartData, refetch } = useQuery(
+  const { refetch } = useQuery(
     "cartItemsData",
     async () => {
       const res = await getCartItems();
-      console.log("Data IS FETCHED");
       return res?.data || [];
     },
     {

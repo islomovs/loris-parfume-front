@@ -40,7 +40,6 @@ export default function Register() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("TOKEN VALUE: ", token, " TYPE: ", typeof token);
 
     if (token && token !== "undefined" && token !== "") {
       syncLocalCartWithServer();

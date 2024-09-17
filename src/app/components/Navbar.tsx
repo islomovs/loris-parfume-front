@@ -43,26 +43,28 @@ interface INavbarProps {
 }
 
 export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { cart } = useCartStore((state) => state);
+  const totalQuantity = Array.isArray(cart)
+  ? cart.reduce((acc, item) => acc + item.quantity, 0)
+  : 0;
+  const page = 1;
+  
   const [open, setOpen] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const page = 1;
-  const totalQuantity = Array.isArray(cart)
-    ? cart.reduce((acc, item) => acc + item.quantity, 0)
-    : 0;
+
   const [catalogues, setCataloguesData] = useState<ICatalogueItem[]>();
   const [isHovered, setIsHovered] = useState(false);
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [searchResults, setSearchResults] = useState<IData | null>(null);
 
   const [isMobile, setIsMobile] = useState(false);
-  const router = useRouter();
+
   const { t, i18n } = useTranslation("common");
-  const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
 
   const items: MenuProps["items"] = [
     {
@@ -202,7 +204,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         className={cn(
           `pt-4 z-20 w-full transition-[background] duration-300 border-b border-solid border-[#dad9d9] relative`,
           {
-            "absolute text-white bg-transparent hover:text-black hover:bg-white border-none":
+            "absolute text-white bg-gradient-to-b from-black hover:text-white hover:bg-black border-none":
               variant == "transparent" && !isSearchOpen,
             "text-black bg-white": variant == "filled" && !isSearchOpen,
             "absolute text-black bg-white": isSearchOpen,

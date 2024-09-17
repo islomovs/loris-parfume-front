@@ -233,18 +233,12 @@ export default function Account() {
                           {t("orderDetails.orderItems")}
                         </h2>
                         {order.itemsList.map((item: any, index: number) => {
-                          console.log("ITEM: ", item);
-
                           const name =
                             i18n.language === "ru" ? item.nameRu : item.nameUz;
                           const sizeName =
                             i18n.language === "ru"
                               ? item.sizeNameRu
                               : item.sizeNameUz;
-
-                          // Check values passed to getDiscountedTotal
-
-                          // Calculate discounted total using Zustand store function
 
                           return (
                             <CheckoutCartItem

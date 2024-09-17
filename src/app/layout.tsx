@@ -1,9 +1,10 @@
-'use client'
 import { Poppins } from 'next/font/google'
-import './globals.css'
 import { RootChildren } from './components/RootChildren'
 import { Providers } from './providers'
 import PageTransition from './components/PageTransition'
+
+import './globals.css'
+import { Metadata } from 'next'
 
 // Load Poppins font with Latin and Cyrillic subsets
 const poppins = Poppins({
@@ -11,6 +12,31 @@ const poppins = Poppins({
   weight: ['400', '500', '600', '700'], // Include the weights you need
   display: 'swap', // Optional: for better font loading performance
 })
+
+export const metadata: Metadata = {
+  title: 'Loris Parfum',
+  description: 'Лучшие Парфюмы От Loris Parfum',
+  keywords: [
+    'loris parfume',
+    'loris parfum',
+    'parfume',
+    'parfumeria',
+    'atir',
+    'duhi',
+    'духи',
+    'gigiyena',
+    'hygiene',
+    'tashkent',
+  ],
+  openGraph: {
+    title: 'Loris Parfume',
+    description: 'Лучшие Парфюмы От Loris Parfum',
+    url: 'https://lorisparfume.uz',
+    siteName: 'Loris Parfume',
+    locale: 'ru_RU',
+    type: 'website',
+  },
+}
 
 export default function RootLayout({
   children,
