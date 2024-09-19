@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist, PersistStorage } from "zustand/middleware";
 import { ICartItem } from "./cart";
-import { string } from "yup";
 
 interface CartState {
   cart: ICartItem[];

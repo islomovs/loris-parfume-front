@@ -3,47 +3,95 @@
 import React, { forwardRef, useState } from "react";
 import { cn } from "../../helpers/mergeFunction";
 import { useTranslation } from "react-i18next";
+import InputMask from "react-input-mask"; // Import InputMask for phone number formatting
 
 interface ICustomInputProps {
   title: string;
   borders: "rounded" | "no-rounded";
   className?: string;
   type: "password" | "number" | "text";
-  value?: string; // Add the value prop
-  disabled?: boolean; // Add the disabled prop
+  value?: string;
+  disabled?: boolean;
+  isPhoneNumber?: boolean; // Add isPhoneNumber prop
 }
 
-export const CustomInput = forwardRef<HTMLInputElement, ICustomInputProps>(
-  ({ title, borders, className, type, value, disabled, ...rest }, ref) => {
+// Forwarding the ref correctly
+export const CustomInput = forwardRef<
+  HTMLInputElement | InputMask,
+  ICustomInputProps
+>(
+  (
+    {
+      title,
+      borders,
+      className,
+      type,
+      value,
+      disabled,
+      isPhoneNumber,
+      ...rest
+    },
+    ref // ref forwarded here
+  ) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const { t } = useTranslation("common");
 
+    // Toggle password visibility
     const togglePasswordVisibility = () => {
       setIsPasswordVisible(!isPasswordVisible);
     };
+
+    // Ensure the correct input type based on isPhoneNumber and type prop
+    const inputType = isPhoneNumber
+      ? "tel"
+      : isPasswordVisible || type === "text"
+      ? "text"
+      : "password";
 
     return (
       <label
         htmlFor={title}
         className="form-group relative flex flex-col-reverse"
       >
-        <input
-          id={title}
-          ref={ref}
-          className={cn(
-            `${className} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] px-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px] pr-[40px]`,
-            {
-              "rounded-[5px]": borders === "rounded",
-              "rounded-0": borders === "no-rounded",
-            }
-          )}
-          type={isPasswordVisible || type === "text" ? "text" : "password"}
-          placeholder=" "
-          value={value} // Pass the value prop
-          disabled={disabled} // Pass the disabled prop
-          {...rest}
-        />
-        {type === "password" && (
+        {/* Use InputMask if isPhoneNumber is true */}
+        {isPhoneNumber ? (
+          <InputMask
+            id={title}
+            ref={ref as React.Ref<InputMask>} // Use ref for InputMask
+            className={cn(
+              `${className} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] px-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px] pr-[40px]`,
+              {
+                "rounded-[5px]": borders === "rounded",
+                "rounded-0": borders === "no-rounded",
+              }
+            )}
+            mask="+\9\9\8 (99) 999-99-99" // Mask for Uzbek phone number format
+            maskChar={null}
+            placeholder=" "
+            value={value}
+            disabled={disabled}
+            {...rest} // Spread rest of the props
+          />
+        ) : (
+          <input
+            id={title}
+            ref={ref as React.Ref<HTMLInputElement>} // Use ref for regular input
+            className={cn(
+              `${className} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] px-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px] pr-[40px]`,
+              {
+                "rounded-[5px]": borders === "rounded",
+                "rounded-0": borders === "no-rounded",
+              }
+            )}
+            type={inputType}
+            placeholder=" "
+            value={value}
+            disabled={disabled}
+            {...rest} // Spread rest of the props
+          />
+        )}
+
+        {type === "password" && !isPhoneNumber && (
           <button
             type="button"
             onClick={togglePasswordVisibility}
@@ -63,4 +111,5 @@ export const CustomInput = forwardRef<HTMLInputElement, ICustomInputProps>(
   }
 );
 
+// Set display name for forwardRef component
 CustomInput.displayName = "CustomInput";

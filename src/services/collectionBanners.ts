@@ -1,4 +1,5 @@
 import { axiosInstance } from "../utils/axiosInstance";
+import { ICategoryItem } from "./categories";
 
 export interface ICollectionBanner {
   id: number;
@@ -9,6 +10,13 @@ export interface ICollectionBanner {
   imageNameUz: string;
   imageNameRu: string;
   imageNameEng: string;
+  isRecommendedInMainPage: boolean;
+  categoriesList: [
+    {
+      categoryId: number;
+      categoryIsRecommendedInMainPage: boolean;
+    }
+  ];
 }
 
 export interface IBanner {

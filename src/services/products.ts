@@ -106,3 +106,19 @@ export const fetchRecommendedProductsData = async (id: number) => {
     );
   }
 };
+
+export const fetchMainRecommendedProductsData = async (
+  collectionId: number,
+  categoryId?: number | null
+) => {
+  try {
+    const response = await axiosInstance.get(
+      !categoryId == null
+        ? `/api/v1/recommended-items/main-page-recommendations?collectionId=${collectionId}&categoryId=${categoryId}`
+        : `/api/v1/recommended-items/main-page-recommendations?collectionId=${collectionId}`
+    );
+    return response;
+  } catch (error: any) {
+    throw error;
+  }
+};

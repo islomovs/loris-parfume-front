@@ -27,20 +27,18 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
   onSubmit,
   errorMessage,
 }) => {
-  const [code, setCode] = useState(Array(6).fill(""));
+  const [code, setCode] = useState(Array(6).fill("")); // 6-digit verification code
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [countdown, setCountdown] = useState(30);
   const { t } = useTranslation("common");
 
   useEffect(() => {
-    // Reset the countdown and disable the resend button when the modal opens
     if (isOpen) {
       setIsResendDisabled(true);
       setCountdown(59);
     }
 
-    // Start countdown timer when the resend button is disabled
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev === 1) {
@@ -52,7 +50,6 @@ export const VerificationModal: React.FC<VerificationModalProps> = ({
       });
     }, 1000);
 
-    // Cleanup the interval when the component unmounts or modal closes
     return () => clearInterval(timer);
   }, [isOpen]);
 

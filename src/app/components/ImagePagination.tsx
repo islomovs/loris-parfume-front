@@ -59,7 +59,7 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
               ref={(el) => {
                 if (el) containersRef.current[index] = el;
               }}
-              className="flex-shrink-0 w-full lg:w-[730px] h-[360px] lg:h-[730px] flex justify-center items-center relative"
+              className="product-image flex-shrink-0 w-full lg:w-[730px] h-[360px] lg:h-[730px] flex justify-center items-center relative mb-2"
             >
               {!loadedIndexes.has(index) && (
                 <div className="absolute inset-0 flex justify-center items-center">
@@ -70,7 +70,7 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
                 src={`${baseUrl}/${image}`}
                 alt={`Image ${index + 1}`}
                 className={cn(
-                  "h-full w-full object-cover transition-all duration-500 ease-in-out",
+                  "product-image h-full w-full object-cover transition-all duration-500 ease-in-out",
                   {
                     "blur-lg": !loadedIndexes.has(index), // Apply blur effect until loaded
                     "blur-0": loadedIndexes.has(index), // Remove blur when loaded

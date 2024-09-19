@@ -22,6 +22,7 @@
       "titleR": "Сбросить пароль",
       "subtitleL": "Введите свой номер телефона и пароль:",
       "subtitleR": "Введите свой номер телефона:",
+      "subtitleC": "Введите новый пароль и подтвердите его",
       "phoneNumber": "Номер телефона",
       "password": "Пароль",
       "show": "показать",
@@ -32,7 +33,16 @@
       "forgotQ": "Помните свой пароль?",
       "backToLogin": "Зайдите",
       "regQ": "Все еще нет аккаунта?",
-      "regGoToPage": "Создайте"
+      "regGoToPage": "Создайте",
+      "newPassword": "Новый пароль",
+      "reNewPassword": "Подтвердите новый пароль",
+      "errorNotFound": "Телефон не найден в системе",
+      "codeSentSuccess": "Код успешно отправлен!",
+      "codeVerifiedSuccess": "Код успешно подтвержден!",
+      "passwordResetSuccess": "Пароль успешно сброшен!",
+      "invalidResetCode": "Неверный код сброса. Пожалуйста, попробуйте еще раз.",
+      "wrongLoginOrPassword": "Неверный логин или пароль.",
+      "loginSuccess": "Вы успешно вошли в систему!"
     },
     "register": {
       "title": "регистрация",
@@ -41,7 +51,9 @@
       "phoneNumber": "Номер телефона",
       "password": "Пароль",
       "repassword": "Введите пароль заново",
-      "createAccount": "Создать акканут"
+      "createAccount": "Создать акканут",
+      "registrationSuccess": "Вы успешно зарегистрировались!",
+      "verificationCodeResent": "Код подтверждения успешно отправлен повторно!"
     },
     "verification": {
       "title": "Требуется проверка",
@@ -68,9 +80,10 @@
     "sale": "скидка",
     "addToCart": "Добавить в корзину",
     "freeShipping": "Бесплатная доставка при заказе от 500000 сум",
-    "estimatedDelivery": "Предполагаемая доставка в течение 3 дней",
+    "estimatedDelivery": "Предполагаемая доставка в течение 1 дня",
     "youMayAlsoLike": "Вам также может понравиться"
   },
+  "saleInfo": "Скидка 50% на 2-й товар",
   "cartDetails": {
     "shoppingCart": "Корзина",
     "shippingCalculated": "Доставка рассчитывается при оформлении заказа",

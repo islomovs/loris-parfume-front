@@ -9,7 +9,16 @@ export type TRegisterFormData = {
 
 export type TLoginFormData = {
   phone: string;
-  password?: string;
+  password: string;
+};
+
+export type TResetPasswordFormData = {
+  phone: string;
+};
+
+export type TResetNewPasswordFormData = {
+  newPassword: string;
+  reNewPassword: string;
 };
 
 export const login = async (data: TLoginFormData) => {
@@ -17,13 +26,8 @@ export const login = async (data: TLoginFormData) => {
     const response = await axiosLoginInstance.post("/api/v1/auth/login", data);
     return response.data;
   } catch (err: any) {
-    if (err.response && err.response.status === 409) {
-      console.error("Conflict error: ", err.response.data);
-      return err;
-    } else {
-      console.error(`Error: ${err.message}`);
-      return err;
-    }
+    console.error(`Error: `, err);
+    throw err;
   }
 };
 
@@ -61,7 +65,6 @@ export const resendVerificationCode = async (phoneNumber: string) => {
     console.log("Code resent successfully:", response.data);
     return response.data;
   } catch (err) {
-    console.error("Code resent:", err);
     throw err;
   }
 };
@@ -96,8 +99,8 @@ export const verifyResetPasswordCode = async (phone: string, code: string) => {
 export const resetPassword = async (
   phone: string,
   code: string,
-  newPassword: string,
-  reNewPassword: string
+  newPassword: string | undefined,
+  reNewPassword: string | undefined
 ) => {
   try {
     const response = await axiosLoginInstance.post(

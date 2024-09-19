@@ -22,6 +22,7 @@
       "titleR": "Parolni tiklash",
       "subtitleL": "Telefon raqamingiz va parolingizni kiriting:",
       "subtitleR": "Telefon raqamingizni kiriting:",
+      "subtitleC": "Yangi parolingizni kiriting va uni tasdiqlang",
       "phoneNumber": "Telefon raqami",
       "password": "Parol",
       "show": "korsatish",
@@ -32,7 +33,16 @@
       "forgotQ": "Parolingiz yodingizga tushdimi?",
       "backToLogin": "Kiring",
       "regQ": "Hali ham akkauntingiz yoqmi?",
-      "regGoToPage": "Ro'yxatdan o'ting"
+      "regGoToPage": "Ro'yxatdan o'ting",
+      "newPassword": "Yangi parol",
+      "reNewPassword": "Yangi parolni tasdiqlang",
+      "errorNotFound": "Telefon tizimda topilmadi",
+      "codeSentSuccess": "Kod muvaffaqiyatli yuborildi!",
+      "codeVerifiedSuccess": "Kod muvaffaqiyatli tasdiqlandi!",
+      "passwordResetSuccess": "Parol muvaffaqiyatli tiklandi!",
+      "invalidResetCode": "Noto‘g‘ri tiklash kodi. Iltimos, qaytadan urinib ko‘ring.",
+      "wrongLoginOrPassword": "Noto‘g‘ri login yoki parol.",
+      "loginSuccess": "Muvaffaqiyatli tizimga kirdingiz!"
     },
     "register": {
       "title": "Ro'yxatdan o'tish",
@@ -41,7 +51,9 @@
       "phoneNumber": "Telefon raqami",
       "password": "Parol",
       "repassword": "Parolingizni qayta kiriting",
-      "createAccount": "Ro'yxatdan o'tish"
+      "createAccount": "Ro'yxatdan o'tish",
+      "registrationSuccess": "Muvaffaqiyatli ro'yxatdan o'tdingiz!",
+      "verificationCodeResent": "Tasdiqlash kodi muvaffaqiyatli qayta yuborildi!"
     },
     "verification": {
       "title": "Tasdiqlash talab qilinadi",
@@ -68,9 +80,10 @@
     "sale": "chegirma",
     "addToCart": "Savatchaga qo'shish",
     "freeShipping": "500000 so'mdan ortiq buyurtmalarga bepul yetkazib berish",
-    "estimatedDelivery": "Yetkazib berish 3 kun ichida amalga oshiriladi",
+    "estimatedDelivery": "Yetkazib berish 1 kun ichida amalga oshiriladi",
     "youMayAlsoLike": "Sizga ham yoqishi mumkin"
   },
+  "saleInfo": "2-chi mahsulotga 50% chegirma",
   "cartDetails": {
     "shoppingCart": "Savatcha",
     "shippingCalculated": "Yetkazib berish narxi buyurtma berishda hisoblanadi",

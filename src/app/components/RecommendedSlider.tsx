@@ -100,7 +100,9 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
                 href={
                   categorySlug
                     ? `/collections/${collectionSlug}/categories/${categorySlug}/products/${product.slug}`
-                    : `/collections/${collectionSlug}/products/${product.slug}`
+                    : collectionSlug
+                    ? `/collections/${collectionSlug}/products/${product.slug}`
+                    : `/products/${product.slug}`
                 }
                 className="w-fit"
               >

@@ -20,6 +20,9 @@ import { addToCart } from "@/services/cart";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
+import { message } from "antd";
+
+const sanitizePhoneNumber = (phone: string) => phone.replace(/[^\d+]/g, "");
 
 export default function Register() {
   const { t } = useTranslation("common");
@@ -27,7 +30,10 @@ export default function Register() {
     fullName: yup.string().required(t("validation.fullNameRequired")),
     phone: yup
       .string()
-      .matches(/^\+998\d{9}$/, t("validation.phoneFormat"))
+      .matches(
+        /^\+998 \(\d{2}\) \d{3}-\d{2}-\d{2}$/,
+        t("validation.phoneFormat")
+      )
       .required(t("validation.phoneNumberRequired")),
     password: yup
       .string()
@@ -55,7 +61,7 @@ export default function Register() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    
+
     if (token && token !== "undefined" && token !== "") {
       syncLocalCartWithServer();
       router.push("/account");
@@ -64,7 +70,7 @@ export default function Register() {
 
   const registrationMutation = useMutation(regApi, {
     onSuccess: (data) => {
-      console.log("Successfully Registered!", data);
+      message.success(t("account.login.codeSentSuccess"));
       setErrorMessage(null);
       onOpen(); // Open the verification modal
       loadingBarRef.current?.complete();
@@ -74,7 +80,7 @@ export default function Register() {
       setErrorMessage(
         "This phone number is already linked to an account. If this account is yours, you can reset your password"
       );
-      loadingBarRef.current?.complete(); // Complete the loading bar even on error
+      loadingBarRef.current?.complete();
     },
   });
 
@@ -88,7 +94,7 @@ export default function Register() {
     }) => sendVerificationCodeApi(phoneNumber, verificationCode),
     {
       onSuccess: async (data) => {
-        console.log("Verification code sent successfully!", data);
+        message.success(t("account.register.registrationSuccess"));
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
 
@@ -104,10 +110,17 @@ export default function Register() {
           loadingBarRef.current?.complete();
         }
       },
-      onError: (error) => {
-        console.error("Failed to send verification code:", error);
-        setErrorMessage("Failed to send verification code. Please try again.");
-        loadingBarRef.current?.complete(); // Complete the loading bar even on error
+      onError: (error: any) => {
+        if (error.isAxiosError) {
+          if (error.response?.status === 404) {
+            setErrorMessage(t("account.login.errorNotFound"));
+          } else {
+            setErrorMessage(`Failed: ${error.response?.data}`);
+          }
+        } else {
+          console.error("Non-Axios error:", error);
+        }
+        loadingBarRef.current?.complete();
       },
     }
   );
@@ -117,7 +130,7 @@ export default function Register() {
       resendVerificationCode(phoneNumber),
     {
       onSuccess: (data) => {
-        console.log("Verification code resent successfully!", data);
+        message.success(t("account.register.verificationCodeResent"));
         loadingBarRef.current?.complete(); // Complete the loading bar
       },
       onError: (error) => {
@@ -132,8 +145,9 @@ export default function Register() {
 
   const onSubmit: SubmitHandler<TRegisterFormData> = (data) => {
     loadingBarRef.current?.continuousStart(); // Start the loading bar when submitting the form
-    setPhoneNumber(data.phone);
-    registrationMutation.mutate(data);
+    const sanitizedPhone = sanitizePhoneNumber(data.phone);
+    setPhoneNumber(sanitizedPhone);
+    registrationMutation.mutate({ ...data, phone: sanitizedPhone });
   };
 
   const handleVerificationSubmit = (verificationCode: string) => {
@@ -213,6 +227,7 @@ export default function Register() {
             title={t("account.register.phoneNumber")}
             borders="no-rounded"
             type="text"
+            isPhoneNumber={true}
           />
           {errors.phone && (
             <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">

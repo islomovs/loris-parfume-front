@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
-import { message } from "antd";
+import { message, Image } from "antd";
 import { useTranslation } from "react-i18next";
 import PaymeIcon from "../../../public/payme-logo.BdmkZoD4.svg";
 import ClickIcon from "../../../public/click-logo.jzgAXUV7.svg";
@@ -196,16 +196,18 @@ export default function Checkout() {
     orderMutation.mutate(orderData);
   };
 
-
   return (
     <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
       <div className="py-2">
         <header className="flex flex-row justify-between items-center md:px-[104px] py-4 md:py-[21px]">
           <Link href="/">
-            <h1 className="text-lg md:text-xl lg:text-[21px] font-medium text-[#454545]">
-              Loris Parfum
-            </h1>
+            <Image
+              preview={false}
+              src="/logo.png"
+              alt="logo"
+              className="max-w-[60px] md:max-w-[90px]"
+            />
           </Link>
           <Link href={`/cart`}>
             <BiBasket className="w-5 h-5 md:w-6 md:h-6 text-primary" />
@@ -213,7 +215,7 @@ export default function Checkout() {
         </header>
         <hr className="border-solid border-t-[1px] border-t-[#DFDFDF] -mx-5 md:-mx-[104px]" />
         <div className="relative flex flex-col lg:flex-row md:px-16 md:py-4">
-          <div className="flex-[6] flex flex-col gap-4 border-b lg:border-b-0 lg:border-r-[1px] border-solid border-[#DFDFDF] md:p-10">
+          <div className="flex-[6] flex flex-col gap-4 border-b lg:border-b-0 lg:border-r-[1px] border-solid border-[#DFDFDF] py-5 md:p-10">
             <h1 className="text-lg md:text-xl lg:text-[21px] font-medium text-[#454545]">
               {t("checkout.delivery")}
             </h1>

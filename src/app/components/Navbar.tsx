@@ -37,6 +37,7 @@ import { DrawerCartItem } from "./DrawerCartItem";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Spinner } from "@chakra-ui/react";
+import { useCollectionStore } from "@/services/useCollectionStore";
 
 interface INavbarProps {
   variant: "filled" | "transparent";
@@ -46,16 +47,15 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { cart } = useCartStore((state) => state);
   const totalQuantity = Array.isArray(cart)
-  ? cart.reduce((acc, item) => acc + item.quantity, 0)
-  : 0;
+    ? cart.reduce((acc, item) => acc + item.quantity, 0)
+    : 0;
   const page = 1;
-  
+
   const [open, setOpen] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
 
   const [catalogues, setCataloguesData] = useState<ICatalogueItem[]>();
   const [isHovered, setIsHovered] = useState(false);
@@ -152,6 +152,8 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
     }
   );
 
+  const { setCollections } = useCollectionStore();
+
   const { data } = useQuery(
     ["collectionsAndCategories", page],
     async () => {
@@ -167,6 +169,12 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
       staleTime: 1000 * 60 * 5, // Cache for 5 minutes
     }
   );
+
+  useEffect(() => {
+    if (data?.collections) {
+      setCollections(data.collections);
+    }
+  }, [data, setCollections]);
 
   const debouncedSearchValue = useDebounce(searchValue, 300);
 
@@ -372,7 +380,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           </div>
         </div>
         <Marquee
-          speed={150}
+          speed={75}
           className="border-y-2 bg-primary border-y-primary py-1 text-center"
         >
           <div className="text-sm md:text-sm font-semibold tracking-[.2em] text-white">
