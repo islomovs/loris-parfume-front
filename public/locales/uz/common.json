@@ -15,7 +15,10 @@
     "branches": "Filiallar",
     "account": "akkaunt"
   },
-  "home": { "viewCollection": "kolleksiyaga o'tish" },
+  "home": {
+    "viewCollection": "kolleksiyaga o'tish",
+    "weRecommend": "biz tavsiya qilamiz"
+  },
   "account": {
     "login": {
       "titleL": "Login",

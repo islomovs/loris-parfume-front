@@ -15,7 +15,10 @@
     "branches": "Филиалы",
     "account": "Аккаунт"
   },
-  "home": { "viewCollection": "Посмотреть коллекцию" },
+  "home": {
+    "viewCollection": "Посмотреть коллекцию",
+    "weRecommend": "мы рекомендуем"
+  },
   "account": {
     "login": {
       "titleL": "Логин",
