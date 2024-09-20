@@ -168,7 +168,7 @@ export const ProductCard = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -100 }}
             transition={{ duration: 0.5 }}
-            className={`absolute text-center bg-green-800 w-full text-[9px] md:text-sm font-semibold p-2 text-white ${colors[currentMessage]}`}
+            className={`absolute text-center w-full text-[9px] md:text-sm font-semibold p-2 text-white ${colors[currentMessage]}`}
           >
             {messages[currentMessage]}
           </motion.div>
