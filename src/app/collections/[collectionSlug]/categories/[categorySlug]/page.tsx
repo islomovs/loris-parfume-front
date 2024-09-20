@@ -14,7 +14,6 @@ export default function CategoriesPage({
   params: { categorySlug: string; collectionSlug: string };
 }) {
   const [sortOption, setSortOption] = useState<string | undefined>(undefined);
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { categorySlug, collectionSlug } = params;
   const { t } = useTranslation("common");
 

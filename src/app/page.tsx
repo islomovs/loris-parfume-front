@@ -29,7 +29,6 @@ export default function Home() {
   >([]);
   const [banners, setBanners] = useState<IBanner[]>([]);
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const page = 1;
   const { t } = useTranslation("common");
 

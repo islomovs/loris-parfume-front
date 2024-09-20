@@ -18,7 +18,6 @@ export const CheckoutCartItem: React.FC<{
   discountedTotal,
   isOrderHistory = false,
 }) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { t } = useTranslation("common");
 
   // Determine if a discount is applied by comparing the original total with the discounted total

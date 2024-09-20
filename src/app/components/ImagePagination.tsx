@@ -13,7 +13,6 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
   const containersRef = useRef<HTMLDivElement[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loadedIndexes, setLoadedIndexes] = useState<Set<number>>(new Set());
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {

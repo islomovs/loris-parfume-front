@@ -44,7 +44,6 @@ interface INavbarProps {
 }
 
 export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { cart } = useCartStore((state) => state);
   const totalQuantity = Array.isArray(cart)
     ? cart.reduce((acc, item) => acc + item.quantity, 0)
@@ -471,15 +470,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                                     navigateToProduct(product.slug)
                                   }
                                 >
-                                  <ProductCard
-                                    image={product.imagesList[0]}
-                                    title={product.nameRu}
-                                    originalPrice={product.price}
-                                    discountPrice={
-                                      discountPrice || product.price
-                                    }
-                                    hasDiscount={product.discountPercent > 0}
-                                  />
+                                  <ProductCard product={product} />
                                 </div>
                               )}
                             </Col>

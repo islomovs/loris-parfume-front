@@ -16,7 +16,6 @@ interface IMainCarouselProps {
 export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [loadedImages, setLoadedImages] = useState<boolean[]>([]); // State to track image load status
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Function to check if the screen is mobile size
   const handleResize = () => {
@@ -81,9 +80,7 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
           <SwiperSlide key={index}>
             <div className="relative w-full h-full">
               <Image
-                src={`${
-                  isMobile ? mobileImageName : desktopImageName
-                }`}
+                src={`${isMobile ? mobileImageName : desktopImageName}`}
                 alt="carousel image"
                 className={`w-full h-full object-cover transition-all duration-500 ease-in-out`}
                 onLoad={() => handleImageLoad(index)}

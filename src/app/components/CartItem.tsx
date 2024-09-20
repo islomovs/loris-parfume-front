@@ -31,7 +31,6 @@ export const CartItem: React.FC<ICartItemProps> = ({
   discountedTotal,
 }) => {
   const [quantity, setQuantity] = useState(qty);
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { setCartItems, updateCartItemQuantity, removeCartItem, cart } =
     useCartStore((state) => state);
   const { t } = useTranslation("common");

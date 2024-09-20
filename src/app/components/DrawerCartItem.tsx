@@ -35,7 +35,6 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
   onClick,
 }) => {
   const [quantity, setQuantity] = useState(qty); // Use optional qty with default
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { setCartItems, updateCartItemQuantity, removeCartItem, cart } =
     useCartStore((state) => state);
 
