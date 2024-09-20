@@ -95,7 +95,7 @@ export default function Home() {
                 >
                   <CollectionCard
                     title={bannerTitle}
-                    image={`${baseUrl}/${bannerImage}`}
+                    image={`${bannerImage}`}
                     link={banner.redirectTo}
                   />
                 </Col>

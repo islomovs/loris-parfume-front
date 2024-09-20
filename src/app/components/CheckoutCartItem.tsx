@@ -35,7 +35,7 @@ export const CheckoutCartItem: React.FC<{
         <Image
           width={64}
           height={64}
-          src={`${baseUrl}/${image}`}
+          src={`${image}`}
           preview={false}
           alt="cart item"
           className="border border-[#DADADA] object-cover border-solid rounded-[5px]"

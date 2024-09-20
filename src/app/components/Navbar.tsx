@@ -368,7 +368,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                         : catalogue.fileUz;
                     return (
                       <li key={catalogue.id} className="px-4 py-2">
-                        <Link href={`${baseUrl}/${file}`}>{name}</Link>
+                        <Link href={`${file}`}>{name}</Link>
                       </li>
                     );
                   })

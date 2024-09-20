@@ -10,6 +10,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'bucket-ps4c71.s3.eu-central-1.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
     formats: ['image/webp'],
     minimumCacheTTL: 86400,
@@ -20,4 +26,4 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+export default nextConfig;

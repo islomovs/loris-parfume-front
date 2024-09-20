@@ -75,7 +75,7 @@ export const CartItem: React.FC<ICartItemProps> = ({
       <div className="flex flex-row">
         <div className="flex flex-row flex-[12]">
           <Image
-            src={`${baseUrl}/${image}`}
+            src={`${image}`}
             alt="cart item"
             preview={false}
             className="object-cover max-w-[120px] max-h-[120px]"

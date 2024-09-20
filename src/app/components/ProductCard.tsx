@@ -31,7 +31,7 @@ export const ProductCard = ({
 
       {/* Product Image with Blur-Up Effect */}
       <img
-        src={`${baseUrl}/${image}` || ""}
+        src={`${image}` || ""}
         alt={title}
         className={`object-cover transition-all duration-500 ease-in-out z-0 h-[155px] sm:h-[360px] w-full ${
           isImageLoaded ? "blur-0" : "blur-lg" // Apply blur while loading
