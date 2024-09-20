@@ -8,6 +8,7 @@ import { SlArrowRight } from "react-icons/sl";
 import { SlArrowLeft } from "react-icons/sl";
 import Link from "next/link";
 import i18n from "@/utils/i18n";
+import { IProduct } from "@/services/products";
 
 // Custom Arrow Components
 const CustomNextArrow: React.FC<{
@@ -86,14 +87,7 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
         loop={false}
         grabCursor={true}
       >
-        {items?.map((product) => {
-          const discountPrice = product.discountPercent
-            ? (
-                parseFloat(product.price) *
-                (1 - product.discountPercent / 100)
-              ).toFixed(2)
-            : null;
-          const name = i18n.language == "ru" ? product.nameRu : product.nameUz;
+        {items?.map((product: any) => {
           return (
             <SwiperSlide key={product.id}>
               <Link
@@ -106,13 +100,7 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
                 }
                 className="w-fit"
               >
-                <ProductCard
-                  image={product.imagesList[0]}
-                  title={name}
-                  originalPrice={product.price}
-                  discountPrice={discountPrice || product.price}
-                  hasDiscount={product.discountPercent > 0}
-                />
+                <ProductCard product={product} />
               </Link>
             </SwiperSlide>
           );

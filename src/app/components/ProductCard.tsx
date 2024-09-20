@@ -30,7 +30,7 @@ export const ProductCard = ({
   const loadingBarRef = useRef<any>(null);
   const { t } = useTranslation("common");
   const messages = [
-    t("saleInfo"),
+    product?.isFiftyPercentSaleApplied && t("saleInfo"),
     t("productDetails.delivery_today"),
     t("productDetails.free_delivery"),
   ];
