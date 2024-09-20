@@ -88,6 +88,9 @@ export const ProductCard = ({
       quantity: 1,
       price: Number(product?.price),
       collectionSlug: product?.collectionsItemsList[0].collectionSlug,
+      ...(product?.sizesItemsList.length > 0 && {
+        size: product?.sizesItemsList[0],
+      }),
     };
 
     if (!token) {
