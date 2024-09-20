@@ -29,12 +29,19 @@ export const ProductCard = ({
   const [open, setOpen] = useState(false);
   const loadingBarRef = useRef<any>(null);
   const { t } = useTranslation("common");
+  const [currentMessage, setCurrentMessage] = useState(0);
   const messages = [
-    product?.isFiftyPercentSaleApplied && t("saleInfo"),
+    ...(product?.isFiftyPercentSaleApplied ? [t("saleInfo")] : []),
     t("productDetails.delivery_today"),
     t("productDetails.free_delivery"),
   ];
-  const [currentMessage, setCurrentMessage] = useState(0);
+
+  const colors = [
+    ...(product?.isFiftyPercentSaleApplied ? ["bg-green-800"] : []),
+    "bg-blue-500",
+    "bg-red-500",
+  ];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentMessage((prevMessage) => (prevMessage + 1) % messages.length);
@@ -42,8 +49,6 @@ export const ProductCard = ({
 
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, [currentMessage, messages.length]);
-
-  const colors = ["bg-green-800", "bg-blue-500", "bg-red-500"];
 
   const token = localStorage.getItem("token");
   const showDrawer = () => {
