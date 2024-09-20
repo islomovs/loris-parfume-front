@@ -12,6 +12,7 @@ export interface ISizeItem {
 }
 
 export interface IProduct {
+  data: IProduct;
   id: number;
   slug: string;
   nameUz: string;
@@ -30,6 +31,7 @@ export interface IProduct {
   categoryNameEng: string | null;
   collectionsItemsList: ICollectionItem[];
   sizesItemsList: ISizeItem[];
+  isFiftyPercentSaleApplied: boolean;
 }
 
 export interface IData {

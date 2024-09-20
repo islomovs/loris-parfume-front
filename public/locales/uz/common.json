@@ -84,7 +84,11 @@
     "addToCart": "Savatchaga qo'shish",
     "freeShipping": "500000 so'mdan ortiq buyurtmalarga bepul yetkazib berish",
     "estimatedDelivery": "Yetkazib berish 1 kun ichida amalga oshiriladi",
-    "youMayAlsoLike": "Sizga ham yoqishi mumkin"
+    "youMayAlsoLike": "Sizga ham yoqishi mumkin",
+    "selectSize": "Iltimos, o'lcham variantini tanlang.",
+    "add_to_cart": "Savatga qo'shish",
+    "delivery_today": "O'sha kuni yetkazib berish",
+    "free_delivery": "500.000 dan ortiq buyurtmalarga bepul yetkazish"
   },
   "saleInfo": "2-chi mahsulotga 50% chegirma",
   "cartDetails": {

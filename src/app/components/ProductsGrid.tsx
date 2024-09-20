@@ -6,7 +6,6 @@ import { AnimatedButton } from "./AnimatedButton";
 import { Spinner } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import i18n from "@/utils/i18n";
 
 interface ProductsGridProps {
   products: IProduct[];
@@ -46,33 +45,13 @@ export const ProductsGrid = ({
     <>
       <Row className="md:px-3" gutter={[20, 20]}>
         {products.map((product: IProduct) => {
-          const discountPrice = product.discountPercent
-            ? (
-                parseFloat(product.price) *
-                (1 - product.discountPercent / 100)
-              ).toFixed(2)
-            : null;
-          const name = i18n.language == "ru" ? product.nameRu : product.nameUz;
-
           return (
             <Col key={product.id} xs={12} sm={12} md={8} lg={8} xl={8}>
-              <Link
-                href={
-                  categorySlug
-                    ? `/collections/${collectionSlug}/categories/${categorySlug}/products/${product.slug}`
-                    : collectionSlug
-                    ? `/collections/${collectionSlug}/products/${product.slug}`
-                    : `/products/${product.slug}`
-                }
-              >
-                <ProductCard
-                  image={product.imagesList[0]}
-                  title={name}
-                  originalPrice={product.price}
-                  discountPrice={discountPrice || product.price}
-                  hasDiscount={product.discountPercent > 0}
-                />
-              </Link>
+              <ProductCard
+                product={product}
+                collectionSlug={collectionSlug}
+                categorySlug={categorySlug}
+              />
             </Col>
           );
         })}

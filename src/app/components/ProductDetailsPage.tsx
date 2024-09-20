@@ -16,10 +16,11 @@ import { SizeSelector } from "@/app/components/SizeSelector";
 import RecommendedSlider from "@/app/components/RecommendedSlider";
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { BsBoxSeam } from "react-icons/bs";
-import LoadingBar from "react-top-loading-bar"; // Import the LoadingBar component
-import { Spinner } from "@chakra-ui/react"; // Import Spinner from Chakra UI
+import LoadingBar from "react-top-loading-bar";
+import { Spinner } from "@chakra-ui/react";
 import i18n from "@/utils/i18n";
 import { useTranslation } from "react-i18next";
+import { message } from "antd";
 
 export default function ProductDetailsPage({
   productSlug,
@@ -78,7 +79,7 @@ export default function ProductDetailsPage({
 
   const handleAddToCart = () => {
     if (product?.data.sizesItemsList?.length >= 2 && !selectedOption) {
-      alert("Please select a size option.");
+      message.warning(t("productDetails.selectSize"));
       return;
     }
 
@@ -105,7 +106,7 @@ export default function ProductDetailsPage({
       return;
     }
 
-    loadingBarRef.current.continuousStart(); // Start the loading bar
+    loadingBarRef.current.continuousStart();
     mutation.mutate(cartItem);
   };
 
@@ -129,12 +130,12 @@ export default function ProductDetailsPage({
       queryClient.invalidateQueries("cartItemsData").then(() => {
         showDrawer();
       });
-      loadingBarRef.current.complete(); // Complete the loading bar
+      loadingBarRef.current.complete();
     },
     onError: (error) => {
       console.error("Error adding item to cart:", error);
-      alert("Failed to add item to cart.");
-      loadingBarRef.current.complete(); // Complete the loading bar on error
+      message.error("Failed to add item to cart.");
+      loadingBarRef.current.complete();
     },
   });
 

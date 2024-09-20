@@ -13,6 +13,7 @@ export interface ICollectionItem {
   nameRu: string;
   nameEng: string;
   bannerImage: string;
+  collectionSlug: string;
   categoriesList: [
     {
       categoryId: number;

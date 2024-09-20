@@ -65,9 +65,11 @@ a:hover {
   padding: 0;
 }
 
-.product-image .ant-image {
-  width: 730px;
-  height: 730px;
+@media (min-width: 640px) {
+  .product-image .ant-image {
+    width: 730px;
+    height: 730px;
+  }
 }
 
 .product-image .ant-image .ant-image-img {
