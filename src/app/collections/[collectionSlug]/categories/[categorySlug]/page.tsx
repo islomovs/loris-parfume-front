@@ -82,7 +82,7 @@ export default function CategoriesPage({
     <div>
       <div
         className="bg-center bg-cover bg-no-repeat bg-fixed h-[90vh] flex justify-center items-end tracking-[.2em]"
-        style={{ backgroundImage: `url(${baseUrl}/${bannerImage})` }}
+        style={{ backgroundImage: `url(${bannerImage})` }}
       >
         <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
       </div>

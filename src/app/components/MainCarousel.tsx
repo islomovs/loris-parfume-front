@@ -81,7 +81,7 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
           <SwiperSlide key={index}>
             <div className="relative w-full h-full">
               <Image
-                src={`${baseUrl}/${
+                src={`${
                   isMobile ? mobileImageName : desktopImageName
                 }`}
                 alt="carousel image"

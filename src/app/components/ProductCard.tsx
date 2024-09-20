@@ -24,7 +24,6 @@ export const ProductCard = ({
   collectionSlug,
   categorySlug,
 }: ProductCardProps) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { addOrUpdateCartItem } = useCartStore((state) => state);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [open, setOpen] = useState(false);
@@ -135,7 +134,7 @@ export const ProductCard = ({
           className="block"
         >
           <img
-            src={`${baseUrl}/${product?.imagesList[0]}` || ""}
+            src={`${product?.imagesList[0]}` || ""}
             alt={name}
             className={`object-cover transition-all duration-500 ease-in-out z-0 h-[155px] sm:h-[360px] w-full ${
               isImageLoaded ? "blur-0" : "blur-lg"

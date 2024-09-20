@@ -73,7 +73,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
     return (
       <div className="flex flex-row gap-5 min-h-[180px]" onClick={onClick}>
         <div className="w-24 md:w-[120px] flex items-center">
-          <img src={`${baseUrl}/${image}`} alt="cart item" />
+          <img src={`${image}`} alt="cart item" />
         </div>
         <div className="flex flex-col items-start justify-center flex-1">
           <h1 className="mb-1 md:mb-[6px] text-xs text-[#454545] tracking-[.2em] uppercase font-normal">
@@ -91,7 +91,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
   return (
     <div className="flex flex-row gap-5 min-h-[180px]">
       <div className="w-24 md:w-[120px] flex items-center">
-        <img src={`${baseUrl}/${image}`} alt="cart item" />
+        <img src={`${image}`} alt="cart item" />
       </div>
       <div className="flex flex-col items-start justify-center flex-1">
         <h1 className="mb-1 md:mb-[6px] text-xs text-[#454545] tracking-[.2em] uppercase font-normal">
