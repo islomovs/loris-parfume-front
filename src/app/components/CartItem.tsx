@@ -7,6 +7,7 @@ import { BiMinus, BiPlus } from "react-icons/bi";
 import { removeFromCart, getCartItems } from "../../services/cart";
 import { ICartItem } from "@/services/cart"; // Import your ICartItem type if needed
 import { useTranslation } from "react-i18next";
+import { formatPrice } from "@/utils/priceUtils";
 
 interface ICartItemProps {
   id: number;
@@ -86,7 +87,7 @@ export const CartItem: React.FC<ICartItemProps> = ({
               </h2>
             </Link>
             <div className="mb-5 my-3 text-[11px] tracking-[.2em] uppercase text-[#9d9d9d]">
-              {price}
+              {formatPrice(price)}
             </div>
           </div>
         </div>
@@ -125,15 +126,15 @@ export const CartItem: React.FC<ICartItemProps> = ({
           {isDiscountApplied ? (
             <>
               <span className="line-through text-[#9d9d9d]">
-                {originalTotal.toFixed(2)} {t("productDetails.sum")}
+                {formatPrice(originalTotal)} {t("productDetails.sum")}
               </span>
               <span className="text-red-500 font-bold">
-                {discountedTotal.toFixed(2)} {t("productDetails.sum")}
+                {formatPrice(discountedTotal)} {t("productDetails.sum")}
               </span>
             </>
           ) : (
             <span>
-              {discountedTotal.toFixed(2)} {t("productDetails.sum")}
+              {formatPrice(discountedTotal)} {t("productDetails.sum")}
             </span>
           )}
         </div>

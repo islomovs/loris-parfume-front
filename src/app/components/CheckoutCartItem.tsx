@@ -1,3 +1,4 @@
+import { formatPrice } from "@/utils/priceUtils";
 import { Image, Badge } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -44,7 +45,7 @@ export const CheckoutCartItem: React.FC<{
         <h1 className="text-[14px] font-normal">{title}</h1>
         <p className="text-xs font-normal text-[#0000008F] my-1">
           {!isOrderHistory ? (
-            <>{`${Number(price).toFixed(2)} ${t("productDetails.sum")}`}</>
+            <>{`${formatPrice(price)} ${t("productDetails.sum")}`}</>
           ) : (
             " "
           )}
@@ -55,15 +56,15 @@ export const CheckoutCartItem: React.FC<{
         {isDiscountApplied ? (
           <>
             <p className="text-[12px] font-normal line-through text-[#0000008F]">
-              {originalTotal.toFixed(2)} {t("productDetails.sum")}
+              {formatPrice(originalTotal)} {t("productDetails.sum")}
             </p>
             <p className="text-[14px] font-bold text-red-500">
-              {Number(discountedTotal).toFixed(2)} {t("productDetails.sum")}
+              {formatPrice(discountedTotal)} {t("productDetails.sum")}
             </p>
           </>
         ) : (
           <p className="text-[14px] font-normal">
-            {!isOrderHistory ? originalTotal.toFixed(2) : price}{" "}
+            {!isOrderHistory ? formatPrice(originalTotal) : formatPrice(price)}{" "}
             {t("productDetails.sum")}
           </p>
         )}

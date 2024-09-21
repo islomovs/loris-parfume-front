@@ -11,6 +11,7 @@ import { queryClient } from "../providers";
 import { DrawerCartItem } from "../components/DrawerCartItem";
 import i18n from "@/utils/i18n";
 import { useTranslation } from "react-i18next";
+import { formatPrice } from "@/utils/priceUtils";
 
 export default function CartPage() {
   const router = useRouter();
@@ -135,7 +136,8 @@ export default function CartPage() {
       <div className="flex flex-col md:flex-row justify-end items-center border-t border-solid border-t-[#e3e3e3] pt-[25px]">
         <div className="flex flex-col items-end w-full">
           <div className="text-xs tracking-[.2em] text-[#454545] font-normal mb-4">
-            {t("cart.total")}: {formattedTotal} {t("productDetails.sum")}
+            {t("cart.total")}: {formatPrice(formattedTotal)}{" "}
+            {t("productDetails.sum")}
           </div>
           <AnimatedButton
             title={t("checkout.makePayment")}

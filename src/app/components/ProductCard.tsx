@@ -12,6 +12,8 @@ import { addToCart, ICartItem } from "@/services/cart";
 import { message } from "antd";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { IoCartOutline } from "react-icons/io5";
+import { formatPrice } from "@/utils/priceUtils";
 
 interface ProductCardProps {
   product: IProduct;
@@ -33,13 +35,13 @@ export const ProductCard = ({
   const messages = [
     ...(product?.isFiftyPercentSaleApplied ? [t("saleInfo")] : []),
     t("productDetails.delivery_today"),
-    t("productDetails.free_delivery"),
+    // t("productDetails.free_delivery"),
   ];
 
   const colors = [
     ...(product?.isFiftyPercentSaleApplied ? ["bg-green-800"] : []),
     "bg-blue-500",
-    "bg-red-500",
+    // "bg-red-500",
   ];
 
   useEffect(() => {
@@ -118,14 +120,13 @@ export const ProductCard = ({
   const name = i18n.language == "ru" ? product?.nameRu : product?.nameUz;
 
   const discountPrice = product?.discountPercent
-    ? (
-        parseFloat(product?.price) *
-        (1 - product?.discountPercent / 100)
-      ).toFixed(2)
-    : product?.price;
+    ? formatPrice(
+        parseFloat(product?.price) * (1 - product?.discountPercent / 100)
+      )
+    : formatPrice(product?.price);
 
   return (
-    <div className="relative flex flex-col items-start h-fit border-[1px] border-[#f0f0f0] border-solid md:w-[380px] w-full">
+    <div className="relative flex flex-col items-start h-fit  md:w-[380px] w-full">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
       {open && <CustomDrawer onClose={onClose} isOpen={open} />}
 
@@ -151,7 +152,7 @@ export const ProductCard = ({
           />
         </Link>
 
-        <button
+        {/* <button
           onClick={(e) => {
             e.preventDefault(); // Prevent default navigation behavior
             e.stopPropagation(); // Stop the event from propagating to the Link
@@ -162,7 +163,7 @@ export const ProductCard = ({
           <div className="uppercase flex justify-center items-center h-full text-white">
             {t("productDetails.add_to_cart")}
           </div>
-        </button>
+        </button> */}
       </div>
 
       <div className="relative w-full overflow-hidden h-10">
@@ -180,24 +181,28 @@ export const ProductCard = ({
         </AnimatePresence>
       </div>
 
-      <div className="md:px-[15px] md:py-[10px] md:mt-[10px] px-[11px] py-[6px]">
+      <div className="flex flex-col justify-between w-full md:px-[15px] md:py-[10px] md:mt-[10px] px-[11px] py-[6px]">
         <p className="text-xs md:text-[15px] font-normal break-words">{name}</p>
-
-        <div className="mt-2">
-          {product?.discountPercent > 0 && product?.price ? (
-            <div className="flex flex-row">
-              <p className="text-base md:text-[19px] font-semibold text-[#454545] line-through mr-1">
-                {product?.price} {t("productDetails.sum")}
+        <div className="flex flex-row justify-between items-end w-full">
+          <div className="mt-2">
+            {product?.discountPercent > 0 && product?.price ? (
+              <div className="flex flex-row">
+                <p className="text-base md:text-[19px] font-semibold text-[#454545] line-through mr-1">
+                  {formatPrice(product?.price)} {t("productDetails.sum")}
+                </p>
+                <p className="text-base md:text-[19px] font-semibold text-red-500">
+                  {discountPrice} {t("productDetails.sum")}
+                </p>
+              </div>
+            ) : (
+              <p className="text-base md:text-[19px] font-semibold text-[#454545]">
+                {formatPrice(product?.price)} {t("productDetails.sum")}
               </p>
-              <p className="text-base md:text-[19px] font-semibold text-red-500">
-                {discountPrice} {t("productDetails.sum")}
-              </p>
-            </div>
-          ) : (
-            <p className="text-base md:text-[19px] font-semibold text-[#454545]">
-              {product?.price} {t("productDetails.sum")}
-            </p>
-          )}
+            )}
+          </div>
+          <button onClick={handleAddToCart}>
+            <IoCartOutline className="text-[22px] md:text-[30px]" />
+          </button>
         </div>
       </div>
     </div>

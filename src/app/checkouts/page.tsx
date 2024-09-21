@@ -24,6 +24,7 @@ import ClickIcon from "../../../public/click-logo.jzgAXUV7.svg";
 import YandexMap from "../components/YandexMap";
 import i18n from "@/utils/i18n";
 import { Box, HStack, Spinner } from "@chakra-ui/react";
+import { formatPrice } from "@/utils/priceUtils";
 
 const allPaymentOptions = [
   { id: 0, title: "payme", icon: PaymeIcon.src },
@@ -327,21 +328,21 @@ export default function Checkout() {
                 <HStack justify="space-between">
                   <p>{t("checkout.products")}</p>
                   <p>
-                    {totalSum().toFixed(2)} {t("productDetails.sum")}
+                    {formatPrice(totalSum())} {t("productDetails.sum")}
                   </p>
                 </HStack>
                 <HStack justify="space-between" my={5}>
                   <p>{t("checkout.delivery")}</p>
                   <p>
-                    {deliverySum.toFixed(2)} {t("productDetails.sum")}
+                    {formatPrice(deliverySum)} {t("productDetails.sum")}
                   </p>
                 </HStack>
                 <HStack justify="space-between" fontWeight={600}>
                   <p>{t("checkout.payment")}</p>
                   <p>
-                    {(
+                    {formatPrice(
                       currentTotalSum + (deliverySum > 0 ? deliverySum : 0)
-                    ).toFixed(2)}{" "}
+                    )}{" "}
                     {t("productDetails.sum")}
                   </p>
                 </HStack>

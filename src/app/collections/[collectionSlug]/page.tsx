@@ -76,17 +76,36 @@ export default function CollectionsPage({
     i18n.language == "ru"
       ? matchedCollection?.nameRu
       : matchedCollection?.nameUz;
-
+  console.log("BANNER IMAGE: ", bannerImage);
   return (
     <div>
-      <div
-        className={`relative parallax h-[90vh] flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
-        style={{
-          backgroundImage: `url(${baseUrl}/${bannerImage})`,
-        }}
-      >
-        <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
-      </div>
+      {bannerImage ? (
+        <div
+          className={`relative parallax h-[90vh] flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
+          style={{
+            backgroundImage: `url(${bannerImage})`,
+          }}
+        >
+          <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
+        </div>
+      ) : (
+        <div className="pt-[188px] flex justify-center items-center">
+          <div className="p-14 text-center">
+            <h1 className="py-4 font-semibold tracking-[.2em]">
+              {matchedCollection?.nameRu}
+            </h1>
+            <p className="text-center text-base text-[#454545]">
+              Loris Perfume parfyumeriya to&apos;plami atirlar olamida ajoyib
+              tajribani taqdim etadi. Maxsus tanlangan noyob va hashamatli
+              essensiyalar bilan yaratilgan ushbu to&apos;plam sizning shaxsiy
+              uslubingiz va o&apos;ziga xosligingizni aks ettirish uchun
+              yaratilgan. Niche parfyumeriyalari odatdagidan uzoqlashish orqali
+              sizni o&apos;zgacha his qiladi. Bu original hidlarni
+              qidirayotganlar uchun ideal variant.
+            </p>
+          </div>
+        </div>
+      )}
       <div className="md:mx-16 mx-5">
         <div className="flex flex-row justify-between items-center my-8">
           <p className="text-[15px] text-[#454545] font-normal">

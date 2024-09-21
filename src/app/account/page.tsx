@@ -16,6 +16,7 @@ import { message } from "antd";
 import { Spinner } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/utils/i18n";
+import { formatPrice } from "@/utils/priceUtils";
 
 type FormData = {
   fullName: string;
@@ -143,7 +144,7 @@ export default function Account() {
                       No {order.id}
                     </p>
                     <p className="text-[14px] font-medium text-[#454545]">
-                      {order.totalSum} UZS
+                      {formatPrice(order.totalSum)} {t("productDetails.sum")}
                     </p>
                   </div>
                   <div className="flex flex-row justify-between my-2">
@@ -256,7 +257,10 @@ export default function Account() {
                         <div className="w-full flex flex-col gap-2">
                           <div className="flex flex-row justify-between text-[19px] font-semibold text-[#454545]">
                             <p>{t("orderDetails.total")}</p>
-                            <p>{order.totalSum} UZS</p>
+                            <p>
+                              {formatPrice(order.totalSum)}{" "}
+                              {t("productDetails.sum")}
+                            </p>
                           </div>
                         </div>
                       </div>

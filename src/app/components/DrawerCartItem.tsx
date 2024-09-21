@@ -5,9 +5,9 @@ import { UnderlinedButton } from "./UnderlinedButton";
 import { removeFromCart, getCartItems } from "../../services/cart";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import useCartStore from "@/services/store";
-import { ICartItem } from "@/services/cart"; // Adjust the import path if needed
-import { message } from "antd"; // Import message from Ant Design
+import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import { formatPrice } from "@/utils/priceUtils";
 
 interface IDrawerCartItemProps {
   id: number;
@@ -68,7 +68,6 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
   };
 
   if (isSimplified) {
-    // Render only image, title, and price in simplified mode
     return (
       <div className="flex flex-row gap-5 min-h-[180px]" onClick={onClick}>
         <div className="w-24 md:w-[120px] flex items-center">
@@ -78,8 +77,8 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
           <h1 className="mb-1 md:mb-[6px] text-xs text-[#454545] tracking-[.2em] uppercase font-normal">
             {title}
           </h1>
-          <h2 className="text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
-            {price} {t("productDetails.sum")}
+          <h2 className="text-[11px] tracking-[.2em] uppercase font-normal text-[#454545]">
+            {formatPrice(price)} {t("productDetails.sum")}
           </h2>
         </div>
       </div>
@@ -97,30 +96,30 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
           {title}
         </h1>
         {sizeName && (
-          <h2 className="mb-1 md:mb-5 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
+          <h2 className="mb-1 md:mb-5 text-[11px] tracking-[.2em] uppercase font-normal text-[#454545]">
             {sizeName}
           </h2>
         )}
-        <h2 className="mb-4 text-[11px] tracking-[.2em] uppercase font-normal text-[#9d9d9d]">
-          {price} {t("productDetails.sum")}
+        <h2 className="mb-4 text-[11px] tracking-[.2em] uppercase font-normal text-[#454545]">
+          {formatPrice(price)} {t("productDetails.sum")}
         </h2>
         <div className="flex flex-row items-center justify-between w-full">
-          <Flex className="border-solid border border-[#e3e3e3] w-fit md:w-[106px] h-[40px]">
+          <Flex className="border-solid border border-[#454545] w-fit md:w-[106px] h-[40px]">
             <button
-              className="my-auto flex-1 py-2 px-2 md:px-[14px] text-[#9D9D9D] hover:text-black"
+              className="my-auto flex-1 py-2 px-2 md:px-[14px] text-[#454545] hover:text-black"
               onClick={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
             >
               <BiMinus />
             </button>
             <input
-              className="text-[#9D9D9D] w-5 text-center focus:outline-none text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="text-[#454545] w-5 text-center focus:outline-none text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
               type="number"
               min="1"
             />
             <button
-              className="my-auto flex-1 py-2 px-2 md:px-[14px] text-[#9D9D9D] hover:text-black"
+              className="my-auto flex-1 py-2 px-2 md:px-[14px] text-[#454545] hover:text-black"
               onClick={() => setQuantity(quantity + 1)}
             >
               <BiPlus />

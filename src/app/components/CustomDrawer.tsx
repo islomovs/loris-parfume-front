@@ -10,6 +10,7 @@ import { queryClient } from "../providers";
 import { useRouter } from "next/navigation";
 import i18n from "@/utils/i18n";
 import { useTranslation } from "react-i18next";
+import { formatPrice } from "@/utils/priceUtils";
 
 interface ICustomDrawerProps {
   isOpen: boolean;
@@ -101,7 +102,9 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
             <div className="w-full">
               <AnimatedButton
                 width="w-full"
-                title={`${t("cartDetails.checkoutTotal")} ${formattedTotal}`}
+                title={`${t("cartDetails.checkoutTotal")} ${formatPrice(
+                  formattedTotal
+                )}`}
                 variant="dark"
                 onClick={handleCheckout}
               />

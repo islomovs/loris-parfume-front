@@ -43,6 +43,13 @@ interface INavbarProps {
   variant: "filled" | "transparent";
 }
 
+type LanguageType = "ru" | "uz";
+
+const flagImages: { [key in LanguageType]: string } = {
+  ru: "/ru.png",
+  uz: "/uz.png",
+};
+
 export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
   const { cart } = useCartStore((state) => state);
   const totalQuantity = Array.isArray(cart)
@@ -65,16 +72,31 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
   const { t, i18n } = useTranslation("common");
   const router = useRouter();
 
-  const items: MenuProps["items"] = [
-    {
-      key: "uz",
-      label: "Uzbek",
-      onClick: () => i18n.changeLanguage("uz"),
-    },
+  const items = [
     {
       key: "ru",
-      label: "Russian",
+      label: (
+        <Space>
+          <Image
+            src={flagImages.ru}
+            alt="Russian Flag"
+            width={20}
+            height={12}
+          />
+          <span>RU</span>
+        </Space>
+      ),
       onClick: () => i18n.changeLanguage("ru"),
+    },
+    {
+      key: "uz",
+      label: (
+        <Space>
+          <Image src={flagImages.uz} alt="Uzbek Flag" width={20} />
+          <span>UZ</span>
+        </Space>
+      ),
+      onClick: () => i18n.changeLanguage("uz"),
     },
   ];
 
@@ -211,7 +233,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         className={cn(
           `pt-4 z-20 w-full transition-[background] duration-300 border-b border-solid border-[#dad9d9] relative`,
           {
-            "absolute text-white bg-gradient-to-b from-black hover:text-white hover:bg-black border-none":
+            "absolute text-black bg-white  hover:text-[#454545] hover:bg-white border-none":
               variant == "transparent" && !isSearchOpen,
             "text-black bg-white": variant == "filled" && !isSearchOpen,
             "absolute text-black bg-white": isSearchOpen,
@@ -227,8 +249,8 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               <MenuOutlined />
             </button>
             <Dropdown
-              className="hidden cursor-pointer md:block"
-              menu={{ items }} // Attach the items to the Dropdown component
+              className="cursor-pointer md:block hidden"
+              menu={{ items }}
               trigger={["click"]}
             >
               <a
@@ -236,8 +258,14 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                 onClick={(e) => e.preventDefault()}
               >
                 <Space>
-                  {i18n.language.toUpperCase()}{" "}
-                  {/* Display the current language */}
+                  <Image
+                    preview={false}
+                    src={
+                      flagImages[i18n.language.toLowerCase() as LanguageType]
+                    }
+                    alt={`${i18n.language.toLowerCase()} flag`}
+                    width={20}
+                  />
                   <DownOutlined />
                 </Space>
               </a>
@@ -246,7 +274,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           <Link href="/">
             <Image
               preview={false}
-              src="/logo.png"
+              src="/logo.jpg"
               alt="logo"
               className="max-w-[100px] md:max-w-[290px]"
             />
@@ -380,7 +408,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         </div>
         <Marquee
           speed={75}
-          className="border-y-2 bg-primary border-y-primary py-1 text-center"
+          className="border-y-2 bg-black border-y-black py-1 text-center"
         >
           <div className="text-sm md:text-sm font-semibold tracking-[.2em] text-white">
             {t("navbar.announcement")}
@@ -497,8 +525,8 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         width="80%"
         className="flex flex-col h-full justify-between md:hidden"
         style={{
-          backgroundColor: "#454545",
-          color: "white",
+          backgroundColor: "#ffffff",
+          color: "#454545",
           overflowY: "hidden",
         }}
       >
@@ -524,7 +552,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                 <div
                   className="flex justify-between items-center cursor-pointer"
                   style={{
-                    borderBottom: "1px solid white",
+                    borderBottom: "1px solid #454545",
                     paddingBottom: "10px",
                   }}
                 >
@@ -545,9 +573,9 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                       }}
                     >
                       {expandedCollections[collection.id] ? (
-                        <MinusOutlined style={{ color: "white" }} />
+                        <MinusOutlined style={{ color: "#454545" }} />
                       ) : (
-                        <PlusOutlined style={{ color: "white" }} />
+                        <PlusOutlined style={{ color: "#454545" }} />
                       )}
                     </button>
                   )}
@@ -565,8 +593,8 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                         <Link
                           key={category.id}
                           href={`/collections/${collection.slug.toLowerCase()}/categories/${category.slug.toLowerCase()}`}
-                          className="block text-sm py-1 border-b border-white"
-                          style={{ color: "white" }}
+                          className="block text-sm tracking-[.2em] py-1 border-b border-[#454545]"
+                          style={{ color: "#454545" }}
                           onClick={toggleSidebar}
                         >
                           {categoryName}
@@ -591,14 +619,14 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         <div className="flex flex-row justify-around items-end space-y-4 px-6 self-end">
           <Link
             href={token ? "/account" : "/account/login"}
-            className="text-sm text-[#FFFFFF80] font-normal"
+            className="text-sm uppercase font-semibold tracking-wider text-[#454545]"
             onClick={toggleSidebar}
           >
             {t("mobileNavbar.account")}
           </Link>
           <Dropdown
             className="cursor-pointer md:hidden"
-            menu={{ items }} // Attach the items to the Dropdown component
+            menu={{ items }}
             trigger={["click"]}
           >
             <a
@@ -606,8 +634,12 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               onClick={(e) => e.preventDefault()}
             >
               <Space>
-                {i18n.language.toUpperCase()}{" "}
-                {/* Display the current language */}
+                <Image
+                  preview={false}
+                  src={flagImages[i18n.language.toLowerCase() as LanguageType]}
+                  alt={`${i18n.language.toLowerCase()} flag`}
+                  width={20}
+                />
                 <DownOutlined />
               </Space>
             </a>

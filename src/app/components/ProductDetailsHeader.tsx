@@ -1,3 +1,4 @@
+import { formatPrice } from "@/utils/priceUtils";
 import { useTranslation } from "react-i18next";
 
 export function ProductDetailsHeader({
@@ -23,16 +24,16 @@ export function ProductDetailsHeader({
       </h1>
       {originalPrice && originalPrice > price ? (
         <div className="flex items-center gap-2">
-          <p className="text-[14px] text-[#9D9D9D] tracking-[.2em] font-normal line-through">
-            {originalPrice} {t("productDetails.sum")}
+          <p className="text-[14px] text-[#454545] tracking-[.2em] font-normal line-through">
+            {formatPrice(originalPrice)} {t("productDetails.sum")}
           </p>
           <p className="text-[14px] text-red-500 tracking-[.2em] font-normal">
-            {price} {t("productDetails.sum")}
+            {formatPrice(price)} {t("productDetails.sum")}
           </p>
         </div>
       ) : (
-        <p className="text-[14px] text-[#9D9D9D] tracking-[.2em] font-normal">
-          {price} {t("productDetails.sum")}
+        <p className="text-[14px] text-[#454545] tracking-[.2em] font-normal">
+          {formatPrice(price)} {t("productDetails.sum")}
         </p>
       )}
     </div>
