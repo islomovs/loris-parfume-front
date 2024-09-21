@@ -82,7 +82,7 @@ export default function CollectionsPage({
       <div
         className={`relative parallax h-[90vh] flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
         style={{
-          backgroundImage: `url(${baseUrl}/${bannerImage})`,
+          backgroundImage: `url(${bannerImage})`,
         }}
       >
         <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
