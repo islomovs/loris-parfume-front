@@ -14,7 +14,6 @@ export default function CollectionsPage({
   params: { collectionSlug: string };
 }) {
   const [sortOption, setSortOption] = useState<string | undefined>(undefined);
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { collectionSlug: slug } = params;
   const { t } = useTranslation("common");
 
@@ -50,7 +49,6 @@ export default function CollectionsPage({
   const products = data?.pages.flatMap((page) => page.content) || [];
   const totalElements = data?.pages[0]?.page.totalElements || 0;
 
-  // Handle sort change
   const handleSortChange = (option: string) => {
     setSortOption(option);
   };

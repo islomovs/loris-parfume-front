@@ -12,6 +12,8 @@ export interface ICollectionItem {
   nameUz: string;
   nameRu: string;
   nameEng: string;
+  descriptionUz: string;
+  descriptionRu: string;
   bannerImage: string;
   collectionSlug: string;
   categoriesList: [
