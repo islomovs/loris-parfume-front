@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { fetchCollectionsData, ICollectionItem } from "@/services/collections";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTelegramPlane } from "react-icons/fa";
 import { capitalizeFirstLetter } from "../../helpers/capitalizeString";
 import Link from "next/link";
 import i18n from "@/utils/i18n";
@@ -34,9 +34,9 @@ export default function Footer() {
             +998 93 911 99 44
           </a>
           <div className="flex flex-row gap-5 mt-3 lg:mt-[14px]">
-            {/* <a href="https://facebook.com" className="hover:text-primary">
-              <FaFacebookF />
-            </a> */}
+            <a href="https://t.me/Loris_perfume" className="hover:text-primary">
+              <FaTelegramPlane />
+            </a>
             <a
               href="https://www.instagram.com/lorisparfum_uz"
               className="hover:text-primary"

@@ -38,6 +38,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Spinner } from "@chakra-ui/react";
 import { useCollectionStore } from "@/services/useCollectionStore";
+import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
 
 interface INavbarProps {
   variant: "filled" | "transparent";
@@ -616,34 +617,60 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         </div>
 
         {/* Account and Language Dropdown Moved to Bottom */}
-        <div className="flex flex-row justify-around items-end space-y-4 px-6 self-end">
-          <Link
-            href={token ? "/account" : "/account/login"}
-            className="text-sm uppercase font-semibold tracking-wider text-[#454545]"
-            onClick={toggleSidebar}
-          >
-            {t("mobileNavbar.account")}
-          </Link>
-          <Dropdown
-            className="cursor-pointer md:hidden"
-            menu={{ items }}
-            trigger={["click"]}
-          >
-            <a
-              className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
-              onClick={(e) => e.preventDefault()}
+        <div className="flex flex-col justify-center items-center gap-5">
+          <div className="w-full flex flex-row justify-between items-end space-y-4 px-6">
+            <Link
+              href={token ? "/account" : "/account/login"}
+              className="text-sm uppercase font-semibold tracking-wider text-[#454545]"
+              onClick={toggleSidebar}
             >
-              <Space>
-                <Image
-                  preview={false}
-                  src={flagImages[i18n.language.toLowerCase() as LanguageType]}
-                  alt={`${i18n.language.toLowerCase()} flag`}
-                  width={20}
-                />
-                <DownOutlined />
-              </Space>
+              {t("mobileNavbar.account")}
+            </Link>
+            <Dropdown
+              className="cursor-pointer md:hidden"
+              menu={{ items }}
+              trigger={["click"]}
+            >
+              <a
+                className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Space>
+                  <Image
+                    preview={false}
+                    src={
+                      flagImages[i18n.language.toLowerCase() as LanguageType]
+                    }
+                    alt={`${i18n.language.toLowerCase()} flag`}
+                    width={20}
+                  />
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
+          <div className="flex flex-col gap-4">
+            <a
+              href="tel:+998939119944"
+              className="text-[14px] text-center font-semibold text-black"
+            >
+              +998 93 911 99 44
             </a>
-          </Dropdown>
+            <div className="flex flex-row justify-center gap-6 lg:mt-[14px]">
+              <a
+                href="https://t.me/Loris_perfume"
+                className="hover:text-primary"
+              >
+                <FaTelegramPlane size={26} />
+              </a>
+              <a
+                href="https://www.instagram.com/lorisparfum_uz"
+                className="hover:text-primary"
+              >
+                <FaInstagram size={26} />
+              </a>
+            </div>
+          </div>
         </div>
       </Drawer>
 
