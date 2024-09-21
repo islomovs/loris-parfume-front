@@ -66,7 +66,7 @@ export const ImagePagination: React.FC<IImagePaginationProps> = ({
                 </div>
               )}
               <Image
-                src={`${image.replace(/\.(jpg|jpeg|png)$/i, ".webp")}`}
+                src={`${image}`}
                 alt={`Image ${index + 1}`}
                 loading="lazy"
                 className={cn(
