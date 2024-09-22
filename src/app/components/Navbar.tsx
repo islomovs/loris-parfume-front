@@ -39,6 +39,7 @@ import { useTranslation } from "react-i18next";
 import { Spinner } from "@chakra-ui/react";
 import { useCollectionStore } from "@/services/useCollectionStore";
 import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
+import { VscAccount } from "react-icons/vsc";
 
 interface INavbarProps {
   variant: "filled" | "transparent";
@@ -537,6 +538,38 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         }}
       >
         <div className="flex flex-col space-y-4 px-6">
+          <div className="w-full flex flex-row justify-between items-end space-y-4">
+            <Link
+              href={token ? "/account" : "/account/login"}
+              className="flex flex-row items-end gap-2 text-sm uppercase font-semibold tracking-wider text-[#454545]"
+              onClick={toggleSidebar}
+            >
+              <VscAccount size={20} />
+              {t("mobileNavbar.account")}
+            </Link>
+            <Dropdown
+              className="cursor-pointer md:hidden"
+              menu={{ items }}
+              trigger={["click"]}
+            >
+              <a
+                className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Space>
+                  <Image
+                    preview={false}
+                    src={
+                      flagImages[i18n.language.toLowerCase() as LanguageType]
+                    }
+                    alt={`${i18n.language.toLowerCase()} flag`}
+                    width={20}
+                  />
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
           <Link
             href="/"
             className="text-lg font-semibold"
@@ -622,38 +655,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         </div>
 
         {/* Account and Language Dropdown Moved to Bottom */}
-        <div className="flex flex-col justify-center items-center gap-5">
-          <div className="w-full flex flex-row justify-between items-end space-y-4 px-6">
-            <Link
-              href={token ? "/account" : "/account/login"}
-              className="text-sm uppercase font-semibold tracking-wider text-[#454545]"
-              onClick={toggleSidebar}
-            >
-              {t("mobileNavbar.account")}
-            </Link>
-            <Dropdown
-              className="cursor-pointer md:hidden"
-              menu={{ items }}
-              trigger={["click"]}
-            >
-              <a
-                className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
-                onClick={(e) => e.preventDefault()}
-              >
-                <Space>
-                  <Image
-                    preview={false}
-                    src={
-                      flagImages[i18n.language.toLowerCase() as LanguageType]
-                    }
-                    alt={`${i18n.language.toLowerCase()} flag`}
-                    width={20}
-                  />
-                  <DownOutlined />
-                </Space>
-              </a>
-            </Dropdown>
-          </div>
+        <div className="flex flex-col justify-center items-center gap-5 mt-5">
           <div className="flex flex-col gap-4">
             <a
               href="tel:+998939119944"
