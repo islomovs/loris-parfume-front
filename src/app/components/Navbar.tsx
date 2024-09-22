@@ -477,12 +477,21 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                             ? product.price -
                               (product.price * product.discountPercent) / 100
                             : product.price;
+
+                          // Determine column size based on number of search results
+                          const colSpan =
+                            searchResults.content.length === 1
+                              ? 24
+                              : searchResults.content.length === 2
+                              ? 12
+                              : 8;
+
                           return (
                             <Col
                               key={product.id}
-                              xs={24}
-                              sm={searchResults.content.length === 1 ? 24 : 12}
-                              md={searchResults.content.length === 1 ? 24 : 8}
+                              xs={24} // Full width on extra small screens (mobile)
+                              sm={colSpan} // Dynamic width based on the number of products
+                              md={colSpan} // Same behavior for medium screens
                               className="cursor-pointer"
                             >
                               {isMobile ? (
@@ -513,7 +522,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                         })}
                       </Row>
                     ) : (
-                      <p>{t("navbar.noProductsFound")}</p>
+                      <p className="px-5">{t("navbar.noProductsFound")}</p>
                     )}
                   </Row>
                 </div>
@@ -570,13 +579,6 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               </a>
             </Dropdown>
           </div>
-          <Link
-            href="/"
-            className="text-lg font-semibold border-b border-solid border-b-[#454545] pb-1"
-            onClick={toggleSidebar}
-          >
-            {t("mobileNavbar.home")}
-          </Link>
           {data?.collections?.map((collection: ICollectionItem) => {
             const filteredCategories = data.categories.filter(
               (category: ICategoryItem) =>
@@ -654,7 +656,6 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           </Link>
         </div>
 
-        {/* Account and Language Dropdown Moved to Bottom */}
         <div className="flex flex-col justify-center items-center gap-5 mt-5">
           <div className="flex flex-col gap-4">
             <a

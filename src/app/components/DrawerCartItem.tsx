@@ -69,7 +69,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
 
   if (isSimplified) {
     return (
-      <div className="flex flex-row gap-5 min-h-[180px]" onClick={onClick}>
+      <div className="flex flex-row gap-5 min-h-fit" onClick={onClick}>
         <div className="w-24 md:w-[120px] flex items-center">
           <img src={`${image}`} alt="cart item" />
         </div>
