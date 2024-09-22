@@ -572,7 +572,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           </div>
           <Link
             href="/"
-            className="text-lg font-semibold"
+            className="text-lg font-semibold border-b border-solid border-b-[#454545] pb-1"
             onClick={toggleSidebar}
           >
             {t("mobileNavbar.home")}
@@ -592,7 +592,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                   className="flex justify-between items-center cursor-pointer"
                   style={{
                     borderBottom: "1px solid #454545",
-                    paddingBottom: "10px",
+                    paddingBottom: "4px",
                   }}
                 >
                   <Link
@@ -647,7 +647,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           })}
           <Link
             href="/branches"
-            className="text-lg font-semibold"
+            className="text-lg font-semibold border-b border-solid border-b-[#454545] pb-1"
             onClick={toggleSidebar}
           >
             {t("mobileNavbar.branches")}
