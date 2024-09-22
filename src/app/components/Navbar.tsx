@@ -79,10 +79,10 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
       label: (
         <Space>
           <Image
+            preview={false}
             src={flagImages.ru}
             alt="Russian Flag"
             width={20}
-            height={12}
           />
           <span>RU</span>
         </Space>
@@ -93,7 +93,12 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
       key: "uz",
       label: (
         <Space>
-          <Image src={flagImages.uz} alt="Uzbek Flag" width={20} />
+          <Image
+            preview={false}
+            src={flagImages.uz}
+            alt="Uzbek Flag"
+            width={20}
+          />
           <span>UZ</span>
         </Space>
       ),

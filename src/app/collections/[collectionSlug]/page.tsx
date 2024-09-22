@@ -74,6 +74,11 @@ export default function CollectionsPage({
     i18n.language == "ru"
       ? matchedCollection?.nameRu
       : matchedCollection?.nameUz;
+
+  const description =
+    i18n.language == "ru"
+      ? matchedCollection?.descriptionRu
+      : matchedCollection?.descriptionUz;
   console.log("BANNER IMAGE: ", bannerImage);
   return (
     <div>
@@ -89,17 +94,9 @@ export default function CollectionsPage({
       ) : (
         <div className="pt-[188px] flex justify-center items-center">
           <div className="p-14 text-center">
-            <h1 className="py-4 font-semibold tracking-[.2em]">
-              {matchedCollection?.nameRu}
-            </h1>
+            <h1 className="py-4 font-semibold tracking-[.2em]">{title}</h1>
             <p className="text-center text-base text-[#454545]">
-              Loris Perfume parfyumeriya to&apos;plami atirlar olamida ajoyib
-              tajribani taqdim etadi. Maxsus tanlangan noyob va hashamatli
-              essensiyalar bilan yaratilgan ushbu to&apos;plam sizning shaxsiy
-              uslubingiz va o&apos;ziga xosligingizni aks ettirish uchun
-              yaratilgan. Niche parfyumeriyalari odatdagidan uzoqlashish orqali
-              sizni o&apos;zgacha his qiladi. Bu original hidlarni
-              qidirayotganlar uchun ideal variant.
+              {description}
             </p>
           </div>
         </div>
