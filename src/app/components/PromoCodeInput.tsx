@@ -40,7 +40,7 @@ const PromoCodeInput: React.FC<PromoCodeInputProps> = ({ onApplyPromo }) => {
   };
 
   return (
-    <div className="flex flex-row justify-between py-5">
+    <div className="flex flex-row justify-between gap-4 md:gap-4 py-5">
       {/* Promo code input field */}
       <CustomInput
         value={promoCode}
@@ -48,6 +48,7 @@ const PromoCodeInput: React.FC<PromoCodeInputProps> = ({ onApplyPromo }) => {
         borders="rounded"
         title={t("checkout.promocode")}
         onChange={(e) => setPromoCode(e.target.value)}
+        isPromoCode={true}
       />
       {/* Apply button */}
       <div

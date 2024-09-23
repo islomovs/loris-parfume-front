@@ -16,6 +16,7 @@ interface ICustomInputProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   name?: string;
+  isPromoCode?: boolean;
 }
 
 // Forwarding the ref correctly
@@ -32,6 +33,7 @@ export const CustomInput = forwardRef<
       value,
       disabled,
       isPhoneNumber,
+      isPromoCode = false,
       onChange, // Include onChange in destructured props
       onBlur, // Include onBlur in destructured props
       name, // Include name prop for form handling
@@ -54,6 +56,10 @@ export const CustomInput = forwardRef<
       ? "text"
       : "password";
 
+    const isPromoCoded = isPromoCode ? "pr-[22px]" : "pr-[40px] md:pr-[40px]";
+
+    console.log("ISPROMOCDDE: ", isPromoCoded);
+
     return (
       <label
         htmlFor={title}
@@ -65,7 +71,7 @@ export const CustomInput = forwardRef<
             id={title}
             ref={ref as React.Ref<InputMask>} // Use ref for InputMask
             className={cn(
-              `${className} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] px-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px] pr-[40px]`,
+              `${className} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] pl-[11px] md:pl-[11px] pr-[40px] md:pr-[40px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px]`,
               {
                 "rounded-[5px]": borders === "rounded",
                 "rounded-0": borders === "no-rounded",
@@ -86,7 +92,7 @@ export const CustomInput = forwardRef<
             id={title}
             ref={ref as React.Ref<HTMLInputElement>} // Use ref for regular input
             className={cn(
-              `${className} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] px-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px] pr-[40px]`,
+              `${className} ${isPromoCoded} peer transition-all duration-300 border-none focus:border-none block h-[50px] outline outline-[#e3e3e3] py-[13.5px] pl-[11px] md:pl-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px]`,
               {
                 "rounded-[5px]": borders === "rounded",
                 "rounded-0": borders === "no-rounded",
