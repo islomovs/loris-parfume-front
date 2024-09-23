@@ -65,7 +65,7 @@ const YandexMap: React.FC<YandexMapProps> = ({ onLocationChange }) => {
       <Marker hover={isDragging} isLoading={isLoading} />
       <YMaps query={{ apikey: process.env.NEXT_PUBLIC_YANDEX_API_KEY }}>
         <Map
-          className="map w-full h-64 md:h-96" // Adjust height for mobile and larger screens
+          className="map w-full h-[360px] md:h-96"
           onMouseDown={() => setDragging(true)}
           defaultState={{ center: [41.314472, 69.27991], zoom: 14 }}
           onBoundsChange={onBoundsChange}

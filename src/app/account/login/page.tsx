@@ -45,13 +45,15 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<TLoginFormData>({
-    resolver: yupResolver(loginSchema),
+    // resolver: yupResolver(loginSchema),
   });
 
   // Form submit handler
   const onSubmit: SubmitHandler<TLoginFormData> = (data) => {
+    console.log("BEFORE SANITIZING: ", data.phone);
     const sanitizedLoginPhone = sanitizeLoginPhoneNumber(data.phone);
     loadingBarRef.current?.continuousStart(); // Start the loading bar
 
@@ -123,7 +125,8 @@ export default function Login() {
               {t("account.login.subtitleL")}
             </h2>
           </motion.div>
-
+        </AnimatePresence>
+        <AnimatePresence mode="wait">
           {errorMessage && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -149,11 +152,12 @@ export default function Login() {
             <div className="w-full sm:w-[400px]">
               <CustomInput
                 className="sm:w-[400px] w-full"
-                {...register("phone")}
+                {...register("phone", { required: "Phone number is required" })}
                 title={t("account.login.phoneNumber")}
                 borders="no-rounded"
                 type="text"
                 isPhoneNumber={true}
+                onChange={(e) => setValue("phone", e.target.value)} // Sync the phone number value with form state
               />
               {errors.phone && (
                 <p className="text-sm text-start sm:text-[14px] text-[#CB2B2B] mt-1">
@@ -165,7 +169,7 @@ export default function Login() {
             <div className="flex flex-col w-full sm:w-[400px]">
               <CustomInput
                 className="sm:w-[400px] w-full"
-                {...register("password")}
+                {...register("password", { required: "Password is required" })}
                 title={t("account.login.password")}
                 borders="no-rounded"
                 type="password"
@@ -191,7 +195,8 @@ export default function Login() {
               type="submit"
             />
           </motion.form>
-
+        </AnimatePresence>
+        <AnimatePresence mode="wait">
           <p className="my-4 sm:my-6 text-[#9D9D9D] text-sm sm:text-[14px] font-normal">
             {t("account.login.regQ")}{" "}
             <a

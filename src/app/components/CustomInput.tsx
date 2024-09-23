@@ -12,10 +12,10 @@ interface ICustomInputProps {
   type: "password" | "number" | "text";
   value?: string;
   disabled?: boolean;
-  isPhoneNumber?: boolean; // Add isPhoneNumber prop
-  onChange?: React.ChangeEventHandler<HTMLInputElement>; // Add onChange handler
-  onBlur?: React.FocusEventHandler<HTMLInputElement>; // Add onBlur handler if needed
-  name?: string; // Add name for form handling
+  isPhoneNumber?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  name?: string;
 }
 
 // Forwarding the ref correctly
@@ -49,7 +49,7 @@ export const CustomInput = forwardRef<
 
     // Ensure the correct input type based on isPhoneNumber and type prop
     const inputType = isPhoneNumber
-      ? "tel"
+      ? "text"
       : isPasswordVisible || type === "text"
       ? "text"
       : "password";
@@ -76,6 +76,7 @@ export const CustomInput = forwardRef<
             placeholder=" "
             value={value}
             disabled={disabled}
+            type={inputType}
             onChange={onChange} // Pass onChange handler here
             onBlur={onBlur} // Pass onBlur handler if needed
             {...rest} // Spread rest of the props

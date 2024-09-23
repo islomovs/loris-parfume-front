@@ -90,18 +90,7 @@ const RecommendedSlider: React.FC<RecommendedSliderProps> = ({
         {items?.map((product: any) => {
           return (
             <SwiperSlide key={product.id}>
-              <Link
-                href={
-                  categorySlug
-                    ? `/collections/${collectionSlug}/categories/${categorySlug}/products/${product.slug}`
-                    : collectionSlug
-                    ? `/collections/${collectionSlug}/products/${product.slug}`
-                    : `/products/${product.slug}`
-                }
-                className="w-fit"
-              >
-                <ProductCard product={product} />
-              </Link>
+              <ProductCard product={product} />
             </SwiperSlide>
           );
         })}
