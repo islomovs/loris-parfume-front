@@ -281,7 +281,7 @@ export default function Checkout() {
                 <div className="w-full flex flex-col gap-5">
                   {nearestBranchMutation.isLoading ? (
                     <div className="flex justify-center items-center py-4">
-                      <Spinner size="lg" color="#87754f" />
+                      <Spinner size="lg" color="#000000" />
                     </div>
                   ) : (
                     cart.map((cartItem, index) => {
@@ -370,17 +370,17 @@ export default function Checkout() {
               </div>
             </form>
 
-            <footer className="border-t border-solid border-t-[#DFDFDF] mt-4 lg:mt-16">
+            {/* <footer className="border-t border-solid border-t-[#DFDFDF] mt-4 lg:mt-16">
               <a href="#" className="mt-2 underline text-primary">
                 {t("checkout.privacy")}
               </a>
-            </footer>
+            </footer> */}
           </div>
           <div className="hidden md:block flex-[4] py-4 md:p-10 lg:h-[300px] lg:sticky top-0 right-0 left-0">
             <div className="w-full flex flex-col gap-5">
               {nearestBranchMutation.isLoading ? (
                 <div className="flex justify-center items-center py-4">
-                  <Spinner size="lg" color="#87754f" />
+                  <Spinner size="lg" color="#000000" />
                 </div>
               ) : (
                 cart.map((cartItem, index) => {

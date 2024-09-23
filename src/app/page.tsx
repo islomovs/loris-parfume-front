@@ -61,7 +61,7 @@ export default function Home() {
         <MainCarousel bannersData={banners} />
       ) : (
         <div className="h-[751px] w-full flex justify-center items-center">
-          <Spinner size="xl" color="#87754f" />
+          <Spinner size="xl" color="#000000" />
         </div>
       )}
       <div className="border-t border-solid border-[#e3e3e3] py-10 md:mb-20">
@@ -70,7 +70,7 @@ export default function Home() {
         </h1>
         {isLoadingRecProducts ? (
           <div className="flex justify-center items-center py-10">
-            <Spinner size="lg" color="#87754f" />
+            <Spinner size="lg" color="#000000" />
           </div>
         ) : (
           <RecommendedSlider items={recommendedProducts} />
@@ -102,7 +102,7 @@ export default function Home() {
             })
           ) : (
             <div className="flex justify-center items-center w-full h-80">
-              <Spinner size="lg" color="#87754f" />
+              <Spinner size="lg" color="#000000" />
             </div>
           )}
         </Row>

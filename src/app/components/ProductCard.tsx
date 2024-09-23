@@ -80,12 +80,12 @@ export const ProductCard = ({
       queryClient.invalidateQueries("cartItemsData").then(() => {
         showDrawer();
       });
-      loadingBarRef.current.complete();
+      // loadingBarRef.current.complete();
     },
     onError: (error) => {
       console.error("Error adding item to cart:", error);
       message.error("Failed to add item to cart.");
-      loadingBarRef.current.complete();
+      // loadingBarRef.current.complete();
     },
   });
 
@@ -112,8 +112,6 @@ export const ProductCard = ({
       showDrawer();
       return;
     }
-
-    loadingBarRef.current.continuousStart();
     mutation.mutate(cartItem);
   };
 
