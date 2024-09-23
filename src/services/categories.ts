@@ -11,6 +11,8 @@ export interface ICategoryItem {
   collectionNameUz: string;
   collectionNameRu: string;
   collectionNameEng: string;
+  descriptionUz: string;
+  descriptionRu: string;
 }
 
 export const fetchCategoriesData = async (page: number) => {

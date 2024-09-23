@@ -79,7 +79,6 @@ export default function CollectionsPage({
     i18n.language == "ru"
       ? matchedCollection?.descriptionRu
       : matchedCollection?.descriptionUz;
-  console.log("BANNER IMAGE: ", bannerImage);
   return (
     <div>
       {bannerImage ? (
@@ -92,7 +91,7 @@ export default function CollectionsPage({
           <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
         </div>
       ) : (
-        <div className="pt-[188px] flex justify-center items-center">
+        <div className="flex justify-center items-center">
           <div className="p-14 text-center">
             <h1 className="py-4 font-semibold tracking-[.2em]">{title}</h1>
             <p className="text-center text-base text-[#454545]">

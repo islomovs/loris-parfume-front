@@ -1,7 +1,8 @@
 {
   "navbar": {
     "account": "akkaunt",
-    "search": "Siz qidirayotgan mahsulot kodini kiriting",
+    "search": "Izlash",
+    "searchPlaceholder": "Siz qidirayotgan mahsulot kodini kiriting",
     "shoppingCart": "xarid savati",
     "branches": "filiallar",
     "e-catalog": "e-katalog",
@@ -10,6 +11,7 @@
     "noProductsFound": "Mahsulotlar topilmadi",
     "results": "natijalar"
   },
+  "terms": "Umumiy shartlar va qoidalar",
   "mobileNavbar": {
     "home": "Bosh sahifa",
     "branches": "Filiallar",
@@ -118,7 +120,11 @@
       "delivery": "Yetkazib berish"
     },
     "products": "Tovarlar",
-    "payment": "To'lov uchun"
+    "payment": "To'lov uchun",
+    "success": "Buyurtma muvaffaqiyatli yaratildi!",
+    "failure": "Buyurtma yaratilmadi, iltimos, qayta urinib ko'ring.",
+    "promocode": "Promokod",
+    "apply": "Qo'llash"
   },
   "cart": {
     "cartUpdatedSuccess": "Savatcha muvaffaqiyatli yangilandi!",
@@ -167,6 +173,7 @@
     "updating": "Foydalanuvchi ma'lumotlari yangilanmoqda..."
   },
   "about": {
+    "title": "Biz haqimizda",
     "description": "LORIS, 2006-yildan buyon innovatsion hidlari bilan tanilgan, 500 dan ortiq do‘kon va kiosk orqali o‘ziga xos xushbo‘yliklarni dunyo bo‘ylab tarqatmoqda. LORIS, global ilmiy-tadqiqot laboratoriyalarida ishlab chiqarilgan parfyumeriya, xona xushbo‘yligi va shaxsiy parvarish mahsulotlari bilan har kuni millionlab insonlarga yetib boradi; ishlab chiqarish Istanbulda amalga oshiriladi. Brend, asosan Yaqin Sharq, Yevropa va Afrika bozorlariga eksport qilib, kosmetika sohasida global yetakchiga aylanmoqda. LORIS, ISO 22716:2007 GMP va IFRA standartlariga mos ishlab chiqarish orqali gigiena va sifatni ta’minlaydi. Mijozlarning mamnuniyatini ta'minlash va yuqori sifatni saqlashga doimo e'tibor qaratadi."
   },
   "validation": {

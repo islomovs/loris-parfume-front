@@ -240,10 +240,9 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
         className={cn(
           `pt-4 z-20 w-full transition-[background] duration-300 border-b border-solid border-[#dad9d9] relative`,
           {
-            "absolute text-black bg-white  hover:text-[#454545] hover:bg-white border-none":
+            "text-black bg-white  hover:text-[#454545] hover:bg-white border-none":
               variant == "transparent" && !isSearchOpen,
             "text-black bg-white": variant == "filled" && !isSearchOpen,
-            "absolute text-black bg-white": isSearchOpen,
           }
         )}
       >
@@ -438,7 +437,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                   onChange={handleSearchChange}
                   autoFocus
                   className="w-full px-4 py-2 text-sm md:text-[18px] text-[#454545] focus:outline-none focus:ring-0 placeholder-[#9d9d9d] placeholder:tracking-[.2em]"
-                  placeholder={`${t("navbar.search")}...`}
+                  placeholder={`${t("navbar.searchPlaceholder")}...`}
                 />
                 <button onClick={closeSearch}>
                   <TfiClose className="text-xl text-[#454545]" />

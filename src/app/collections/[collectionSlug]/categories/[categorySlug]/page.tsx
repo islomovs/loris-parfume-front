@@ -76,15 +76,32 @@ export default function CategoriesPage({
   const bannerImage = matchedCategory?.bannerImage || "";
   const title =
     i18n.language == "ru" ? matchedCategory?.nameRu : matchedCategory?.nameUz;
+  const description =
+    i18n.language == "ru"
+      ? matchedCategory?.descriptionRu
+      : matchedCategory?.descriptionUz;
 
   return (
     <div>
-      <div
-        className="bg-center bg-cover bg-no-repeat bg-fixed h-[90vh] flex justify-center items-end tracking-[.2em]"
-        style={{ backgroundImage: `url(${bannerImage})` }}
-      >
-        <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
-      </div>
+      {bannerImage ? (
+        <div
+          className={`relative parallax h-[90vh] flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
+          style={{
+            backgroundImage: `url(${bannerImage})`,
+          }}
+        >
+          <p className="text-xl text-white font-semibold mb-[30vh]">{title}</p>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center">
+          <div className="p-14 text-center">
+            <h1 className="py-4 font-semibold tracking-[.2em]">{title}</h1>
+            <p className="text-center text-base text-[#454545]">
+              {description}
+            </p>
+          </div>
+        </div>
+      )}
       <div className="md:mx-16 mx-5">
         <div className="flex flex-row md:flex-row justify-between items-center my-8">
           <p className="text-[15px] text-[#454545] font-normal">

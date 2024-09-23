@@ -22,7 +22,7 @@ export default function Footer() {
         {/* First Column */}
         <div className="flex flex-col lg:basis-[460px] p-5 lg:p-10">
           <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]">
-            OVER LORIS
+            {t("about.title")}
           </h1>
           <p className="text-sm lg:text-[14px] leading-6 font-normal mb-5">
             {t("about.description")}
@@ -69,11 +69,19 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col lg:basis-[460px] p-5 lg:p-10">
-          <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]"></h1>
+          <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]">
+            {t("terms")}
+          </h1>
           <ul>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
-            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5"></li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
+              - {t("productDetails.estimatedDelivery")}
+            </li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
+              - {t("productDetails.freeShipping")}
+            </li>
+            <li className="font-bold text-sm lg:text-[14px] mb-3 lg:mb-5">
+              - {t("navbar.announcement")}
+            </li>
           </ul>
         </div>
       </div>

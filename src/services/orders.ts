@@ -24,6 +24,7 @@ export interface OrderData {
   paymentType: string;
   returnUrl: string;
   ordersItemsList: OrderItem[];
+  promocode: string;
 }
 
 export const createOrder = async (orderData: OrderData) => {

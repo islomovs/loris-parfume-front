@@ -13,6 +13,9 @@ interface ICustomInputProps {
   value?: string;
   disabled?: boolean;
   isPhoneNumber?: boolean; // Add isPhoneNumber prop
+  onChange?: React.ChangeEventHandler<HTMLInputElement>; // Add onChange handler
+  onBlur?: React.FocusEventHandler<HTMLInputElement>; // Add onBlur handler if needed
+  name?: string; // Add name for form handling
 }
 
 // Forwarding the ref correctly
@@ -29,6 +32,9 @@ export const CustomInput = forwardRef<
       value,
       disabled,
       isPhoneNumber,
+      onChange, // Include onChange in destructured props
+      onBlur, // Include onBlur in destructured props
+      name, // Include name prop for form handling
       ...rest
     },
     ref // ref forwarded here
@@ -70,6 +76,8 @@ export const CustomInput = forwardRef<
             placeholder=" "
             value={value}
             disabled={disabled}
+            onChange={onChange} // Pass onChange handler here
+            onBlur={onBlur} // Pass onBlur handler if needed
             {...rest} // Spread rest of the props
           />
         ) : (
@@ -87,6 +95,9 @@ export const CustomInput = forwardRef<
             placeholder=" "
             value={value}
             disabled={disabled}
+            name={name} // Pass name for form handling
+            onChange={onChange} // Pass onChange handler here
+            onBlur={onBlur} // Pass onBlur handler if needed
             {...rest} // Spread rest of the props
           />
         )}

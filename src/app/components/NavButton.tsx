@@ -25,14 +25,14 @@ export default function NavButton({
 }: NavButtonProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  // const isUnderlined = isUnderline
-  //   ? "relative after:bg-black after:absolute after:h-[2px] after:w-0 after:top-[38px] after:left-0 hover:after:w-full after:transition-all after:duration-300"
-  //   : "";
+  const isUnderlined = isUnderline
+    ? "relative after:bg-black after:absolute after:h-[2px] after:w-0 after:top-[38px] after:left-0 hover:after:w-full after:transition-all after:duration-300"
+    : "";
 
   return (
     <div
       className={cn(
-        `py-[9px] text-[18px] tracking-[.2em] uppercase my-[6px] mx-[14px] font-montserrat bg-transparent cursor-pointer relative group`,
+        `${isUnderlined} py-[9px] text-[18px] tracking-[.2em] uppercase my-[6px] mx-[14px] font-montserrat bg-transparent cursor-pointer relative group`,
         { "text-[10px]": type === "sm", "text-xs": type === "md" }
       )}
       onClick={onClick}
