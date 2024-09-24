@@ -58,8 +58,6 @@ export const CustomInput = forwardRef<
 
     const isPromoCoded = isPromoCode ? "pr-[22px]" : "pr-[40px] md:pr-[40px]";
 
-    console.log("ISPROMOCDDE: ", isPromoCoded);
-
     return (
       <label
         htmlFor={title}

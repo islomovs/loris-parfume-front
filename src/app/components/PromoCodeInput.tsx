@@ -22,7 +22,7 @@ const PromoCodeInput: React.FC<PromoCodeInputProps> = ({ onApplyPromo }) => {
       onApplyPromo(data.discountSum, data.discountPercent, promoCode);
       message.success(t("checkout.promoApplied"));
     },
-    onError: (error) => {
+    onError: (error: any) => {
       if (error.response?.status === 404) {
         message.error(t("checkout.promoNotFound"));
       } else if (error.response?.status === 409) {
@@ -58,7 +58,7 @@ const PromoCodeInput: React.FC<PromoCodeInputProps> = ({ onApplyPromo }) => {
       />
       {/* Apply button */}
       <div
-        className="bg-[#F1F1F1] flex justify-center items-center cursor-pointer border-solid border border-[#DADADA] text-[#454545] px-1 md:px-[14px] rounded-[5px] font-normal"
+        className="bg-[#F1F1F1] flex justify-center items-center cursor-pointer border-solid border border-[#DADADA] text-[#454545] w-full rounded-[5px] font-normal"
         onClick={handleApplyPromoCode}
       >
         {t("checkout.apply")}

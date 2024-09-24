@@ -48,12 +48,11 @@ export default function Login() {
     setValue,
     formState: { errors },
   } = useForm<TLoginFormData>({
-    // resolver: yupResolver(loginSchema),
+    resolver: yupResolver(loginSchema),
   });
 
   // Form submit handler
   const onSubmit: SubmitHandler<TLoginFormData> = (data) => {
-    console.log("BEFORE SANITIZING: ", data.phone);
     const sanitizedLoginPhone = sanitizeLoginPhoneNumber(data.phone);
     loadingBarRef.current?.continuousStart(); // Start the loading bar
 

@@ -47,6 +47,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<TRegisterFormData>({
     resolver: yupResolver(registerSchema),
@@ -228,6 +229,7 @@ export default function Register() {
             borders="no-rounded"
             type="text"
             isPhoneNumber={true}
+            onChange={(e) => setValue("phone", e.target.value)}
           />
           {errors.phone && (
             <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
