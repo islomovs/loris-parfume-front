@@ -124,7 +124,11 @@
     "success": "Buyurtma muvaffaqiyatli yaratildi!",
     "failure": "Buyurtma yaratilmadi, iltimos, qayta urinib ko'ring.",
     "promocode": "Promokod",
-    "apply": "Qo'llash"
+    "apply": "Qo'llash",
+    "promoApplied": "Promokod muvaffaqiyatli qo'llanildi",
+    "promoNotFound": "Promokod topilmadi",
+    "promoAlreadyUsed": "Promokod allaqachon ishlatilgan",
+    "invalidPromo": "Noto'g'ri promokod"
   },
   "cart": {
     "cartUpdatedSuccess": "Savatcha muvaffaqiyatli yangilandi!",

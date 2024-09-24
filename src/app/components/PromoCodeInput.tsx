@@ -22,8 +22,14 @@ const PromoCodeInput: React.FC<PromoCodeInputProps> = ({ onApplyPromo }) => {
       onApplyPromo(data.discountSum, data.discountPercent, promoCode);
       message.success(t("checkout.promoApplied"));
     },
-    onError: () => {
-      message.error(t("checkout.invalidPromo"));
+    onError: (error) => {
+      if (error.response?.status === 404) {
+        message.error(t("checkout.promoNotFound"));
+      } else if (error.response?.status === 409) {
+        message.error(t("checkout.promoAlreadyUsed"));
+      } else {
+        message.error(t("checkout.invalidPromo"));
+      }
     },
   });
 
