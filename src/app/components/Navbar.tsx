@@ -291,7 +291,11 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
             <NavButton
               type="sm"
               className="hidden text-[10px] uppercase tracking-[.2em] md:block"
-              link={token ? "/account" : "/account/login"}
+              link={
+                token && token !== "undefined" && token !== ""
+                  ? "/account"
+                  : "/account/login"
+              }
             >
               {t(`navbar.account`)}
             </NavButton>

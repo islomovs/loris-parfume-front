@@ -30,7 +30,6 @@ export const RootChildren: React.FC<IRootLayout> = ({ children }) => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  // Conditionally fetch cart items only if token exists
   const { refetch } = useQuery(
     "cartItemsData",
     async () => {
@@ -38,7 +37,7 @@ export const RootChildren: React.FC<IRootLayout> = ({ children }) => {
       return res?.data || [];
     },
     {
-      enabled: !!token, // Run only if token is available
+      enabled: !!token,
       onSuccess: (data) => {
         if (data) {
           setCartItems(data);
