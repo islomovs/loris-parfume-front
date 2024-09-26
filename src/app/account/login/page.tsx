@@ -106,7 +106,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-col justify-center items-center py-10 md:py-20 px-4 md:px-0">
-      <LoadingBar color="#87754f" ref={loadingBarRef} />
+      <LoadingBar color="#000000" ref={loadingBarRef} />
       <div className="flex flex-col items-center justify-center w-full max-w-sm sm:max-w-md min-h-[400px] text-center">
         <AnimatePresence mode="wait">
           <motion.div

@@ -77,6 +77,8 @@ export default function Checkout() {
   const { t } = useTranslation("common");
   const currentTotalSum = totalSum();
   const [deliverySum, setDeliverySum] = useState<number>(0);
+  // Debounce Timer
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   const deliveryOptions = [
     { id: 1, title: t("checkout.deliveryOptions.delivery") },
@@ -138,8 +140,9 @@ export default function Checkout() {
   }) => {
     setValue("address", value?.address);
     setCoords([value?.location[0], value?.location[1]]);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
+    // Debounce nearest branch mutation
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => {
       nearestBranchMutation.mutate({
         latitude: value?.location[0],
         longitude: value?.location[1],
@@ -176,6 +179,11 @@ export default function Checkout() {
   );
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
+    if (!data.address) {
+      message.error(t("checkout.addressErr"));
+      return;
+    }
+
     const ordersItemsList = cart.map((item) => ({
       itemId: item.id,
       sizeId: item.sizeId ?? 1,
@@ -239,9 +247,12 @@ export default function Checkout() {
                 title={t("checkout.deliveryType")}
                 control={control}
               />
-              <YandexMap onLocationChange={onLocationChange} onNearestBranch={function (coords: [number, number]): void {
-                throw new Error("Function not implemented.");
-              } } />
+              <YandexMap
+                onLocationChange={onLocationChange}
+                onNearestBranch={function (coords: [number, number]): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
               <CustomInput
                 {...register("fullName")}
                 type="text"
@@ -266,6 +277,7 @@ export default function Checkout() {
                 type="text"
                 borders="rounded"
                 title={t("checkout.address")}
+                disabled={true}
               />
               <CustomTextArea
                 {...register("comment")}
