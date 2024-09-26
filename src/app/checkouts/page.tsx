@@ -239,7 +239,9 @@ export default function Checkout() {
                 title={t("checkout.deliveryType")}
                 control={control}
               />
-              <YandexMap onLocationChange={onLocationChange} />
+              <YandexMap onLocationChange={onLocationChange} onNearestBranch={function (coords: [number, number]): void {
+                throw new Error("Function not implemented.");
+              } } />
               <CustomInput
                 {...register("fullName")}
                 type="text"
