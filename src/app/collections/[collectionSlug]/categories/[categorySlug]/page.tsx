@@ -34,7 +34,7 @@ export default function CategoriesPage({
         categorySlug,
         sortOption
       );
-      return res.data; // Return the entire response for handling pages
+      return res.data;
     },
     {
       getNextPageParam: (lastPage) => {

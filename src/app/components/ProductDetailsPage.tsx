@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation } from "react-query";
 import {
@@ -21,6 +22,7 @@ import { Spinner } from "@chakra-ui/react";
 import i18n from "@/utils/i18n";
 import { useTranslation } from "react-i18next";
 import { message } from "antd";
+import Script from "next/script";
 
 export default function ProductDetailsPage({
   productSlug,
@@ -163,86 +165,111 @@ export default function ProductDetailsPage({
       ? product?.data.descriptionRu
       : product?.data.descriptionUz;
 
-  return (
-    <div className="flex flex-col px-4">
-      <LoadingBar color="#87754f" ref={loadingBarRef} />
-      <div className="flex flex-col lg:flex-row py-8 md:py-16">
-        {open && <CustomDrawer onClose={onClose} isOpen={open} />}
-        <div className="flex flex-col lg:flex-row lg:flex-[2] lg:pl-16 mb-6 lg:mb-0">
-          <ImagePagination images={product?.data?.imagesList} />
-        </div>
-        <div className="flex-1 lg:mr-[100px] lg:ml-[50px] mt-6 lg:mt-0 sticky top-0 lg:h-[400px]">
-          <ProductDetailsHeader
-            category={category}
-            name={name}
-            price={productPrice}
-            originalPrice={originalPrice}
-          />
-          <div className="border-t my-6 pt-6 border-t-[#e3e3e3] border-solid">
-            <p className="text-[#454545] text-sm md:text-[14px] leading-[1.65] font-normal">
-              {description}
-            </p>
-          </div>
-          <div>
-            {product?.data.sizesItemsList?.length >= 2 && (
-              <SizeSelector
-                options={product?.data.sizesItemsList}
-                selectedOption={selectedOption}
-                onSelect={(option, price, sizeId) => {
-                  const sizeDiscountPercent = product?.data.sizesItemsList.find(
-                    (size: any) => size.sizeId === sizeId
-                  )?.discountPercent;
-                  const finalPrice = sizeDiscountPercent
-                    ? price * (1 - sizeDiscountPercent / 100)
-                    : price;
+  const microdata = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: name,
+    image: product?.data?.imagesList[0],
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      reviewCount: "23",
+    },
+  };
 
-                  setSelectedOption(option);
-                  setProductPrice(finalPrice);
-                  setOriginalPrice(price);
-                  setSelectedSizeId(sizeId);
-                }}
-              />
-            )}
-            <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-            <AnimatedButton
-              title={t("productDetails.addToCart")}
-              variant="dark"
-              width="w-full"
-              onClick={handleAddToCart}
+  const microdataJson = JSON.stringify(microdata);
+
+  return (
+    <>
+      <div className="flex flex-col px-4">
+        <LoadingBar color="#87754f" ref={loadingBarRef} />
+        <div className="flex flex-col lg:flex-row py-8 md:py-16">
+          {open && <CustomDrawer onClose={onClose} isOpen={open} />}
+          <div className="flex flex-col lg:flex-row lg:flex-[2] lg:pl-16 mb-6 lg:mb-0">
+            <ImagePagination images={product?.data?.imagesList} />
+          </div>
+          <div className="flex-1 lg:mr-[100px] lg:ml-[50px] mt-6 lg:mt-0 sticky top-0 lg:h-[400px]">
+            <ProductDetailsHeader
+              category={category}
+              name={name}
+              price={productPrice}
+              originalPrice={originalPrice}
             />
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center my-7 space-y-4 md:space-y-0">
-              <div className="flex flex-row items-center mb-4 md:mb-0">
-                <LiaShippingFastSolid className="w-[35px] h-[35px] mr-[15px]" />
-                <p className="text-[#454545] text-xs md:text-sm leading-[1.65] font-normal">
-                  {t("productDetails.freeShipping")}
-                </p>
-              </div>
-              <div className="flex flex-row items-center">
-                <BsBoxSeam className="w-[30px] h-[30px] mr-[15px]" />
-                <p className="text-[#454545] text-xs md:text-sm leading-[1.65] font-normal">
-                  {t("productDetails.estimatedDelivery")}
-                </p>
+            <div className="border-t my-6 pt-6 border-t-[#e3e3e3] border-solid">
+              <p className="text-[#454545] text-sm md:text-[14px] leading-[1.65] font-normal">
+                {description}
+              </p>
+            </div>
+            <div>
+              {product?.data.sizesItemsList?.length >= 2 && (
+                <SizeSelector
+                  options={product?.data.sizesItemsList}
+                  selectedOption={selectedOption}
+                  onSelect={(option, price, sizeId) => {
+                    const sizeDiscountPercent =
+                      product?.data.sizesItemsList.find(
+                        (size: any) => size.sizeId === sizeId
+                      )?.discountPercent;
+                    const finalPrice = sizeDiscountPercent
+                      ? price * (1 - sizeDiscountPercent / 100)
+                      : price;
+
+                    setSelectedOption(option);
+                    setProductPrice(finalPrice);
+                    setOriginalPrice(price);
+                    setSelectedSizeId(sizeId);
+                  }}
+                />
+              )}
+              <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
+              <AnimatedButton
+                title={t("productDetails.addToCart")}
+                variant="dark"
+                width="w-full"
+                onClick={handleAddToCart}
+              />
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center my-7 space-y-4 md:space-y-0">
+                <div className="flex flex-row items-center mb-4 md:mb-0">
+                  <LiaShippingFastSolid className="w-[35px] h-[35px] mr-[15px]" />
+                  <p className="text-[#454545] text-xs md:text-sm leading-[1.65] font-normal">
+                    {t("productDetails.freeShipping")}
+                  </p>
+                </div>
+                <div className="flex flex-row items-center">
+                  <BsBoxSeam className="w-[30px] h-[30px] mr-[15px]" />
+                  <p className="text-[#454545] text-xs md:text-sm leading-[1.65] font-normal">
+                    {t("productDetails.estimatedDelivery")}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div className="border-t border-solid border-[#e3e3e3] py-10 md:my-20">
+          <h1 className="uppercase font-normal text-center text-lg md:text-xl tracking-[.2em] text-[#454545] mb-10 md:mb-16">
+            {t("productDetails.youMayAlsoLike")}
+          </h1>
+          {isLoadingRecProducts ? (
+            <div className="flex justify-center items-center py-10">
+              <Spinner size="lg" color="#87754f" />
+            </div>
+          ) : (
+            <RecommendedSlider
+              items={recommendedProducts}
+              collectionSlug={
+                product.data.collectionsItemsList[0].collectionSlug
+              }
+              categorySlug={product.data.categorySlug}
+            />
+          )}
+        </div>
       </div>
-      <div className="border-t border-solid border-[#e3e3e3] py-10 md:my-20">
-        <h1 className="uppercase font-normal text-center text-lg md:text-xl tracking-[.2em] text-[#454545] mb-10 md:mb-16">
-          {t("productDetails.youMayAlsoLike")}
-        </h1>
-        {isLoadingRecProducts ? (
-          <div className="flex justify-center items-center py-10">
-            <Spinner size="lg" color="#87754f" />
-          </div>
-        ) : (
-          <RecommendedSlider
-            items={recommendedProducts}
-            collectionSlug={product.data.collectionsItemsList[0].collectionSlug}
-            categorySlug={product.data.categorySlug}
-          />
-        )}
-      </div>
-    </div>
+      <Script
+        id="microdata-product"
+        strategy="lazyOnload"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: microdataJson }}
+      />
+    </>
   );
 }

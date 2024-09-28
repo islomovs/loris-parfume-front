@@ -1,70 +1,46 @@
-"use client";
-
-import { Col, Row, message } from "antd";
-import { Spinner } from "@chakra-ui/react";
-import { useQuery } from "react-query";
-import { BranchCard } from "../components/BranchCard";
 import { fetchBranchesData, IBranchItem } from "@/services/branches";
-import YandexMap from "../components/BYandexMap";
-import { useTranslation } from "react-i18next";
+import BranchesPage from "../_pages/branches";
+import { AxiosResponse } from "axios";
 
-export default function Contacts() {
+export async function generateMetadata() {
+  return {
+    title: "Филиалы | Парфюмерные Филиалы Лорис",
+    description:
+      "LORIS Parfume представлен в ряде ключевых торговых центров и локаций по всей стране, предлагая широкий ассортимент уникальных ароматов для дома и парфюмов. Наши филиалы находятся в таких местах, как Tashkent City Mall, Seoul Mun, Samarqand Darvoza, Next, Riviera, Compass, Chimgan, Atlass Mall, Navruz Mall и O’zbegim Trade Center. Посетите ближайший магазин, чтобы окунуться в мир утонченных ароматов LORIS Parfume.",
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_DOMAIN}/branches`,
+      languages: {
+        en: `${process.env.NEXT_PUBLIC_DOMAIN}/branches`,
+        ru: `${process.env.NEXT_PUBLIC_DOMAIN}/branches`,
+      },
+    },
+  };
+}
+
+const getData = async () => {
+  let branches: IBranchItem[] = [];
+  let error = null;
+
+  try {
+    const response: AxiosResponse<any> = await fetchBranchesData();
+    branches = response.data;
+  } catch (err) {
+    error = err;
+  }
+
+  return { branches, error };
+};
+
+export default async function Branches() {
   const defaultState = {
     center: [55.751574, 37.573856],
     zoom: 5,
   };
-  const { t } = useTranslation("common");
-  const page = 1;
+  const { branches, error } = await getData();
 
-  // Fetch branches data using useQuery
-  const { data, isLoading, isError } = useQuery<any, Error>(
-    ["branchesData", page],
-    () => fetchBranchesData(),
-    {
-      onError: (error) => {
-        console.error("Error fetching branches data:", error);
-        message.error("Failed to load branches. Please try again.");
-      },
-    }
-  );
-
-  const branches = data?.data;
+  const isLoading = !branches && !error;
 
   return (
-    <div className="flex flex-col py-5 px-4 md:px-8">
-      <h1 className="uppercase font-normal text-center md:my-[50px] text-xl tracking-[.2em] text-[#454545] mb-8">
-        {t("branches")}
-      </h1>
-      <Row gutter={[16, 16]}>
-        {isLoading ? (
-          <div className="flex justify-center items-center w-full py-10">
-            <Spinner size="lg" color="#87754f" /> {/* Chakra UI Spinner */}
-          </div>
-        ) : isError ? (
-          <p className="text-center text-red-500">Error loading branches</p>
-        ) : (
-          branches?.map((branch: IBranchItem) => (
-            <Col xs={24} sm={12} md={8} lg={8} key={branch.id}>
-              <BranchCard
-                title={branch.name}
-                address={branch.name}
-                phone={branch.phone}
-                location={branch.redirectTo}
-              />
-            </Col>
-          ))
-        )}
-      </Row>
-      <div className="mt-8 md:mt-14">
-        {branches ? (
-          <YandexMap branches={branches} />
-        ) : (
-          <div className="flex justify-center items-center">
-            <Spinner size="lg" color="#87754f" />{" "}
-            {/* Chakra UI Spinner for the map */}
-          </div>
-        )}
-      </div>
-    </div>
+    <BranchesPage branches={branches} isLoading={isLoading} error={error} />
   );
 }
