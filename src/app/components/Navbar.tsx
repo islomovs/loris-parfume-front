@@ -259,7 +259,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               menu={{ items }}
               trigger={["click"]}
             >
-              <a
+              <div
                 className="text-xs md:text-[10px] uppercase hover:text-[#454545]"
                 onClick={(e) => e.preventDefault()}
               >
@@ -274,7 +274,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                   />
                   <DownOutlined />
                 </Space>
-              </a>
+              </div>
             </Dropdown>
           </div>
           <Link href="/">
@@ -378,12 +378,12 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                     : []
                 }
               >
-                {collectionName}
+                <h2>{collectionName}</h2>
               </NavButton>
             );
           })}
           <NavButton type="md" link="/branches" isUnderline={true}>
-            {t("navbar.branches")}
+            <h2>{t("navbar.branches")}</h2>
           </NavButton>
           <div
             className="relative py-[9px] text-xs tracking-[.2em] uppercase my-2 md:my-[6px] mx-2 md:mx-[14px] font-montserrat bg-transparent cursor-pointer group after:bg-black after:absolute after:h-[2px] after:w-0 after:top-[38px] after:left-0 hover:after:w-full after:transition-all after:duration-300"

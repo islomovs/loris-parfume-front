@@ -20,6 +20,7 @@ import {
   fetchRecommendedProductsData,
 } from "@/services/products";
 import RecommendedSlider from "./components/RecommendedSlider";
+import Script from "next/script";
 
 export default function Home() {
   const [collectionId, setCollectionId] = useState<number>(0);
@@ -53,6 +54,35 @@ export default function Home() {
     );
 
   const recommendedProducts = recommendedProductsData?.data.recommendedItems;
+
+  const JsonId = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    url: "https://lorisparfume.uz",
+    logo: "https://lorisparfume.uz/logo600.jpg",
+    name: "Loris Parfum",
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: "+998 93 911 99 44",
+        areaServed: "UZ",
+        availableLanguage: ["Uzbek", "Russian"],
+        email: "uzbekistan@lorisparfum.com",
+      },
+    ],
+    sameAs: [
+      "https://t.me/Loris_perfume",
+      "https://www.instagram.com/lorisparfum_uz",
+    ],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Tashkent",
+      addressRegion: "Tashkent Region",
+      addressCountry: "UZ",
+    },
+  };
+
+  const jsonID = JSON.stringify(JsonId);
 
   return (
     <>
@@ -107,6 +137,11 @@ export default function Home() {
           )}
         </Row>
       </section>
+      <Script
+        id="json-id"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonID }}
+      />
     </>
   );
 }

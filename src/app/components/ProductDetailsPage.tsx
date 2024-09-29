@@ -175,6 +175,18 @@ export default function ProductDetailsPage({
       ratingValue: "4.8",
       reviewCount: "23",
     },
+    offers: {
+      "@type": "Offer",
+      url: `${process.env.NEXT_PUBLIC_DOMAIN}/products/${product?.data?.slug}`,
+      priceCurrency: "UZS",
+      price: product?.data?.price,
+      itemCondition: "https://schema.org/NewCondition",
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Loris Parfume",
+      },
+    },
   };
 
   const microdataJson = JSON.stringify(microdata);
@@ -266,7 +278,6 @@ export default function ProductDetailsPage({
       </div>
       <Script
         id="microdata-product"
-        strategy="lazyOnload"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: microdataJson }}
       />

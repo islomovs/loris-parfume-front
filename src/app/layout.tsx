@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Poppins } from "next/font/google";
 import { RootChildren } from "./components/RootChildren";
 import { Providers } from "./providers";
@@ -15,7 +16,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Loris Parfum",
+  title: "Loris Parfum – Ароматы премиум-класса для мужчин и женщин",
   description:
     "Откройте для себя мир уникальных ароматов с LORIS Parfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
   applicationName: "Loris Parfume",
@@ -30,6 +31,10 @@ export const metadata: Metadata = {
     "gigiyena",
     "hygiene",
     "tashkent",
+    "parfum",
+    "hushbo'ylantruvchi",
+    "loris",
+    "uzbekistan",
   ],
   robots: {
     index: true,
@@ -44,11 +49,11 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Loris Parfume",
+    title: "Loris Parfum – Ароматы премиум-класса для мужчин и женщин",
     description:
       "Откройте для себя мир уникальных ароматов с LORIS Parfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
     url: "https://lorisparfume.uz",
-    images: "https://lorisparfume.uz/logo.jpg",
+    images: "https://lorisparfume.uz/logo600.jpg",
     siteName: "Loris Parfume",
     locale: "ru_RU",
     type: "website",
@@ -57,7 +62,10 @@ export const metadata: Metadata = {
     icon: ["/favicon-logo.png"],
     apple: ["/favicon-logo.png"],
   },
-  manifest: "/manifest.json",
+  manifest: "/site.webmanifest.json",
+  verification: {
+    google: "VQFkJCahv2Oab-Bi55UbMB26MoUu1Kx3cYp0T7v2wK0",
+  },
 };
 
 export default function RootLayout({
@@ -66,7 +74,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <body className={poppins.className}>
         <Providers>
           <PageTransition>
@@ -84,12 +92,10 @@ export default function RootLayout({
         ></script>
         <noscript>
           <div>
-            <Image
+            <img
               src="https://mc.yandex.ru/watch/98371026"
               style={{ position: "absolute", left: "-9999px" }}
               alt="yandex"
-              width={100}
-              height={100}
             />
           </div>
         </noscript>

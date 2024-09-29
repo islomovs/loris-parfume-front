@@ -180,7 +180,9 @@ export const ProductCard = ({
       </div>
 
       <div className="flex flex-col justify-between w-full md:px-[15px] md:py-[10px] md:mt-[10px] px-[11px] py-[6px]">
-        <p className="text-xs md:text-[15px] font-normal break-words h-10">{name}</p>
+        <h2 className="text-xs md:text-[15px] font-normal break-words h-10">
+          {name}
+        </h2>
         <div className="flex flex-row justify-between items-end w-full">
           <div className="mt-2">
             {product?.discountPercent > 0 && product?.price ? (
