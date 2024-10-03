@@ -37,7 +37,6 @@ export const NewPasswordForm: React.FC<INewPasswordFormProps> = ({
   });
 
   const onSubmit: SubmitHandler<TResetNewPasswordFormData> = (data) => {
-    console.log("Form Data: ", data);
     onPasswordChange({
       newPassword: data.newPassword,
       reNewPassword: data.reNewPassword,

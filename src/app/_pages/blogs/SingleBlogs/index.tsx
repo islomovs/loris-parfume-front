@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 import { BsChevronRight } from "react-icons/bs";
 
 const SingleBlogsPage = ({ data }: { data: IBlog }) => {
-  console.log(data);
   const { t } = useTranslation();
   const title = i18n.language === "uz" ? data?.titleUz : data?.titleRu;
   const description =
