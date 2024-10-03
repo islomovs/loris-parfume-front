@@ -72,7 +72,8 @@
   "b2b": {
     "distribution": "Hududlarga tarqatish",
     "europe": "Yevropa brendlarining Rossiya omborida mavjudligi",
-    "contract": "Zavodlar bilan to'g'ridan-to'g'ri shartnomalar — siz uchun eng yaxshi narx kafolati",
+    "contractText1": "Zavodlar bilan to'g'ridan-to'g'ri shartnomalar — siz uchun eng yaxshi narx kafolati",
+    "contractText2": "Biznes ochishda yordam",
     "success_sent": "Muvaffaqiyatli yuborildi",
     "cartEmpty": "Sizning savatangiz bo'sh.",
     "name": "Ism",
