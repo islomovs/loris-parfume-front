@@ -213,15 +213,15 @@ export default function Account() {
                           title={t("orderDetails.paymentType")}
                           description={order.paymentType}
                         />
-                        {order.paymentType === t("orderDetails.cash") ? (
-                          " "
-                        ) : (
-                          <OrderDetailsItem
-                            title={t("orderDetails.paymentLink")}
-                            description={order.paymentLink}
-                            isDescriptionLink
-                          />
-                        )}
+                        {order.paymentType === t("orderDetails.cash")
+                          ? " "
+                          : !order?.isPaid && (
+                              <OrderDetailsItem
+                                title={t("orderDetails.paymentLink")}
+                                description={order.paymentLink}
+                                isDescriptionLink
+                              />
+                            )}
                         {order.paymentType === "uzum nasiya" && (
                           <OrderDetailsItem
                             title="Status"

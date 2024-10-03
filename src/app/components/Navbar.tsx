@@ -37,6 +37,8 @@ import { DrawerCartItem } from "./DrawerCartItem";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Spinner } from "@chakra-ui/react";
+import { BsChevronDown } from "react-icons/bs";
+
 import { useCollectionStore } from "@/services/useCollectionStore";
 import { FaInstagram, FaTelegramPlane } from "react-icons/fa";
 import { VscAccount } from "react-icons/vsc";
@@ -62,6 +64,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [eCatalog, setECatalog] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -272,7 +275,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                     alt={`${i18n.language.toLowerCase()} flag`}
                     width={20}
                   />
-                  <DownOutlined />
+                  <BsChevronDown />
                 </Space>
               </div>
             </Dropdown>
@@ -384,6 +387,9 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
           })}
           <NavButton type="md" link="/branches" isUnderline={true}>
             <h2>{t("navbar.branches")}</h2>
+          </NavButton>
+          <NavButton type="md" link="/b2b" isUnderline={true}>
+            <h2>{t("b2b.b2b")}</h2>
           </NavButton>
           <div
             className="relative py-[9px] text-xs tracking-[.2em] uppercase my-2 md:my-[6px] mx-2 md:mx-[14px] font-montserrat bg-transparent cursor-pointer group after:bg-black after:absolute after:h-[2px] after:w-0 after:top-[38px] after:left-0 hover:after:w-full after:transition-all after:duration-300"
@@ -650,6 +656,90 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
               </div>
             );
           })}
+          <div
+            className="flex justify-between items-center cursor-pointer"
+            style={{
+              borderBottom: "1px solid #454545",
+              paddingBottom: "4px",
+            }}
+          >
+            <Link
+              href={`/b2b`}
+              className="text-lg uppercase font-semibold flex-1"
+              onClick={toggleSidebar}
+            >
+              {t("b2b.b2b")}
+            </Link>
+          </div>
+          {
+            <div className="relative">
+              <div
+                className="flex justify-between items-center cursor-pointer"
+                style={{
+                  borderBottom: "1px solid #454545",
+                  paddingBottom: "4px",
+                }}
+              >
+                <Link
+                  href={`/collections/`}
+                  className="text-lg uppercase font-semibold flex-1"
+                  onClick={toggleSidebar}
+                >
+                  {t("navbar.e-catalog")}
+                </Link>
+                {
+                  <button
+                    className="ml-2"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setECatalog(!eCatalog);
+                    }}
+                  >
+                    {eCatalog ? (
+                      <MinusOutlined style={{ color: "#454545" }} />
+                    ) : (
+                      <PlusOutlined style={{ color: "#454545" }} />
+                    )}
+                  </button>
+                }
+              </div>
+
+              {/* Categories collapse */}
+              {eCatalog && (
+                <div className="ml-4 mt-2">
+                  <ul>
+                    {!isLoadingCatalogues ? (
+                      catalogues?.map((catalogue: ICatalogueItem) => {
+                        const name =
+                          i18n.language == "ru"
+                            ? catalogue.nameRu
+                            : catalogue.nameUz;
+                        const file =
+                          i18n.language == "ru"
+                            ? catalogue.fileRu
+                            : catalogue.fileUz;
+                        return (
+                          <li key={catalogue.id}>
+                            <Link
+                              className="block text-sm tracking-[.2em] py-1 border-b border-[#454545]"
+                              style={{ color: "#454545" }}
+                              href={`${file}`}
+                            >
+                              {name}
+                            </Link>
+                          </li>
+                        );
+                      })
+                    ) : (
+                      <Spinner color="#87754f" size="xl" />
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+          }
+
           <Link
             href="/branches"
             className="text-lg font-semibold border-b border-solid border-b-[#454545] pb-1"

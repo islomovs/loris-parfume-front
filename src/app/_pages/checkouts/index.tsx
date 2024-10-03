@@ -8,7 +8,8 @@ import { useMutation } from "react-query";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
-import { message, Image } from "antd";
+import { message, Image, Radio, RadioChangeEvent } from "antd";
+// import Image as from "next/image";
 import { useTranslation } from "react-i18next";
 // import PaymeIcon from "../../../../public/payme-logo.BdmkZoD4.svg";
 // import ClickIcon from "../../../../click-logo.jzgAXUV7.svg";
@@ -24,6 +25,7 @@ import { CustomInput } from "@/app/components/CustomInput";
 import CustomTextArea from "@/app/components/CustomTextArea";
 import { CheckoutCartItem } from "@/app/components/CheckoutCartItem";
 import PromoCodeInput from "@/app/components/PromoCodeInput";
+import PhoneInput from "react-phone-input-2";
 
 const allPaymentOptions = [
   { id: 0, title: "payme", icon: "/payme-logo.BdmkZoD4.svg" },
@@ -63,6 +65,7 @@ const CheckoutPage = () => {
   });
   const [branchName, setBranchName] = useState<string>("");
   const [city, setCity] = useState<string>("");
+  const [paymentType, setPaymentType] = useState<string>("");
   const [coords, setCoords] = useState([41.314472, 69.27991]);
   const [branchId, setBranchId] = useState<number | null>(null);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
@@ -77,10 +80,13 @@ const CheckoutPage = () => {
   const [deliverySum, setDeliverySum] = useState<number>(0);
   // Debounce Timer
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const token = localStorage.getItem("token");
+  const [activePayment, setActivePayment] = useState<string>(""); // State to track active payment type
 
-  const deliveryOptions = [
-    { id: 1, title: t("checkout.deliveryOptions.delivery") },
-  ];
+  const handlePaymentClick = (paymentType: string) => {
+    setActivePayment(paymentType);
+    setValue("paymentType", paymentType);
+  };
 
   // Calculate final total with discount logic
   useEffect(() => {
@@ -109,6 +115,7 @@ const CheckoutPage = () => {
       },
       onSuccess: (data) => {
         loadingBarRef.current?.complete();
+
         addOrder(data);
         if (data.paymentType.toLowerCase() === "uzum nasiya") {
           message.success(
@@ -127,6 +134,9 @@ const CheckoutPage = () => {
       onError: () => {
         loadingBarRef.current?.complete();
         message.error(t("checkout.failure"));
+        if (!token) {
+          router.push("/");
+        }
       },
     }
   );
@@ -222,6 +232,8 @@ const CheckoutPage = () => {
     orderMutation.mutate(orderData);
   };
 
+  const phone = watch("phone", "");
+
   return (
     <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
@@ -249,12 +261,20 @@ const CheckoutPage = () => {
               className="flex flex-col gap-4 relative"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <CustomDropdown
+              {/* <CustomDropdown
                 name="deliveryType"
                 options={deliveryOptions}
                 title={t("checkout.deliveryType")}
                 control={control}
-              />
+              /> */}
+              <div
+                className={`flex flex-col  w-full  p-2 cursor-pointer rounded-md border-2  transition duration-300`}
+              >
+                <p className="text-[10px] text-[gray]">
+                  {t("checkout.deliveryType")}
+                </p>
+                <p className="font-[500]">{t("checkout.delivery")}</p>
+              </div>
               <YandexMap
                 onLocationChange={onLocationChange}
                 onNearestBranch={function (coords: [number, number]): void {
@@ -267,11 +287,32 @@ const CheckoutPage = () => {
                 borders="rounded"
                 title={t("checkout.fullName")}
               />
-              <CustomInput
+              {/* <CustomInput
                 {...register("phone")}
                 type="text"
                 borders="rounded"
                 title={t("checkout.phoneNumber")}
+              /> */}
+              <PhoneInput
+                country={"uz"} // Default country (e.g., Uzbekistan)
+                value={phone} // Bind the phone value
+                onChange={(e: any) => setValue("phone", e)}
+                enableSearch={false} // Enable search for countries
+                placeholder="Enter phone number"
+                inputStyle={{
+                  width: "100%",
+                  height: "50px",
+                  borderRadius: "5px",
+                  border: "1px solid #e3e3e3",
+                  outline: "1px solid #e3e3e3", // General outline
+                  paddingTop: "13.5px",
+                  paddingBottom: "13.5px",
+                  outlineWidth: "2px",
+                  transition: "all 0.3s",
+                }}
+                dropdownStyle={{
+                  textAlign: "left",
+                }}
               />
               <CustomInput
                 value={branchName}
@@ -292,12 +333,33 @@ const CheckoutPage = () => {
                 borders="rounded"
                 title={t("checkout.comment")}
               />
-              <CustomDropdown
+              {/* <CustomDropdown
                 name="paymentType"
                 options={filteredPaymentOptions}
                 title={t("checkout.paymentType")}
                 control={control}
-              />
+              /> */}
+              <div className="flex items-center gap-4">
+                {allPaymentOptions.map((option) => (
+                  <div
+                    key={option.id}
+                    onClick={() => {
+                      handlePaymentClick(option.title);
+                    }}
+                    className={`flex items-center w-full gap-2 p-4 cursor-pointer rounded-md border-2 ${
+                      activePayment === option.title
+                        ? "border-[#53B7D1]"
+                        : "border-[#e3e3e3]"
+                    } hover:border-[#53B7D1] transition duration-300`}
+                  >
+                    <Image
+                      preview={false}
+                      src={option.icon}
+                      alt={option.title}
+                    />
+                  </div>
+                ))}
+              </div>
 
               <div className="md:hidden flex-[4] top-0 right-0 left-0">
                 <div className="w-full flex flex-col gap-5">

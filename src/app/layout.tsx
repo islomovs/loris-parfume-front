@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import { RootChildren } from "./components/RootChildren";
 import { Providers } from "./providers";
 import PageTransition from "./components/PageTransition";
+import "react-phone-input-2/lib/style.css"; // Import the CSS file
 
 import "./globals.css";
 import { Metadata } from "next";

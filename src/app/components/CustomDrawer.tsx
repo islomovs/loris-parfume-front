@@ -63,14 +63,14 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
       }
     });
     handleClose();
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
-    if (token) {
-      router.push("/checkouts");
-    } else {
-      message.error("Please log in!");
-      router.push("/account/login");
-    }
+    // if (token) {
+    router.push("/checkouts");
+    // } else {
+    //   message.error("Please log in!");
+    //   router.push("/account/login");
+    // }
   }, [cart, apiQuantity, mutation, handleClose, router]);
 
   const totalPrice = totalSum();

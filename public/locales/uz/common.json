@@ -69,6 +69,28 @@
       "close": "Yopish"
     }
   },
+  "b2b": {
+    "distribution": "Hududlarga tarqatish",
+    "europe": "Yevropa brendlarining Rossiya omborida mavjudligi",
+    "contract": "Zavodlar bilan to'g'ridan-to'g'ri shartnomalar — siz uchun eng yaxshi narx kafolati",
+    "success_sent": "Muvaffaqiyatli yuborildi",
+    "cartEmpty": "Sizning savatangiz bo'sh.",
+    "name": "Ism",
+    "partner": "Hamkorlik ",
+    "phone": "Telefon",
+    "contact": "Aloqa",
+    "b2b": "Hamkorlik (B&B)",
+    "email": "Elektron pochta",
+    "message": "Xabar",
+    "sent": "Yuborish",
+    "flag": "Yevropa brendlarining to'g'ri va tanlangan qatorlari",
+    "star": "Mutaxassislarning ko'rish va tajribasi",
+    "key": "Toptan xaridorlar uchun qulay chegirmalar tizimi",
+    "card_title": "Bizning afzalliklarimiz:",
+    "euro_txt": "Yevropadan yetkazib berish, aniq logistika, tez yetkazib berish",
+    "contact_source": "Aloqa manbai"
+}
+,
   "products": "tovarlar",
   "sortBy": "Saralash",
   "sortOptions": {
@@ -179,7 +201,9 @@
   },
   "about": {
     "title": "Biz haqimizda",
-    "description": "LORIS, 2006-yildan buyon innovatsion hidlari bilan tanilgan, 500 dan ortiq do‘kon va kiosk orqali o‘ziga xos xushbo‘yliklarni dunyo bo‘ylab tarqatmoqda. LORIS, global ilmiy-tadqiqot laboratoriyalarida ishlab chiqarilgan parfyumeriya, xona xushbo‘yligi va shaxsiy parvarish mahsulotlari bilan har kuni millionlab insonlarga yetib boradi; ishlab chiqarish Istanbulda amalga oshiriladi. Brend, asosan Yaqin Sharq, Yevropa va Afrika bozorlariga eksport qilib, kosmetika sohasida global yetakchiga aylanmoqda. LORIS, ISO 22716:2007 GMP va IFRA standartlariga mos ishlab chiqarish orqali gigiena va sifatni ta’minlaydi. Mijozlarning mamnuniyatini ta'minlash va yuqori sifatni saqlashga doimo e'tibor qaratadi."
+    "description": "LORIS, 2006-yildan buyon innovatsion hidlari bilan tanilgan, 500 dan ortiq do‘kon va kiosk orqali o‘ziga xos xushbo‘yliklarni dunyo bo‘ylab tarqatmoqda. LORIS, global ilmiy-tadqiqot laboratoriyalarida ishlab chiqarilgan parfyumeriya, xona xushbo‘yligi va shaxsiy parvarish mahsulotlari bilan har kuni millionlab insonlarga yetib boradi; ishlab chiqarish Istanbulda amalga oshiriladi. Brend, asosan Yaqin Sharq, Yevropa va Afrika bozorlariga eksport qilib, kosmetika sohasida global yetakchiga aylanmoqda. LORIS, ISO 22716:2007 GMP va IFRA standartlariga mos ishlab chiqarish orqali gigiena va sifatni ta’minlaydi. Mijozlarning mamnuniyatini ta'minlash va yuqori sifatni saqlashga doimo e'tibor qaratadi.",
+    "main_txt_title": "Loris Parfum: Sizning Aromaningiz, Sizning Stiliniz",
+  "main_text":"2006 yilda Turkiyada tashkil etilgan Loris Parfüm, parfyumlarini dunyoning to‘rt burchagiga yetkazishni muvaffaqiyatli amalga oshirgan brendga aylandi. Loris, har bir tomchida o'tmishning nafisligini va zamonaviy dunyoning dinamikalarini birlashtirgan holda, foydalanuvchilarini unutilmas hid safariga olib chiqadi. An'anaviy va zamonaviy notalarning ajoyib birlashmasi bilan yaratilgan bu parfyumlar, zamonlarsiz bir jozibadorlikni taklif etadi. Har bir shisha, faqat bir parfyum emas, balki shaxsiy uslubingizni to‘ldiradigan bir aksessuar sifatida ajralib turadi. Loris Parfüm, o'zingizni ifoda etishning eng nafis yo‘lini taqdim etadi va sizni o'z hikoyangizning bosh roliga olib chiqadi. <br/> Loris Parfüm bilan har kuni yangi bir boshlanish qiling; hissiyotlaringizni harakatga keltiradigan bu hidlar, o'zingizga bo'lgan ishonchingizni va noyobligingizni ochib beradi. Har biri ehtiyotkorlik bilan ishlab chiqilgan hidlar, uslubingizni to‘ldirib, o‘zingizni eng yaxshi tarzda ifoda etishingizga yordam beradi. Loris Parfüm, hidlari bilan hayotingizga nafislik va hissiyot qo‘shib, sizni har bir lahzadan bahramand bo‘lishga taklif etadi. <br/> O'zingizni kashf eting, uslubingizni aks ettiring, Loris Parfüm bilan hayotga o'z hidingizni qoldiring. Parfyum, faqat go‘zal hidlash uchun emas, balki uslubingiz va shaxsiyatingizni aks ettiruvchi bir aksessuar hisoblanadi. To‘g‘ri parfyum tanlovi, o‘zingizni yanada ishonchli va jozibali his qilishingizga yordam berishi mumkin. Loris Parfüm, sizga parfyum turlarining eng keng tanlovini taklif qilib, orzuingizdagi hidi kashf etishingizga yordam bermoqda.</p><p>Loris Parfüm'da Sizni Nimalar Kutmoqda? <br/> Eng Yaxshi Erkak Parfyumlari va Eng Yaxshi Ayol Parfyumlari: Loris Parfüm, har bir did va uslubga mos keladigan keng parfyum tanloviga ega. Eng mashhur erkak va ayol parfyumlari, klassik va zamonaviy hidlar, niche parfyumlari va boshqalar Loris Parfüm'da topishingiz mumkin. <br/>Davomli Parfyumlar va Maxsus Parfyumlar: Loris Parfüm, kun davomida davom etadigan parfyumlar va maxsus kunlar uchun ideal bo‘lgan maxsus parfyumlarni taklif qiladi.<br/>Vanil Hidli Parfyumlar, Amber Parfyumlar va Boshqalar: Loris Parfüm'da, vanil, amber, gulsi, yog‘ochsi, mevalik kabi turli hid oilalaridan parfyumlarni topishingiz mumkin.<br/>Har Bütçaga Mos Parfyumlar: Loris Parfüm, har bir byudjetga mos parfyum variantlarini taqdim etadi. Arzon narxlardagi parfyumlardan to‘g‘ri narxlardagi luks parfyumlarga qadar keng tanlov mavjud.<br/><p>Loris Parfüm bilan Hidlar Safarangizga Boshlang! </p><p>Parfyum, ko‘rinmas bir aksessuar singari; shaxsiyatimizni to‘ldiradi, ruhiy holatimizni aks ettiradi va unutilmas bir iz qoldirishimizga yordam beradi. Qanday hid sizga mos keladi? Shokoladli bir sir, yangi va tazelik, yog‘ochsimon bir tabiiylik, ziravorli bir ehtiros yoki gullarni andozalagan bir romantikami?</p><br/> Yangi Parfyumlar: Meva va dengiz notalari bilan tazelik hissi beradigan yangi parfyumlar, bahor va yoz oylari uchun ajralmasdir. Kundalik foydalanish uchun ideal bo‘lgan ushbu parfyumlar, energiya va erkinlik ruhidagi shaxsiyatlarga mo‘ljallangan.<br/>Yog‘ochsimon Parfyumlar: Tabiatning ma'naviyatini aks ettiruvchi yog‘ochsimon parfyumlar, sandal, sidr va vetiver kabi notalari bilan erkaklarga xos ta'sir yaratadi. Kuchli va karizmatik erkaklarning sevimli tanlovi bo‘lgan ushbu parfyumlar har faslda ishlatilishi mumkin.<br/>Ziravorli Parfyumlar: Sirli va maftunkor ziravorli parfyumlar, karanfil, dolchin va zanjabil kabi notalari bilan qish oylarda ajoyib taassurot qoldiradi. Ehtirosli va o‘ziga xos shaxsiyatlarga mo‘ljallangan ushbu parfyum unutilmas bir iz qoldiradi.<br/>Gullsi Parfyumlar: Nafis va romantik gullsi parfyumlar, yasemin, gul va lilýum kabi notalari bilan ayolga xos ta'sir yaratadi. Har faslda ishlatilishi mumkin bo‘lgan ushbu parfyumlar, romantik va hissiy shaxsiyatlarga mo‘ljallangan.<br/>Parfyum tanlovi shaxsiy diddir. Sinab ko‘rishdan qo‘rqmang, turli hidlarni kashf eting va sizga eng mosini toping. Unutmang, parfyumingiz sizni ta'riflovchi sirli bir hikoyadir. Parfyumdan tashqari, biz ixtisoslashgan boshqa hidlar ham mavjud. Ularga ham bir ko‘z tashlaylik.<br/>Loris Parfüm, parfyum ixlosmandlarining ajralmas brendi bo‘lib qolmoqda. Loris, 'Sening Hiding, Sening Uslubing' shiori bilan har bir parfyum ixlosmandini o‘z hidini topishga taklif etadi. Parfyum va boshqa mahsulotlarimiz uchun kuzatib boring!</p>"
   },
   "validation": {
     "phoneNumber": "Telefon raqami majburiy",

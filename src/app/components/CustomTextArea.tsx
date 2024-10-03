@@ -3,15 +3,19 @@ import { cn } from "../../helpers/mergeFunction";
 
 interface ICustomTextAreaProps {
   title: string;
+  value?: any;
   borders: "rounded" | "no-rounded";
+  onChange?: any;
 }
 
 const CustomTextArea = forwardRef<HTMLTextAreaElement, ICustomTextAreaProps>(
-  ({ title, borders, ...rest }, ref) => {
+  ({ title, borders, value, onChange, ...rest }, ref) => {
     return (
       <label className="form-group relative flex flex-col-reverse">
         <textarea
           ref={ref}
+          value={value}
+          onChange={onChange}
           className={cn(
             `peer transition-all duration-300 border-none focus:border-none block outline outline-[#e3e3e3] py-[13.5px] px-[11px] focus:outline-2 focus:outline-primary placeholder-transparent pb-0 peer:focus:pb-[4px] peer:not(:placeholder-shown):pb-[4px] min-h-[100px]`,
             {

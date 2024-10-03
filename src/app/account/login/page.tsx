@@ -15,6 +15,8 @@ import { addToCart } from "@/services/cart";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { message } from "antd";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css"; // Import the CSS file
 
 // Utility function to sanitize phone number
 const sanitizeLoginPhoneNumber = (phone: string) =>
@@ -29,13 +31,7 @@ export default function Login() {
 
   // Schema validation for form
   const loginSchema = yup.object({
-    phone: yup
-      .string()
-      .matches(
-        /^\+998 \(\d{2}\) \d{3}-\d{2}-\d{2}$/,
-        t("validation.phoneFormat")
-      )
-      .required(t("validation.phoneNumberRequired")),
+    phone: yup.string().required(t("validation.phoneNumberRequired")),
     password: yup
       .string()
       .min(8, t("validation.passwordMinLength"))
@@ -46,6 +42,8 @@ export default function Login() {
     register,
     handleSubmit,
     setValue,
+    watch,
+
     formState: { errors },
   } = useForm<TLoginFormData>({
     resolver: yupResolver(loginSchema),
@@ -103,6 +101,7 @@ export default function Login() {
       console.error("Error syncing cart with server:", error);
     }
   };
+  const phone = watch("phone", "");
 
   return (
     <div className="flex flex-col justify-center items-center py-10 md:py-20 px-4 md:px-0">
@@ -149,14 +148,34 @@ export default function Login() {
             transition={{ duration: 0.3 }}
           >
             <div className="w-full sm:w-[400px]">
-              <CustomInput
+              {/* <CustomInput
                 className="sm:w-[400px] w-full"
                 {...register("phone", { required: "Phone number is required" })}
                 title={t("account.login.phoneNumber")}
                 borders="no-rounded"
                 type="text"
                 isPhoneNumber={true}
-                onChange={(e) => setValue("phone", e.target.value)} // Sync the phone number value with form state
+              /> */}
+              <PhoneInput
+                country={"uz"} // Default country (e.g., Uzbekistan)
+                value={phone} // Bind the phone value
+                onChange={(e: any) => setValue("phone", e)}
+                enableSearch={false} // Enable search for countries
+                placeholder="Enter phone number"
+                inputStyle={{
+                  width: "100%",
+                  height: "50px",
+                  borderRadius: "0px",
+                  border: "1px solid #e3e3e3",
+                  outline: "1px solid #e3e3e3", // General outline
+                  paddingTop: "13.5px",
+                  paddingBottom: "13.5px",
+                  outlineWidth: "2px",
+                  transition: "all 0.3s",
+                }}
+                dropdownStyle={{
+                  textAlign: "left",
+                }}
               />
               {errors.phone && (
                 <p className="text-sm text-start sm:text-[14px] text-[#CB2B2B] mt-1">
@@ -173,6 +192,7 @@ export default function Login() {
                 borders="no-rounded"
                 type="password"
               />
+
               {errors.password && (
                 <p className="text-sm text-start sm:text-[14px] text-[#CB2B2B] mt-1">
                   {errors.password.message}

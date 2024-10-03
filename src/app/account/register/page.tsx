@@ -21,20 +21,22 @@ import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { message } from "antd";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css"; // Import the CSS file
 
-const sanitizePhoneNumber = (phone: string) => phone.replace(/[^\d+]/g, "");
+const sanitizePhoneNumber = (phone: string) => {
+  // Remove any character that is not a digit or '+'
+  const sanitizedPhone = phone.replace(/[^\d]/g, "");
+
+  // Check if the phone number starts with a '+'
+  return sanitizedPhone.startsWith("+") ? sanitizedPhone : `+${sanitizedPhone}`;
+};
 
 export default function Register() {
   const { t } = useTranslation("common");
   const registerSchema = yup.object({
     fullName: yup.string().required(t("validation.fullNameRequired")),
-    phone: yup
-      .string()
-      .matches(
-        /^\+998 \(\d{2}\) \d{3}-\d{2}-\d{2}$/,
-        t("validation.phoneFormat")
-      )
-      .required(t("validation.phoneNumberRequired")),
+    phone: yup.string().required(t("validation.phoneNumberRequired")),
     password: yup
       .string()
       .min(8, t("validation.passwordMinLength"))
@@ -48,6 +50,7 @@ export default function Register() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<TRegisterFormData>({
     resolver: yupResolver(registerSchema),
@@ -145,10 +148,9 @@ export default function Register() {
   );
 
   const onSubmit: SubmitHandler<TRegisterFormData> = (data) => {
-    loadingBarRef.current?.continuousStart(); // Start the loading bar when submitting the form
     const sanitizedPhone = sanitizePhoneNumber(data.phone);
     setPhoneNumber(sanitizedPhone);
-    registrationMutation.mutate({ ...data, phone: sanitizedPhone });
+    registrationMutation.mutate({ ...data });
   };
 
   const handleVerificationSubmit = (verificationCode: string) => {
@@ -174,6 +176,7 @@ export default function Register() {
       console.error("Error syncing cart with server:", error);
     }
   };
+  const phone = watch("phone", "");
 
   return (
     <div className="flex flex-col items-center py-10 md:py-20 px-4 md:px-0">
@@ -222,7 +225,7 @@ export default function Register() {
           )}
         </div>
         <div className="w-full">
-          <CustomInput
+          {/* <CustomInput
             {...register("phone")}
             className="w-full"
             title={t("account.register.phoneNumber")}
@@ -230,6 +233,27 @@ export default function Register() {
             type="text"
             isPhoneNumber={true}
             onChange={(e) => setValue("phone", e.target.value)}
+          /> */}
+          <PhoneInput
+            country={"uz"} // Default country (e.g., Uzbekistan)
+            value={phone} // Bind the phone value
+            onChange={(e: any) => setValue("phone", e)}
+            enableSearch={false} // Enable search for countries
+            placeholder="Enter phone number"
+            inputStyle={{
+              width: "100%",
+              height: "50px",
+              borderRadius: "0px",
+              border: "1px solid #e3e3e3",
+              outline: "1px solid #e3e3e3",
+              paddingTop: "13.5px",
+              paddingBottom: "13.5px",
+              outlineWidth: "2px",
+              transition: "all 0.3s",
+            }}
+            dropdownStyle={{
+              textAlign: "left",
+            }}
           />
           {errors.phone && (
             <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">

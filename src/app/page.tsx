@@ -11,7 +11,7 @@ import {
 import { CollectionCard } from "./components/CollectionCard";
 import { MainCarousel } from "./components/MainCarousel";
 import { useQuery } from "react-query";
-import { Spinner } from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 import "../utils/i18n";
 import { useTranslation } from "react-i18next";
 import i18n from "../utils/i18n";
@@ -21,6 +21,10 @@ import {
 } from "@/services/products";
 import RecommendedSlider from "./components/RecommendedSlider";
 import Script from "next/script";
+import StaticBanners from "./components/StaticBanners";
+import BlogsCarousel from "./components/Blogs";
+import blogsTitle from "../../public/blogs.webp";
+import Image from "next/image";
 
 export default function Home() {
   const [collectionId, setCollectionId] = useState<number>(0);
@@ -107,7 +111,7 @@ export default function Home() {
         )}
       </div>
       {/* Collection banners section */}
-      <section className="m-5">
+      <section className="m-5 py-10 md:mb-20">
         <Row gutter={[30, 30]} className="justify-center">
           {!isLoadingCBanners ? (
             collectionBanners?.map((banner: ICollectionBanner) => {
@@ -136,6 +140,25 @@ export default function Home() {
             </div>
           )}
         </Row>
+      </section>
+      <section className="m-5 py-10 md:mb-20">
+        <StaticBanners />
+      </section>
+      <Center className="text-center">
+        <Image src={blogsTitle} alt="title" />
+      </Center>
+      <section className="m-5 py-10 md:mb-20">
+        <BlogsCarousel />
+      </section>
+      <section className="max-w-[1000px] mx-auto m-5 p-5 md:p-5 py-10 md:mb-20">
+        <h2 className="text-center mb-5 text-[25px] font-bold">
+          {t("about.main_txt_title")}
+        </h2>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: t("about.main_text"),
+          }}
+        />
       </section>
       <Script
         id="json-id"
