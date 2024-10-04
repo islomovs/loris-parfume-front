@@ -321,7 +321,7 @@ export default function Account() {
             <div className="border-t border-solid border-t-[#e3e3e3] mt-10 md:mt-20">
               <button
                 onClick={handleLogout}
-                className="uppercase text-[11px] text-[#9D9D9D] tracking-[.2em] font-normal mb-[25px] text-start"
+                className="uppercase text-[14px] text-[#CB2B2B] tracking-[.2em] font-bold mb-[25px] text-start"
               >
                 {t("orderDetails.logOut")}
               </button>

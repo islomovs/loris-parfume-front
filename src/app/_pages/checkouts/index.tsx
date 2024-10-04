@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { BiBasket } from "react-icons/bi";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -26,6 +26,7 @@ import CustomTextArea from "@/app/components/CustomTextArea";
 import { CheckoutCartItem } from "@/app/components/CheckoutCartItem";
 import PromoCodeInput from "@/app/components/PromoCodeInput";
 import PhoneInput from "react-phone-input-2";
+import { fetchUserInfo } from "@/services/user";
 
 const allPaymentOptions = [
   { id: 0, title: "payme", icon: "/payme-logo.BdmkZoD4.svg" },
@@ -106,6 +107,8 @@ const CheckoutPage = () => {
     setDiscountPercent(discountPercent);
     setAppliedPromoCode(promoCode); // Store the applied promo code
   };
+
+  const { data: userInfo } = useQuery("userInfo", fetchUserInfo);
 
   const orderMutation = useMutation(
     (orderData: OrderData) => createOrder(orderData),
@@ -226,6 +229,7 @@ const CheckoutPage = () => {
       promocode: appliedPromoCode, // Include the applied promo code in the order
       returnUrl: "https://lorisparfume.uz/account",
       ordersItemsList: ordersItemsList,
+      userId: userInfo?.id || null,
       city,
     };
 

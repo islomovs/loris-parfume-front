@@ -146,6 +146,11 @@
     "success": "Buyurtma muvaffaqiyatli yaratildi!",
     "failure": "Buyurtma yaratilmadi, iltimos, qayta urinib ko'ring.",
     "promocode": "Promokod",
+    "promocode_error_title": "Roʻyxatdan oʻtish talab qilinadi",
+    "promocode_error_text": "Promokoddan foydalanish uchun ro‘yxatdan o‘ting",
+    "ok_error_modal": "O‘tish",
+    "cancel_error_modal": "Rad etish",
+
     "apply": "Qo'llash",
     "promoApplied": "Promokod muvaffaqiyatli qo'llanildi",
     "promoNotFound": "Promokod topilmadi",
