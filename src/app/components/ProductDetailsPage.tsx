@@ -125,6 +125,7 @@ export default function ProductDetailsPage({
         nameRu: product?.data.nameRu,
         nameUz: product?.data.nameUz,
         imagesList: product?.data?.imagesList,
+        collectionId: product?.data?.collectionsItemsList[0]?.collectionId,
         collectionSlug: product?.data.collectionsItemsList[0].collectionSlug,
       };
 

@@ -45,7 +45,9 @@ type FormData = {
 };
 
 const CheckoutPage = () => {
-  const { cart, totalSum, getDiscountedTotal } = useCartStore((state) => state);
+  const { cart, totalSum, getDiscountedTotal, clearCart } = useCartStore(
+    (state) => state
+  );
   const { addOrder } = useOrderStore();
   const { handleSubmit, setValue, control, register, resetField, watch } =
     useForm<FormData>({
@@ -119,6 +121,7 @@ const CheckoutPage = () => {
       onSuccess: (data) => {
         loadingBarRef.current?.complete();
 
+        clearCart();
         addOrder(data);
         if (data.paymentType.toLowerCase() === "uzum nasiya") {
           message.success(
@@ -137,9 +140,6 @@ const CheckoutPage = () => {
       onError: () => {
         loadingBarRef.current?.complete();
         message.error(t("checkout.failure"));
-        if (!token) {
-          router.push("/");
-        }
       },
     }
   );

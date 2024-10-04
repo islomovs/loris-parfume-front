@@ -73,6 +73,7 @@ export const ProductCard = ({
         nameRu: product?.nameRu,
         nameUz: product?.nameUz,
         imagesList: product?.imagesList,
+        collectionId: product?.collectionsItemsList[0]?.collectionId,
         collectionSlug: product?.collectionsItemsList[0].collectionSlug,
       };
 
@@ -94,6 +95,7 @@ export const ProductCard = ({
       slug: product?.slug,
       quantity: 1,
       price: Number(product?.price),
+      collectionId: product?.collectionsItemsList[0]?.collectionId,
       collectionSlug: product?.collectionsItemsList[0].collectionSlug,
       ...(product?.sizesItemsList.length > 0 && {
         size: product?.sizesItemsList[0],

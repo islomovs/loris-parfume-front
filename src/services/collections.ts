@@ -16,6 +16,7 @@ export interface ICollectionItem {
   descriptionRu: string;
   bannerImage: string;
   collectionSlug: string;
+  collectionId: number;
   categoriesList: [
     {
       categoryId: number;
