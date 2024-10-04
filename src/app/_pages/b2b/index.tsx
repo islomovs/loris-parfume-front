@@ -72,9 +72,8 @@ const B2bPage = () => {
             {t("b2b.europe")}
           </Text>
           <ul className="mt-5">
-            <li className="mb-3 text-[12px]">- {t("b2b.contract")}</li>
-            <li className="mb-3 text-[12px]">- {t("b2b.contract")}</li>
-            <li className="mb-3 text-[12px]">- {t("b2b.contract")}</li>
+            <li className="mb-3 text-[12px]">- {t("b2b.contractText1")}</li>
+            <li className="mb-3 text-[12px]">- {t("b2b.contractText2")}</li>
           </ul>
           <Box mt={5}>
             <Text fontSize={25} fontWeight={500}>
