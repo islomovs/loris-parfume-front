@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 // import PaymeIcon from "../../../../public/payme-logo.BdmkZoD4.svg";
 // import ClickIcon from "../../../../click-logo.jzgAXUV7.svg";
 import i18n from "@/utils/i18n";
-import { Box, HStack, Spinner } from "@chakra-ui/react";
+import { Box, HStack, Spinner, Text } from "@chakra-ui/react";
 import { formatPrice } from "@/utils/priceUtils";
 import useCartStore from "@/services/store";
 import useOrderStore from "@/services/orderStore";
@@ -49,7 +49,7 @@ const CheckoutPage = () => {
     (state) => state
   );
   const { addOrder } = useOrderStore();
-  const { handleSubmit, setValue, control, register, resetField, watch } =
+  const { handleSubmit, setValue, control, register, getValues, watch } =
     useForm<FormData>({
       defaultValues: {
         deliveryType: "Доставка", // Set Доставка as default
@@ -65,6 +65,10 @@ const CheckoutPage = () => {
   }>({
     distance: 0,
     deliverySum: 0,
+  });
+  const [requiredFields, setRequiredFields] = useState<any>({
+    phone: false,
+    payment: false,
   });
   const [branchName, setBranchName] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -89,6 +93,10 @@ const CheckoutPage = () => {
   const handlePaymentClick = (paymentType: string) => {
     setActivePayment(paymentType);
     setValue("paymentType", paymentType);
+    setRequiredFields((prev: any) => ({
+      ...prev,
+      payment: false,
+    }));
   };
 
   // Calculate final total with discount logic
@@ -133,10 +141,8 @@ const CheckoutPage = () => {
         ) {
           window.location.href = data.paymentLink;
         } else {
-
           message.success(t("checkout.success"));
           if (token != null) {
-        
             router.push("/account");
           }
 
@@ -206,6 +212,22 @@ const CheckoutPage = () => {
   );
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
+    const { phone, payment } = requiredFields;
+
+    const phoneIsEmpty = !data.phone;
+    const paymentIsEmpty = !data.paymentType;
+
+    setRequiredFields((prev: any) => ({
+      ...prev,
+      phone: phoneIsEmpty,
+      payment: paymentIsEmpty,
+    }));
+
+    if (phoneIsEmpty || paymentIsEmpty) {
+      message.error(t("checkout.requiredFileds"));
+      return;
+    }
+
     if (!data.address) {
       message.error(t("checkout.addressErr"));
       return;
@@ -234,7 +256,9 @@ const CheckoutPage = () => {
       totalSum: finalTotalSum,
       paymentType: data.paymentType?.toLowerCase(),
       promocode: appliedPromoCode, // Include the applied promo code in the order
-      returnUrl: token ? "https://lorisparfume.uz/account" : "https://lorisparfume.uz",
+      returnUrl: token
+        ? "https://lorisparfume.uz/account"
+        : "https://lorisparfume.uz",
       ordersItemsList: ordersItemsList,
       userId: userInfo?.id || null,
       city,
@@ -304,27 +328,44 @@ const CheckoutPage = () => {
                 borders="rounded"
                 title={t("checkout.phoneNumber")}
               /> */}
-              <PhoneInput
-                country={"uz"} // Default country (e.g., Uzbekistan)
-                value={phone} // Bind the phone value
-                onChange={(e: any) => setValue("phone", e)}
-                enableSearch={false} // Enable search for countries
-                placeholder="Enter phone number"
-                inputStyle={{
-                  width: "100%",
-                  height: "50px",
-                  borderRadius: "5px",
-                  border: "1px solid #e3e3e3",
-                  outline: "1px solid #e3e3e3", // General outline
-                  paddingTop: "13.5px",
-                  paddingBottom: "13.5px",
-                  outlineWidth: "2px",
-                  transition: "all 0.3s",
-                }}
-                dropdownStyle={{
-                  textAlign: "left",
-                }}
-              />
+              <div>
+                <PhoneInput
+                  country={"uz"} // Default country (e.g., Uzbekistan)
+                  value={phone} // Bind the phone value
+                  onChange={(e: any) => {
+                    setValue("phone", e);
+                    setRequiredFields((prev: any) => ({
+                      ...prev,
+                      phone: e === "",
+                    }));
+                  }}
+                  enableSearch={false} // Enable search for countries
+                  placeholder="Enter phone number"
+                  inputStyle={{
+                    width: "100%",
+                    height: "50px",
+                    borderRadius: "5px",
+                    border: requiredFields?.phone
+                      ? "1px solid red"
+                      : "2px solid #e3e3e3",
+                    outline: requiredFields?.phone
+                      ? "2px solid red"
+                      : "2px solid #e3e3e3",
+                    paddingTop: "13.5px",
+                    paddingBottom: "13.5px",
+                    outlineWidth: "2px",
+                    transition: "all 0.3s",
+                  }}
+                  dropdownStyle={{
+                    textAlign: "left",
+                  }}
+                />
+                {requiredFields?.phone && (
+                  <Text color={"red"} mt={1} fontSize={"12"}>
+                    {t("checkout.requiredFileds")}
+                  </Text>
+                )}
+              </div>
               <CustomInput
                 value={branchName}
                 type="text"
@@ -350,26 +391,33 @@ const CheckoutPage = () => {
                 title={t("checkout.paymentType")}
                 control={control}
               /> */}
-              <div className="flex items-center gap-4">
-                {allPaymentOptions.map((option) => (
-                  <div
-                    key={option.id}
-                    onClick={() => {
-                      handlePaymentClick(option.title);
-                    }}
-                    className={`flex items-center w-full gap-2 p-4 cursor-pointer rounded-md border-2 ${
-                      activePayment === option.title
-                        ? "border-[#53B7D1]"
-                        : "border-[#e3e3e3]"
-                    } hover:border-[#53B7D1] transition duration-300`}
-                  >
-                    <Image
-                      preview={false}
-                      src={option.icon}
-                      alt={option.title}
-                    />
-                  </div>
-                ))}
+              <div>
+                <div className="flex items-center gap-4">
+                  {allPaymentOptions.map((option) => (
+                    <div
+                      key={option.id}
+                      onClick={() => {
+                        handlePaymentClick(option.title);
+                      }}
+                      className={`flex items-center w-full gap-2 p-4 cursor-pointer rounded-md border-2 ${
+                        activePayment === option.title
+                          ? "border-[#53B7D1]"
+                          : "border-[#e3e3e3]"
+                      } hover:border-[#53B7D1] transition duration-300`}
+                    >
+                      <Image
+                        preview={false}
+                        src={option.icon}
+                        alt={option.title}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {requiredFields?.payment && (
+                  <Text color={"red"} mt={1} fontSize={"12"}>
+                    {t("checkout.requiredFileds")}
+                  </Text>
+                )}
               </div>
 
               <div className="md:hidden flex-[4] top-0 right-0 left-0">

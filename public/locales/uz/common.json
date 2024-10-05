@@ -157,7 +157,8 @@
     "promoNotFound": "Promokod topilmadi",
     "promoAlreadyUsed": "Promokod allaqachon ishlatilgan",
     "invalidPromo": "Noto'g'ri promokod",
-    "addressErr": "Yandex Xaritalarida manzilni kiriting yoki geolokatsiyani aniqlash tugmasini bosing"
+    "addressErr": "Yandex Xaritalarida manzilni kiriting yoki geolokatsiyani aniqlash tugmasini bosing",
+    "requiredFileds": "To'ldirish talab qilinadi"
   },
   "cart": {
     "cartUpdatedSuccess": "Savatcha muvaffaqiyatli yangilandi!",

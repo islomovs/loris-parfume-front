@@ -14,6 +14,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoCartOutline } from "react-icons/io5";
 import { formatPrice } from "@/utils/priceUtils";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 interface ProductCardProps {
   product: IProduct;
@@ -101,6 +102,20 @@ export const ProductCard = ({
         size: product?.sizesItemsList[0],
       }),
     };
+
+    sendGTMEvent({
+      event: "add_to_cart",
+      ecommerce: {
+        items: [
+          {
+            ...cartItem,
+            item_name: product?.nameRu,
+            item_id: product.id,
+            price: product.price,
+          },
+        ],
+      },
+    });
 
     if (!token) {
       addOrUpdateCartItem({

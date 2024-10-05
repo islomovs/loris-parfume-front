@@ -4,6 +4,7 @@ import { RootChildren } from "./components/RootChildren";
 import { Providers } from "./providers";
 import PageTransition from "./components/PageTransition";
 import "react-phone-input-2/lib/style.css"; // Import the CSS file
+import { GoogleTagManager } from "@next/third-parties/google";
 
 import "./globals.css";
 import { Metadata } from "next";
@@ -99,6 +100,7 @@ export default function RootLayout({
             <RootChildren>{children}</RootChildren>
           </PageTransition>
         </Providers>
+        <GoogleTagManager gtmId="GTM-T9CXPH52" />
 
         {/* <!-- Yandex.Metrika counter --> */}
         <script
