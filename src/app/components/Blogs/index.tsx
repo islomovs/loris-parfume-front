@@ -15,8 +15,7 @@ import { useRouter } from "next/navigation";
 
 const BlogCarousel = () => {
   const router = useRouter();
-  const { data, isLoading, error } = useQuery("allBlogs", getAllBlogs);
-  console.log(data);
+  const { data } = useQuery("allBlogs", getAllBlogs);
 
   return (
     <Box className="relative">
@@ -90,11 +89,11 @@ const BlogCarousel = () => {
         })}
       </Swiper>
 
-      <div className="absolute top-1/2 transform -translate-y-1/2 z-10 flex justify-between w-full">
-        <button className="arrow-left arrow p-3 bg-black rounded-md hidden md:block">
+      <div className="absolute top-[43.3%] transform -translate-y-1/2 z-10 flex justify-between w-full">
+        <button className="arrow-left arrow p-3 bg-black rounded-md">
           <FaChevronLeft color="white" />
         </button>
-        <button className="arrow-right arrow p-3 bg-black rounded-md hidden md:block">
+        <button className="arrow-right arrow p-3 bg-black rounded-md ">
           <FaChevronRight color="white" />
         </button>
       </div>
