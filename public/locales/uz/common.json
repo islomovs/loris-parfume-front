@@ -147,8 +147,8 @@
     "success": "Buyurtma muvaffaqiyatli yaratildi!",
     "failure": "Buyurtma yaratilmadi, iltimos, qayta urinib ko'ring.",
     "promocode": "Promokod",
-    "promocode_error_title": "Roʻyxatdan oʻtish talab qilinadi",
-    "promocode_error_text": "Promokoddan foydalanish uchun ro‘yxatdan o‘ting",
+    "promocode_error_title": "Akkauntga kirish talab qilinadi",
+    "promocode_error_text": "Promokoddan foydalanish uchun iltimos, akkauntingizga kiring.",
     "ok_error_modal": "O‘tish",
     "cancel_error_modal": "Rad etish",
 
