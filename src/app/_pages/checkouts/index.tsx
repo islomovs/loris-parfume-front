@@ -133,8 +133,15 @@ const CheckoutPage = () => {
         ) {
           window.location.href = data.paymentLink;
         } else {
+
           message.success(t("checkout.success"));
-          router.push("/account");
+          if (token != null) {
+        
+            router.push("/account");
+          }
+
+          router.push("/");
+          message.success(t("checkout.success"));
         }
       },
       onError: () => {
@@ -227,7 +234,7 @@ const CheckoutPage = () => {
       totalSum: finalTotalSum,
       paymentType: data.paymentType?.toLowerCase(),
       promocode: appliedPromoCode, // Include the applied promo code in the order
-      returnUrl: "https://lorisparfume.uz/account",
+      returnUrl: token ? "https://lorisparfume.uz/account" : "https://lorisparfume.uz",
       ordersItemsList: ordersItemsList,
       userId: userInfo?.id || null,
       city,
