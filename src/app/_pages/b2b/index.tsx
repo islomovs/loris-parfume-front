@@ -71,10 +71,7 @@ const B2bPage = () => {
           <Text fontSize={14} mt={2}>
             {t("b2b.europe")}
           </Text>
-          <ul className="mt-5">
-            <li className="mb-3 text-[12px]">- {t("b2b.contractText1")}</li>
-            <li className="mb-3 text-[12px]">- {t("b2b.contractText2")}</li>
-          </ul>
+          
           <Box mt={5}>
             <Text fontSize={25} fontWeight={500}>
               {t("b2b.contact")}
@@ -164,64 +161,7 @@ const B2bPage = () => {
           </form>
         </Box>
       </Flex>
-      <Box m={4} pt={8}>
-        <Text fontSize={28} fontWeight={500}>
-          {t("b2b.card_title")}
-        </Text>
-        <Grid
-          templateColumns={{
-            base: "repeat(1, 1fr)",
-            md: "repeat(2, 1fr)",
-            lg: "repeat(4, 1fr)",
-          }} // 1 column on small, 2 columns on medium, 4 on large
-          gap={4}
-        >
-          <Flex
-            flexDir={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            bg="#F3F4F6"
-            gap={4}
-            p={7}
-          >
-            <Image src={Img1} width={45} height={45} alt="flag" />
-            <Text>{t("b2b.flag")}</Text>
-          </Flex>
-          <Flex
-            flexDir={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            bg="#F3F4F6"
-            gap={4}
-            p={7}
-          >
-            <Image src={Img2} width={45} height={45} alt="star" />
-            <Text>{t("b2b.star")}</Text>
-          </Flex>
-          <Flex
-            flexDir={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            bg="#F3F4F6"
-            gap={4}
-            p={7}
-          >
-            <Image src={Img3} width={45} height={45} alt="key" />
-            <Text>{t("b2b.key")}</Text>
-          </Flex>
-          <Flex
-            flexDir={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            bg="#F3F4F6"
-            gap={4}
-            p={7}
-          >
-            <Image src={Img4} width={45} height={45} alt="euro_txt" />
-            <Text>{t("b2b.euro_txt")}</Text>
-          </Flex>
-        </Grid>
-      </Box>
+      
     </Box>
   );
 };
