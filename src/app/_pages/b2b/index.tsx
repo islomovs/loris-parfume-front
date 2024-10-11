@@ -65,12 +65,7 @@ const B2bPage = () => {
         flexDirection="column"
       >
         <Box textAlign="start" width="100%">
-          <Text fontSize={25} fontWeight={500}>
-            {t("b2b.distribution")}
-          </Text>
-          <Text fontSize={14} mt={2}>
-            {t("b2b.europe")}
-          </Text>
+          
           
           <Box mt={5}>
             <Text fontSize={25} fontWeight={500}>
