@@ -90,7 +90,8 @@ export default function ProductDetailsPage({
       quantity,
       sizeId: selectedSizeId,
       price: productPrice,
-      collectionSlug: product?.data.collectionsItemsList[0].collectionSlug,
+      collectionId: product?.data?.collectionsItemsList[0]?.collectionId,
+      collectionSlug: product?.data?.collectionsItemsList[0]?.collectionSlug,
     };
 
     const token = localStorage.getItem("token");
