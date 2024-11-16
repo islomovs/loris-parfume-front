@@ -42,6 +42,12 @@ export default function ProductDetailsPage({
   const loadingBarRef = useRef<any>(null);
   const { t } = useTranslation("common");
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -137,7 +143,6 @@ export default function ProductDetailsPage({
       loadingBarRef.current.complete();
     },
     onError: (error) => {
-      console.error("Error adding item to cart:", error);
       message.error("Failed to add item to cart.");
       loadingBarRef.current.complete();
     },
@@ -202,7 +207,7 @@ export default function ProductDetailsPage({
           <div className="flex flex-col lg:flex-row lg:flex-[2] lg:pl-16 mb-6 lg:mb-0">
             <ImagePagination images={product?.data?.imagesList} />
           </div>
-          <div className="flex-1 lg:mr-[100px] lg:ml-[50px] mt-6 lg:mt-0 sticky top-0 lg:h-[400px]">
+          <div className="flex-1 lg:mr-[100px] lg:ml-[50px] mt-6 lg:mt-0 sticky top-0 lg:min-h-[400px] lg:h-fit">
             <ProductDetailsHeader
               category={category}
               name={name}
@@ -210,9 +215,21 @@ export default function ProductDetailsPage({
               originalPrice={originalPrice}
             />
             <div className="border-t my-6 pt-6 border-t-[#e3e3e3] border-solid">
-              <p className="text-[#454545] text-sm md:text-[14px] leading-[1.65] font-normal">
+              <p
+                className={`text-[#454545] text-sm md:text-[14px] leading-[1.65] font-normal ${
+                  isExpanded
+                    ? "line-clamp-none"
+                    : "overflow-hidden line-clamp-4"
+                }`}
+              >
                 {description}
               </p>
+              <button
+                onClick={toggleExpand}
+                className="mt-2 text-[#454545] text-sm font-medium hover:underline"
+              >
+                {isExpanded ? t("showLess") : t("showMore")}
+              </button>
             </div>
             <div>
               {product?.data.sizesItemsList?.length >= 2 && (

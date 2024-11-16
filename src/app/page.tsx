@@ -34,6 +34,12 @@ export default function Home() {
   >([]);
   const [banners, setBanners] = useState<IBanner[]>([]);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   const page = 1;
   const { t } = useTranslation("common");
 
@@ -154,11 +160,22 @@ export default function Home() {
         <h2 className="text-center mb-5 text-[25px] font-bold">
           {t("about.main_txt_title")}
         </h2>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: t("about.main_text"),
-          }}
-        />
+        <div className="border-t my-6 pt-6 border-t-[#e3e3e3] border-solid">
+          <div
+            className={`text-[16px] text-[#454545] leading-8 font-normal ${
+              isExpanded ? "line-clamp-none" : "line-clamp-6"
+            }`}
+            dangerouslySetInnerHTML={{
+              __html: t("about.main_text"),
+            }}
+          />
+          <button
+            onClick={toggleExpanded}
+            className="mt-2 text-[#454545] text-sm font-medium hover:underline"
+          >
+            {isExpanded ? t("showLess") : t("showMore")}
+          </button>
+        </div>
       </section>
       <Script
         id="json-id"
