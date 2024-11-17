@@ -94,7 +94,7 @@
     "partner": "Hamkorlik ",
     "phone": "Telefon",
     "contact": "Aloqa",
-    "b2b": "Hamkorlik (B&B)",
+    "b2b": "Hamkorlik (B2B)",
     "email": "Elektron pochta",
     "message": "Xabar",
     "sent": "Yuborish",
@@ -179,7 +179,8 @@
     "product": "MAHSULOT",
     "number": "SONI",
     "total": "JAMI",
-    "cartEmpty": "Sizning savatchangiz bo'sh."
+    "cartEmpty": "Sizning savatchangiz bo'sh.",
+    "removedItem": "Mahsulot savatchadan olib tashlandi"
   },
   "branches": "filiallar",
   "orderDetails": {

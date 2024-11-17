@@ -51,7 +51,7 @@ const B2bPage = () => {
     "
     >
       <Text fontSize={28} fontWeight={500} m={5}>
-        {t("b2b.partner")} (B&B)
+        {t("b2b.partner")} (B2B)
       </Text>
       <Flex
         maxW={"580px"}

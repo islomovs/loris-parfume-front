@@ -680,13 +680,16 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                   paddingBottom: "4px",
                 }}
               >
-                <Link
-                  href={`/collections/`}
+                <div
                   className="text-lg uppercase font-semibold flex-1"
-                  onClick={toggleSidebar}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setECatalog(!eCatalog);
+                  }}
                 >
                   {t("navbar.e-catalog")}
-                </Link>
+                </div>
                 {
                   <button
                     className="ml-2"
@@ -705,7 +708,7 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                 }
               </div>
 
-              {/* Categories collapse */}
+              {/* Catalogues collapse */}
               {eCatalog && (
                 <div className="ml-4 mt-2">
                   <ul>
@@ -721,13 +724,14 @@ export const Navbar: React.FC<INavbarProps> = ({ variant }) => {
                             : catalogue.fileUz;
                         return (
                           <li key={catalogue.id}>
-                            <Link
-                              className="block text-sm tracking-[.2em] py-1 border-b border-[#454545]"
-                              style={{ color: "#454545" }}
+                            <a
+                              className="block text-sm tracking-[.2em] py-1 border-b border-[#454545] text-[#454545]"
                               href={`${file}`}
+                              rel="noopener noreferrer"
+                              target="_blank"
                             >
                               {name}
-                            </Link>
+                            </a>
                           </li>
                         );
                       })

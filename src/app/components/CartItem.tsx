@@ -63,7 +63,7 @@ export const CartItem: React.FC<ICartItemProps> = ({
         (item) => !(item.id === id && item.sizeId === sizeId)
       );
       setCartItems(updatedCart);
-      console.info("Item removed from cart.");
+      console.info(t("cart.removedItem"));
     }
   };
 

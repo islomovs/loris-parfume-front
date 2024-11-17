@@ -54,7 +54,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
       }
       const updatedCart = await getCartItems();
       setCartItems(updatedCart?.data);
-      message.success("Item removed from cart.");
+      message.success(t("cart.removedItem"));
     } else {
       // User is not logged in, remove from local storage only
       removeCartItem(id, sizeId);
@@ -63,7 +63,7 @@ export const DrawerCartItem: React.FC<IDrawerCartItemProps> = ({
         (item) => !(item.id === id && item.sizeId === sizeId)
       );
       setCartItems(updatedCart);
-      message.info("Item removed from cart.");
+      message.info(t("cart.removedItem"));
     }
   };
 
