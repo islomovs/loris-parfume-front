@@ -27,8 +27,6 @@ import blogsTitle from "../../public/blogs.webp";
 import Image from "next/image";
 
 export default function Home() {
-  const [collectionId, setCollectionId] = useState<number>(0);
-  const [categoryId, setCategoryId] = useState<number>(0);
   const [collectionBanners, setCollectionBanners] = useState<
     ICollectionBanner[]
   >([]);

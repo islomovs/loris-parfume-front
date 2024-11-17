@@ -24,6 +24,16 @@
     "weRecommend": "biz tavsiya qilamiz"
   },
   "account": {
+    "authorization": {
+      "title": "Avtorizatsiya",
+      "subtitle": "Telefon raqamingizni kiriting:",
+      "codeSentSuccess": "Tasdiqlash kodi muvaffaqiyatli yuborildi!",
+      "errorNotFound": "Telefon raqam topilmadi",
+      "login": "Kirish",
+      "loginSuccess": "Muvaffaqiyatli tizimga kirdingiz!",
+      "verificationCodeResent": "Tasdiqlash kodi muvaffaqiyatli qayta yuborildi!",
+      "resentError": "Kodni qayta yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
+    },
     "login": {
       "titleL": "Login",
       "titleR": "Parolni tiklash",
@@ -60,7 +70,9 @@
       "repassword": "Parolingizni qayta kiriting",
       "createAccount": "Ro'yxatdan o'tish",
       "registrationSuccess": "Muvaffaqiyatli ro'yxatdan o'tdingiz!",
-      "verificationCodeResent": "Tasdiqlash kodi muvaffaqiyatli qayta yuborildi!"
+      "verificationCodeResent": "Tasdiqlash kodi muvaffaqiyatli qayta yuborildi!",
+      "error": "Bu telefon raqami allaqachon hisobga ulangan. Agar bu hisob sizniki bo'lsa, parolingizni qayta o'rnatishingiz mumkin",
+      "resentError": "Kodni qayta yuborishda xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
     },
     "verification": {
       "title": "Tasdiqlash talab qilinadi",

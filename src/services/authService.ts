@@ -41,6 +41,21 @@ export const register = async (data: TRegisterFormData) => {
   }
 };
 
+export type TAuthFormData = {
+  fullName?: string;
+  phone: string;
+};
+
+export const auth = async (data: TAuthFormData) => {
+  try {
+    const response = await axiosLoginInstance.post(`/api/v1/auth`, data);
+    return response.data;
+  } catch (err: any) {
+    console.error("Failed to authenticate user:", err);
+    throw err;
+  }
+};
+
 export const sendVerificationCode = async (
   phoneNumber: string,
   verificationCode: string

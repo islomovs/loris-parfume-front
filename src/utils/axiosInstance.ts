@@ -3,8 +3,10 @@ import axios from "axios";
 const baseURL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.lorisparfume.uz";
 
+const authBaseURL = "http://3.125.118.211:8880/";
+
 export const axiosLoginInstance = axios.create({
-  baseURL,
+  baseURL: authBaseURL,
 });
 
 export const axiosInstance = axios.create({
