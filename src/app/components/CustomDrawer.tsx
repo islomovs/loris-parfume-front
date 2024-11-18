@@ -35,10 +35,10 @@ export const CustomDrawer: React.FC<ICustomDrawerProps> = ({
     {
       onSuccess: () => {
         queryClient.invalidateQueries("cartItemsData");
-        message.success("Cart updated successfully!");
+        // message.success("Cart updated successfully!");
       },
       onError: () => {
-        message.error("Failed to update cart.");
+        // message.error("Failed to update cart.");
       },
     }
   );

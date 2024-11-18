@@ -23,6 +23,7 @@ import { message } from "antd";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { VerificationModal } from "@/app/components/VerificationModal";
+import { CustomInput } from "@/app/components/CustomInput";
 
 const sanitizePhoneNumber = (phone: string) => {
   // Remove any character that is not a digit or '+'
@@ -61,7 +62,7 @@ export default function Login() {
     const sanitizedPhone = sanitizePhoneNumber(data.phone);
     loadingBarRef.current?.continuousStart();
 
-    loginMutation.mutate({ phone: sanitizedPhone });
+    loginMutation.mutate({ ...data, phone: sanitizedPhone });
   };
 
   const loginMutation = useMutation(auth, {
@@ -104,6 +105,7 @@ export default function Login() {
           await syncLocalCartWithServer();
 
           loadingBarRef.current?.complete();
+          onClose();
           router.push("/");
         } else {
           console.error("Token was not stored correctly.");
@@ -218,6 +220,20 @@ export default function Login() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
+            <div className="w-full sm:w-[400px]">
+              <CustomInput
+                {...register("fullName")}
+                className="w-full"
+                title={t("account.register.fullName")}
+                borders="no-rounded"
+                type="text"
+              />
+              {errors.fullName && (
+                <p className="text-sm sm:text-[14px] text-[#CB2B2B] mt-1">
+                  {errors.fullName.message}
+                </p>
+              )}
+            </div>
             <div className="w-full sm:w-[400px]">
               <PhoneInput
                 country={"uz"} // Default country (e.g., Uzbekistan)

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { BiBasket } from "react-icons/bi";
@@ -8,18 +9,14 @@ import { useMutation, useQuery } from "react-query";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
-import { message, Image, Radio, RadioChangeEvent } from "antd";
-// import Image as from "next/image";
+import { message, Image } from "antd";
 import { useTranslation } from "react-i18next";
-// import PaymeIcon from "../../../../public/payme-logo.BdmkZoD4.svg";
-// import ClickIcon from "../../../../click-logo.jzgAXUV7.svg";
 import i18n from "@/utils/i18n";
-import { Box, HStack, Spinner, Text } from "@chakra-ui/react";
+import { Box, HStack, Text, useDisclosure } from "@chakra-ui/react";
 import { formatPrice } from "@/utils/priceUtils";
 import useCartStore from "@/services/store";
 import useOrderStore from "@/services/orderStore";
-import { createOrder, fetchNearestBranch, OrderData } from "@/services/orders";
-import { CustomDropdown } from "@/app/components/CustomDropdown";
+import { createOrder, OrderData } from "@/services/orders";
 import YandexMap from "@/app/components/YandexMap";
 import { CustomInput } from "@/app/components/CustomInput";
 import CustomTextArea from "@/app/components/CustomTextArea";
@@ -27,11 +24,27 @@ import { CheckoutCartItem } from "@/app/components/CheckoutCartItem";
 import PromoCodeInput from "@/app/components/PromoCodeInput";
 import PhoneInput from "react-phone-input-2";
 import { fetchUserInfo } from "@/services/user";
+import { VerificationModal } from "@/app/components/VerificationModal";
+import {
+  auth,
+  resendVerificationCode,
+  sendVerificationCode,
+} from "@/services/authService";
+
+const sanitizePhoneNumber = (phone: string) => {
+  // Remove any character that is not a digit or '+'
+  const sanitizedPhone = phone?.replace(/[^\d]/g, "");
+
+  // Check if the phone number starts with a '+'
+  return sanitizedPhone.startsWith("+") ? sanitizedPhone : `+${sanitizedPhone}`;
+};
 
 const allPaymentOptions = [
   { id: 0, title: "payme", icon: "/payme-logo.BdmkZoD4.svg" },
   { id: 1, title: "click", icon: "/click-logo.jzgAXUV7.svg" },
+  { id: 2, title: "cash", icon: "/cash-payment.png" },
 ];
+
 type FormData = {
   fullName: string;
   phone: string;
@@ -55,17 +68,8 @@ const CheckoutPage = () => {
         deliveryType: "Доставка", // Set Доставка as default
       },
     });
+  const { t } = useTranslation("common");
 
-  const [filteredPaymentOptions, setFilteredPaymentOptions] =
-    useState(allPaymentOptions);
-  const [isDelivery, setDelivery] = useState<boolean>(true);
-  const [deliveryData, setDeliveryData] = useState<{
-    distance: number;
-    deliverySum: number;
-  }>({
-    distance: 0,
-    deliverySum: 0,
-  });
   const [requiredFields, setRequiredFields] = useState<any>({
     phone: false,
     payment: false,
@@ -82,13 +86,15 @@ const CheckoutPage = () => {
   const router = useRouter();
   const timer = useRef(setTimeout(() => {}, 3000));
   const loadingBarRef = useRef<LoadingBarRef | null>(null);
-  const { t } = useTranslation("common");
   const currentTotalSum = totalSum();
-  const [deliverySum, setDeliverySum] = useState<number>(0);
+  const [deliverySum, setDeliverySum] = useState(20000);
   // Debounce Timer
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
   const token = localStorage.getItem("token");
   const [activePayment, setActivePayment] = useState<string>(""); // State to track active payment type
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [orderData, setOrderData] = useState<OrderData | null>(null);
 
   const handlePaymentClick = (paymentType: string) => {
     setActivePayment(paymentType);
@@ -121,33 +127,21 @@ const CheckoutPage = () => {
   const { data: userInfo } = useQuery("userInfo", fetchUserInfo);
 
   const orderMutation = useMutation(
-    (orderData: OrderData) => createOrder(orderData),
+    (orderData: OrderData | null) => createOrder(orderData),
     {
       onMutate: () => {
         loadingBarRef.current?.continuousStart();
       },
       onSuccess: (data) => {
         loadingBarRef.current?.complete();
-
-        clearCart();
         addOrder(data);
         if (data.paymentType.toLowerCase() === "uzum nasiya") {
           message.success(
             "Answer for your request will be sent to your phone number"
           );
-        } else if (
-          data.paymentType.toLowerCase() === "click" ||
-          data.paymentType.toLowerCase() === "payme"
-        ) {
-          window.location.href = data.paymentLink;
         } else {
           message.success(t("checkout.success"));
-          if (token != null) {
-            router.push("/account");
-          }
-
-          router.push("/");
-          message.success(t("checkout.success"));
+          router.push("/account");
         }
       },
       onError: () => {
@@ -164,58 +158,25 @@ const CheckoutPage = () => {
   }) => {
     setValue("address", value?.address);
     setCoords([value?.location[0], value?.location[1]]);
+
+    if (
+      value?.city.toLowerCase() == "ташкент" ||
+      value?.city.toLowerCase() == "toshkent" ||
+      value?.city.toLowerCase() == "tashkent"
+    ) {
+      setDeliverySum(20000);
+    } else {
+      setDeliverySum(30000);
+    }
     setCity(value?.city);
-    // Debounce nearest branch mutation
-    if (debounceTimer.current) clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      nearestBranchMutation.mutate({
-        latitude: value?.location[0],
-        longitude: value?.location[1],
-        city: value?.city,
-      });
-    }, 2000);
   };
 
-  const nearestBranchMutation = useMutation(
-    ({
-      longitude,
-      latitude,
-      city,
-    }: {
-      longitude: number;
-      latitude: number;
-      city: string;
-    }) => fetchNearestBranch(latitude, longitude, city),
-    {
-      onMutate: () => {
-        message.loading("Fetching nearest branch...");
-      },
-      onSuccess: (data) => {
-        message.destroy();
-        setBranchName(data?.name);
-        setBranchId(data?.id);
-        setDeliveryData({
-          distance: Number(data?.distance),
-          deliverySum: Number(data?.deliverySum),
-        });
-
-        const currentTotalSum = totalSum();
-        setDeliverySum(
-          currentTotalSum >= 500000 ? 0 : Number(data?.deliverySum)
-        );
-      },
-      onError: (error) => {
-        message.destroy();
-        message.error("Failed to fetch nearest branch, please try again.");
-      },
-    }
-  );
-
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    const { phone, payment } = requiredFields;
-
+    setPhoneNumber(sanitizePhoneNumber(data.phone));
     const phoneIsEmpty = !data.phone;
     const paymentIsEmpty = !data.paymentType;
+
+    loginMutation.mutate({ phone: sanitizePhoneNumber(data.phone) });
 
     setRequiredFields((prev: any) => ({
       ...prev,
@@ -264,14 +225,101 @@ const CheckoutPage = () => {
       city,
     };
 
-    orderMutation.mutate(orderData);
+    if (token != null) {
+      orderMutation.mutate(orderData);
+    } else {
+      message.info(t("checkout.loginFirst"));
+      setErrorMessage(null);
+      onOpen();
+    }
+    setOrderData(orderData);
   };
 
-  const phone = watch("phone", "");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const loginMutation = useMutation(auth, {
+    onSuccess: async (data) => {
+      message.success(t("account.authorization.codeSentSuccess"));
+      setErrorMessage(null);
+      onOpen();
+      loadingBarRef.current?.complete();
+    },
+    onError: (error: any) => {
+      if (error.isAxiosError) {
+        // console.error("ERRROR MESSAGE: ", error);
+        if (error.response?.status === 404) {
+          setErrorMessage(t("account.authorization.errorNotFound"));
+        } else {
+          setErrorMessage(`Failed: ${error.response?.data}`);
+        }
+      } else {
+        console.error("Non-Axios error:", error);
+      }
+      loadingBarRef.current?.complete();
+    },
+  });
+
+  const sendVerificationCodeMutation = useMutation(
+    ({
+      phoneNumber,
+      verificationCode,
+    }: {
+      phoneNumber: string;
+      verificationCode: string;
+    }) => sendVerificationCode(phoneNumber, verificationCode),
+    {
+      onSuccess: async (data) => {
+        message.success(t("account.authorization.loginSuccess"));
+        orderMutation.mutate(orderData);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+      },
+      onError: (error: any) => {
+        console.error("Error: ", error);
+        loadingBarRef.current?.complete();
+      },
+    }
+  );
+
+  const resendVerificationCodeMutation = useMutation(
+    ({ phoneNumber }: { phoneNumber: string }) =>
+      resendVerificationCode(phoneNumber),
+    {
+      onSuccess: (data) => {
+        message.success(t("account.authorization.verificationCodeResent"));
+        loadingBarRef.current?.complete();
+      },
+      onError: (error) => {
+        setErrorMessage(t("account.authorization.resentError"));
+        console.error("Failed to resend verification code:", error);
+        loadingBarRef.current?.complete();
+      },
+    }
+  );
+
+  const handleVerificationSubmit = (verificationCode: string) => {
+    loadingBarRef.current?.continuousStart();
+    sendVerificationCodeMutation.mutate({
+      phoneNumber,
+      verificationCode,
+    });
+  };
+
+  const handleResend = () => {
+    loadingBarRef.current?.continuousStart();
+    resendVerificationCodeMutation.mutate({ phoneNumber });
+  };
 
   return (
     <section className="px-5 md:px-8 lg:px-16 overflow-x-hidden">
-      <LoadingBar color="#87754f" ref={loadingBarRef} />
+      <LoadingBar color="black" ref={loadingBarRef} />
+      <VerificationModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onSubmit={handleVerificationSubmit}
+        errorMessage={errorMessage}
+        handleResend={handleResend}
+      />
       <div className="py-2">
         <header className="flex flex-row justify-between items-center md:px-[104px] py-4 md:py-[21px]">
           <Link href="/">
@@ -322,16 +370,10 @@ const CheckoutPage = () => {
                 borders="rounded"
                 title={t("checkout.fullName")}
               />
-              {/* <CustomInput
-                {...register("phone")}
-                type="text"
-                borders="rounded"
-                title={t("checkout.phoneNumber")}
-              /> */}
               <div>
                 <PhoneInput
                   country={"uz"} // Default country (e.g., Uzbekistan)
-                  value={phone} // Bind the phone value
+                  value={phoneNumber} // Bind the phone value
                   onChange={(e: any) => {
                     setValue("phone", e);
                     setRequiredFields((prev: any) => ({
@@ -367,13 +409,6 @@ const CheckoutPage = () => {
                 )}
               </div>
               <CustomInput
-                value={branchName}
-                type="text"
-                borders="rounded"
-                title={t("checkout.branch")}
-                disabled
-              />
-              <CustomInput
                 {...register("address")}
                 type="text"
                 borders="rounded"
@@ -385,12 +420,6 @@ const CheckoutPage = () => {
                 borders="rounded"
                 title={t("checkout.comment")}
               />
-              {/* <CustomDropdown
-                name="paymentType"
-                options={filteredPaymentOptions}
-                title={t("checkout.paymentType")}
-                control={control}
-              /> */}
               <div>
                 <div className="flex items-center gap-4">
                   {allPaymentOptions.map((option) => (
@@ -399,14 +428,14 @@ const CheckoutPage = () => {
                       onClick={() => {
                         handlePaymentClick(option.title);
                       }}
-                      className={`flex items-center w-full gap-2 p-4 cursor-pointer rounded-md border-2 ${
+                      className={`flex items-center justify-center w-full gap-2 p-4 cursor-pointer rounded-md border-2 ${
                         activePayment === option.title
                           ? "border-[#53B7D1]"
                           : "border-[#e3e3e3]"
                       } hover:border-[#53B7D1] transition duration-300`}
                     >
-                      <Image
-                        preview={false}
+                      <img
+                        className="w-16 h-8 object-contain"
                         src={option.icon}
                         alt={option.title}
                       />
@@ -422,46 +451,40 @@ const CheckoutPage = () => {
 
               <div className="md:hidden flex-[4] top-0 right-0 left-0">
                 <div className="w-full flex flex-col gap-5">
-                  {nearestBranchMutation.isLoading ? (
-                    <div className="flex justify-center items-center py-4">
-                      <Spinner size="lg" color="#000000" />
-                    </div>
-                  ) : (
-                    cart.map((cartItem, index) => {
-                      const discountPrice = cartItem.discountPercent
-                        ? cartItem.price -
-                          (cartItem.price * cartItem.discountPercent) / 100
-                        : cartItem.price;
+                  {cart.map((cartItem, index) => {
+                    const discountPrice = cartItem.discountPercent
+                      ? cartItem.price -
+                        (cartItem.price * cartItem.discountPercent) / 100
+                      : cartItem.price;
 
-                      const name =
-                        i18n.language === "ru"
-                          ? cartItem.nameRu
-                          : cartItem.nameUz;
-                      const sizeName =
-                        i18n.language === "ru"
-                          ? cartItem.sizeNameRu
-                          : cartItem.sizeNameUz;
+                    const name =
+                      i18n.language === "ru"
+                        ? cartItem.nameRu
+                        : cartItem.nameUz;
+                    const sizeName =
+                      i18n.language === "ru"
+                        ? cartItem.sizeNameRu
+                        : cartItem.sizeNameUz;
 
-                      // Calculate total with discount logic from Zustand
-                      const discountedTotal = getDiscountedTotal(
-                        cartItem.collectionSlug || "",
-                        Number(discountPrice),
-                        Number(cartItem.quantity)
-                      );
+                    // Calculate total with discount logic from Zustand
+                    const discountedTotal = getDiscountedTotal(
+                      cartItem.collectionSlug || "",
+                      Number(discountPrice),
+                      Number(cartItem.quantity)
+                    );
 
-                      return (
-                        <CheckoutCartItem
-                          key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
-                          title={name}
-                          subtitle={sizeName}
-                          price={discountPrice}
-                          quantity={cartItem.quantity}
-                          image={cartItem.imagesList[0]}
-                          discountedTotal={discountedTotal}
-                        />
-                      );
-                    })
-                  )}
+                    return (
+                      <CheckoutCartItem
+                        key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
+                        title={name}
+                        subtitle={sizeName}
+                        price={discountPrice}
+                        quantity={cartItem.quantity}
+                        image={cartItem.imagesList[0]}
+                        discountedTotal={discountedTotal}
+                      />
+                    );
+                  })}
                   <Box color="#454545">
                     <PromoCodeInput onApplyPromo={handleApplyPromo} />
                     <HStack justify="space-between">
@@ -521,44 +544,38 @@ const CheckoutPage = () => {
           </div>
           <div className="hidden md:block flex-[4] py-4 md:p-10 lg:h-[300px] lg:sticky top-0 right-0 left-0">
             <div className="w-full flex flex-col gap-5">
-              {nearestBranchMutation.isLoading ? (
-                <div className="flex justify-center items-center py-4">
-                  <Spinner size="lg" color="#000000" />
-                </div>
-              ) : (
-                cart.map((cartItem, index) => {
-                  const discountPrice = cartItem.discountPercent
-                    ? cartItem.price -
-                      (cartItem.price * cartItem.discountPercent) / 100
-                    : cartItem.price;
+              {cart.map((cartItem, index) => {
+                const discountPrice = cartItem.discountPercent
+                  ? cartItem.price -
+                    (cartItem.price * cartItem.discountPercent) / 100
+                  : cartItem.price;
 
-                  const name =
-                    i18n.language === "ru" ? cartItem.nameRu : cartItem.nameUz;
-                  const sizeName =
-                    i18n.language === "ru"
-                      ? cartItem.sizeNameRu
-                      : cartItem.sizeNameUz;
+                const name =
+                  i18n.language === "ru" ? cartItem.nameRu : cartItem.nameUz;
+                const sizeName =
+                  i18n.language === "ru"
+                    ? cartItem.sizeNameRu
+                    : cartItem.sizeNameUz;
 
-                  // Calculate total with discount logic from Zustand
-                  const discountedTotal = getDiscountedTotal(
-                    cartItem.collectionSlug || "",
-                    Number(discountPrice),
-                    Number(cartItem.quantity)
-                  );
+                // Calculate total with discount logic from Zustand
+                const discountedTotal = getDiscountedTotal(
+                  cartItem.collectionSlug || "",
+                  Number(discountPrice),
+                  Number(cartItem.quantity)
+                );
 
-                  return (
-                    <CheckoutCartItem
-                      key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
-                      title={name}
-                      subtitle={sizeName}
-                      price={discountPrice}
-                      quantity={cartItem.quantity}
-                      image={cartItem.imagesList[0]}
-                      discountedTotal={discountedTotal}
-                    />
-                  );
-                })
-              )}
+                return (
+                  <CheckoutCartItem
+                    key={`${cartItem.id}-${cartItem.sizeId}-${cartItem.price}-${index}`}
+                    title={name}
+                    subtitle={sizeName}
+                    price={discountPrice}
+                    quantity={cartItem.quantity}
+                    image={cartItem.imagesList[0]}
+                    discountedTotal={discountedTotal}
+                  />
+                );
+              })}
               <Box color="#454545">
                 <PromoCodeInput onApplyPromo={handleApplyPromo} />
                 <HStack justify="space-between">

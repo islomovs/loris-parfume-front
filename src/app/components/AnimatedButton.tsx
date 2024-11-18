@@ -3,7 +3,7 @@ import { cn } from "../../helpers/mergeFunction";
 export const AnimatedButton: React.FC<{
   title: string;
   width: string;
-  variant: "dark" | "lite";
+  variant: "dark" | "lite" | "red";
   type?: "submit";
   onClick?: () => void;
 }> = ({ title, width, variant, type, onClick }) => {
@@ -18,6 +18,8 @@ export const AnimatedButton: React.FC<{
             variant == "dark",
           "border-white hover:text-white before:bg-white text-[#000000]":
             variant == "lite",
+          "border-[#6c0d0d] hover:text-[#6c0d0d] before:bg-[#6c0d0d] text-[#ffffff]":
+            variant == "red",
         }
       )}
     >

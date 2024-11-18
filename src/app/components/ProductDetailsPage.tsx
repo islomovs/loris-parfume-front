@@ -23,6 +23,7 @@ import i18n from "@/utils/i18n";
 import { useTranslation } from "react-i18next";
 import { message } from "antd";
 import Script from "next/script";
+import { useRouter } from "next/navigation";
 
 export default function ProductDetailsPage({
   productSlug,
@@ -41,6 +42,7 @@ export default function ProductDetailsPage({
   const [open, setOpen] = useState(false);
   const loadingBarRef = useRef<any>(null);
   const { t } = useTranslation("common");
+  const router = useRouter();
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -119,6 +121,56 @@ export default function ProductDetailsPage({
     mutation.mutate(cartItem);
   };
 
+  const handleOneClick = async () => {
+    if (product?.data.sizesItemsList?.length >= 2 && !selectedOption) {
+      message.warning(t("productDetails.selectSize"));
+      return;
+    }
+
+    const cartItem = {
+      slug: product?.data.slug,
+      quantity,
+      sizeId: selectedSizeId,
+      price: productPrice,
+      collectionId: product?.data?.collectionsItemsList[0]?.collectionId,
+      collectionSlug: product?.data?.collectionsItemsList[0]?.collectionSlug,
+    };
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      addOrUpdateCartItem({
+        id: product?.data.id,
+        ...cartItem,
+        nameEng: product?.data?.nameEng,
+        nameRu: product?.data.nameRu,
+        nameUz: product?.data.nameUz,
+        imagesList: product?.data?.imagesList,
+      });
+
+      loadingBarRef.current.continuousStart();
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      router.push("/checkouts");
+
+      setTimeout(() => {
+        loadingBarRef.current.complete();
+      }, 300);
+
+      return;
+    }
+
+    loadingBarRef.current.continuousStart();
+    mutation.mutate(cartItem, {
+      onSuccess: () => {
+        loadingBarRef.current.complete();
+      },
+      onError: () => {
+        loadingBarRef.current.complete();
+      },
+    });
+  };
+
   const mutation = useMutation(addToCart, {
     onSuccess: (data, variables) => {
       const { slug, quantity, sizeId, price } = variables;
@@ -138,7 +190,7 @@ export default function ProductDetailsPage({
 
       addOrUpdateCartItem(newItem);
       queryClient.invalidateQueries("cartItemsData").then(() => {
-        showDrawer();
+        router.push("/checkouts");
       });
       loadingBarRef.current.complete();
     },
@@ -201,7 +253,7 @@ export default function ProductDetailsPage({
   return (
     <>
       <div className="flex flex-col px-4">
-        <LoadingBar color="#87754f" ref={loadingBarRef} />
+        <LoadingBar color="black" ref={loadingBarRef} />
         <div className="flex flex-col lg:flex-row py-8 md:py-16">
           {open && <CustomDrawer onClose={onClose} isOpen={open} />}
           <div className="flex flex-col lg:flex-row lg:flex-[2] lg:pl-16 mb-6 lg:mb-0">
@@ -253,12 +305,20 @@ export default function ProductDetailsPage({
                 />
               )}
               <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
-              <AnimatedButton
-                title={t("productDetails.addToCart")}
-                variant="dark"
-                width="w-full"
-                onClick={handleAddToCart}
-              />
+              <div className="flex flex-col gap-2">
+                <AnimatedButton
+                  title={t("productDetails.addToCart")}
+                  variant="dark"
+                  width="w-full"
+                  onClick={handleAddToCart}
+                />
+                <AnimatedButton
+                  title={t("productDetails.buyNow")}
+                  variant="red"
+                  width="w-full"
+                  onClick={handleOneClick}
+                />
+              </div>
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center my-7 space-y-4 md:space-y-0">
                 <div className="flex flex-row items-center mb-4 md:mb-0">
                   <LiaShippingFastSolid className="w-[35px] h-[35px] mr-[15px]" />

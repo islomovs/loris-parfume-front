@@ -11,7 +11,7 @@ import { CheckoutCartItem } from "../components/CheckoutCartItem";
 import { useQuery, useMutation } from "react-query";
 import { fetchUserInfo, updateUserInfo } from "../../services/user";
 import { fetchAllOrders } from "../../services/orders";
-import useCartStore from "@/services/store"; // Correctly import useCartStore
+import useCartStore from "@/services/store";
 import { message } from "antd";
 import { Spinner } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
@@ -127,7 +127,7 @@ export default function Account() {
           <div className="w-full text-[14px] text-[#454545] font-normal">
             {ordersLoading && (
               <div className="flex justify-center items-center py-4">
-                <Spinner size="xl" color="#87754f" />
+                <Spinner size="xl" color="black" />
               </div>
             )}
             {ordersError && <p>{t("messages.fetchOrdersError")}</p>}
@@ -213,7 +213,7 @@ export default function Account() {
                           title={t("orderDetails.paymentType")}
                           description={order.paymentType}
                         />
-                        {order.paymentType === t("orderDetails.cash")
+                        {order.paymentType == "CASH"
                           ? " "
                           : !order?.isPaid && (
                               <OrderDetailsItem

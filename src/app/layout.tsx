@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { Poppins } from "next/font/google";
-import { RootChildren } from "./components/RootChildren";
 import { Providers } from "./providers";
 import PageTransition from "./components/PageTransition";
 import "react-phone-input-2/lib/style.css"; // Import the CSS file
@@ -8,7 +7,8 @@ import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 import "./globals.css";
 import { Metadata } from "next";
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import { handleClientScriptLoad } from "next/script";
 
 // Load Poppins font with Latin and Cyrillic subsets
 const poppins = Poppins({
@@ -100,9 +100,7 @@ export default function RootLayout({
           <GoogleAnalytics gaId="G-LW60PDDJ9X" />
         </head>
         <Providers>
-          <PageTransition>
-            <RootChildren>{children}</RootChildren>
-          </PageTransition>
+          <PageTransition>{children}</PageTransition>
         </Providers>
 
         {/* <!-- Yandex.Metrika counter --> */}

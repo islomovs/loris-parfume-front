@@ -126,7 +126,8 @@
     "selectSize": "Iltimos, o'lcham variantini tanlang.",
     "add_to_cart": "Savatga qo'shish",
     "delivery_today": "O'sha kuni yetkazib berish",
-    "free_delivery": "500.000 dan ortiq buyurtmalarga bepul yetkazish"
+    "free_delivery": "500.000 dan ortiq buyurtmalarga bepul yetkazish",
+    "buyNow": "Xarid qilish"
   },
   "saleInfo": "2-chi mahsulotga 50% chegirma",
   "cartDetails": {
@@ -171,7 +172,9 @@
     "promoAlreadyUsed": "Promokod allaqachon ishlatilgan",
     "invalidPromo": "Noto'g'ri promokod",
     "addressErr": "Yandex Xaritalarida manzilni kiriting yoki geolokatsiyani aniqlash tugmasini bosing",
-    "requiredFileds": "To'ldirish talab qilinadi"
+    "requiredFileds": "To'ldirish talab qilinadi",
+    "cash": "Naqd pul",
+    "loginFirst": "Buyurtmani amalga oshirish uchun akkauntingizga kiring"
   },
   "cart": {
     "cartUpdatedSuccess": "Savatcha muvaffaqiyatli yangilandi!",

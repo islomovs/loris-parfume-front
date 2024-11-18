@@ -29,7 +29,7 @@ export interface OrderData {
   city: string;
 }
 
-export const createOrder = async (orderData: OrderData) => {
+export const createOrder = async (orderData: OrderData | null) => {
   try {
     const response = await axiosInstance.post(
       "/api/v1/orders/create",
