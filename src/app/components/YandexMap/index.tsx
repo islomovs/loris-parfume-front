@@ -62,7 +62,7 @@ const YandexMap: React.FC<YandexMapProps> = ({ onLocationChange, onNearestBranch
         onNearestBranch([coords[1], coords[0]]);
       }
     } catch (error: any) {
-      console.log(error?.data?.message);
+      // console.log(error?.data?.message);
     }
   };
 
@@ -101,7 +101,7 @@ const YandexMap: React.FC<YandexMapProps> = ({ onLocationChange, onNearestBranch
         getAddress([lat, lng]);  // Используем координаты для получения адреса и ближайшего филиала
       }
     } catch (error: any) {
-      console.log(error?.data?.message);
+      // console.log(error?.data?.message);
     }
   };
 

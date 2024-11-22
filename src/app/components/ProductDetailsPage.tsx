@@ -121,7 +121,12 @@ export default function ProductDetailsPage({
     mutation.mutate(cartItem);
   };
 
+  const { clearCart } = useCartStore((state) => ({
+    clearCart: state.clearCart,
+  }));
+
   const handleOneClick = async () => {
+    clearCart();
     if (product?.data.sizesItemsList?.length >= 2 && !selectedOption) {
       message.warning(t("productDetails.selectSize"));
       return;

@@ -156,7 +156,7 @@ const CheckoutPage = () => {
     city: string;
     location: [number, number];
   }) => {
-    setValue("address", value?.address);
+    setValue("address", `${value?.city}, ${value?.address}`);
     setCoords([value?.location[0], value?.location[1]]);
 
     if (
