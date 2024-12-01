@@ -42,7 +42,6 @@ export const ProductCard = ({
   const colors = [
     ...(product?.isFiftyPercentSaleApplied ? ["bg-green-800"] : []),
     "bg-blue-500",
-    // "bg-red-500",
   ];
 
   useEffect(() => {
@@ -151,7 +150,6 @@ export const ProductCard = ({
         parseFloat(product?.price) * (1 - product?.discountPercent / 100)
       )
     : formatPrice(product?.price);
-
   return (
     <div className="relative flex flex-col items-start h-fit  md:w-[380px] w-full">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
@@ -178,19 +176,6 @@ export const ProductCard = ({
             onLoad={() => setIsImageLoaded(true)}
           />
         </Link>
-
-        {/* <button
-          onClick={(e) => {
-            e.preventDefault(); // Prevent default navigation behavior
-            e.stopPropagation(); // Stop the event from propagating to the Link
-            handleAddToCart(); // Custom logic for adding to cart
-          }}
-          className="absolute bottom-0 left-0 right-0 bg-primary w-full transition-all ease-in-out duration-500 md:opacity-0 opacity-100 md:group-hover:opacity-100 font-semibold md:p-2 text-[9px] md:text-base h-6 sm:h-0 sm:group-hover:h-10"
-        >
-          <div className="uppercase flex justify-center items-center h-full text-white">
-            {t("productDetails.add_to_cart")}
-          </div>
-        </button> */}
       </div>
 
       <div className="relative w-full overflow-hidden h-10">
