@@ -1,6 +1,6 @@
-import { fetchCollectionsData } from "@/services/collections";
-import { Metadata } from "next";
-import ClientComponent from "./components/ClientComponent";
+import { fetchCollectionsData } from '@/services/collections';
+import { Metadata } from 'next';
+import ClientComponent from './components/ClientComponent';
 
 type Props = {
   params: { collectionSlug: string };
@@ -28,8 +28,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     //     : matchedCollection?.descriptionUz;
 
     return {
-      title: "Loris - " + matchedCollection?.nameRu,
+      title: 'Loris - ' + matchedCollection?.nameRu,
       description: matchedCollection?.descriptionRu,
+      openGraph: {
+        images: [matchedCollection?.imagesList[0]],
+      },
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_DOMAIN}/ru/collections`,
         languages: {
@@ -40,8 +43,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: "Loris parfume",
-      description: "Description",
+      title: 'Loris parfume',
+      description: 'Description',
     };
   }
 }

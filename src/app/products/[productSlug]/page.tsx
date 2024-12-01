@@ -11,10 +11,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { productSlug: slug } = params;
 
     const collectionsData: any = await fetchProductBySlug(slug);
-
     return {
       title: collectionsData.data?.nameUz + ' mahsuloti',
       description: collectionsData.data?.descriptionRu,
+      openGraph: {
+        images: [collectionsData.data?.imagesList[0]],
+      },
       alternates: {
         canonical: `${process.env.NEXT_PUBLIC_DOMAIN}/products/${slug}`,
         languages: {

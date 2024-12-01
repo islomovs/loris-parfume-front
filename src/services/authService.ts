@@ -23,7 +23,7 @@ export type TResetNewPasswordFormData = {
 
 export const login = async (data: TLoginFormData) => {
   try {
-    const response = await axiosLoginInstance.post("/api/v1/auth/login", data);
+    const response = await axiosLoginInstance.post("/api/v1/auth", data);
     return response.data;
   } catch (err: any) {
     console.error(`Error: `, err);
