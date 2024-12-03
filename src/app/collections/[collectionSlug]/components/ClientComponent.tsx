@@ -1,12 +1,14 @@
 "use client";
 import { useQuery, useInfiniteQuery } from "react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { fetchProductsData } from "@/services/products";
 import { CollectionsAndCategoriesData } from "@/services/collections";
 import { ProductsGrid } from "@/app/components/ProductsGrid";
 import SortingDropdown from "@/app/components/SortingDropdown";
 import i18n from "@/utils/i18n";
+import Image from "next/image";
+
 type Props = {
   params: { collectionSlug: string };
 };
@@ -77,16 +79,35 @@ const ClientComponent = ({ params }: Props) => {
       ? matchedCollection?.descriptionRu
       : matchedCollection?.descriptionUz;
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div>
       <div>
         {bannerImage ? (
           <div
-            className={`relative parallax h-[90vh] flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
-            style={{
-              backgroundImage: `url(${bannerImage})`,
-            }}
+            className={`relative ${
+              isMobile ? "aspect-[4/3]" : "h-[90vh]"
+            } flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
           >
+            <Image
+              src={bannerImage}
+              alt="Banner Image"
+              className={`w-full ${
+                isMobile ? "object-contain" : "object-cover"
+              } transition-all duration-500 ease-in-out`}
+              fill
+              priority
+            />
             <p className="text-xl text-white font-semibold mb-[30vh]">
               {title}
             </p>
