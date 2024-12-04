@@ -110,6 +110,9 @@ const CheckoutPage = () => {
     const totalAfterSum = currentTotalSum - discountSum;
     const totalAfterDiscount =
       totalAfterSum - (totalAfterSum * discountPercent) / 100;
+    if (totalAfterDiscount > 500000) {
+      setDeliverySum(0);
+    }
     setFinalTotalSum(totalAfterDiscount + deliverySum);
   }, [discountSum, discountPercent, currentTotalSum, deliverySum]);
 
