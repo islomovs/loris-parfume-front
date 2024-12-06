@@ -4,15 +4,16 @@ import HttpBackend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 
 const options: InitOptions = {
-  fallbackLng: "ru", // Default language if translation is missing
-  supportedLngs: ["ru", "uz"], // Supported languages
+  fallbackLng: "uz",
+  lng: "uz",
+  supportedLngs: ["uz", "ru"], // Supported languages
   ns: ["common"], // Namespaces
   defaultNS: "common", // Default namespace
   backend: {
     loadPath: "/locales/{{lng}}/{{ns}}.json", // Path for loading translation files
   },
   react: {
-    useSuspense: false, // Prevents async rendering issues with suspense
+    useSuspense: false,
   },
   detection: {
     order: ["cookie", "localStorage", "querystring", "navigator"], // Language detection order

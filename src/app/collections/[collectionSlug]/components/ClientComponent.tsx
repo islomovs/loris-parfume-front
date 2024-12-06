@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useQuery, useInfiniteQuery } from "react-query";
 import React, { useEffect, useState } from "react";
@@ -79,36 +80,17 @@ const ClientComponent = ({ params }: Props) => {
       ? matchedCollection?.descriptionRu
       : matchedCollection?.descriptionUz;
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
     <div>
       <div>
         {bannerImage ? (
-          <div
-            className={`relative ${
-              isMobile ? "aspect-[4/3]" : "h-[90vh]"
-            } flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
-          >
-            <Image
+          <div className="w-full aspect-auto tracking-[.2em] transition-all duration-500 ease-in-out">
+            <img
               src={bannerImage}
               alt="Banner Image"
-              className={`w-full ${
-                isMobile ? "object-contain" : "object-cover"
-              } transition-all duration-500 ease-in-out`}
-              fill
-              priority
+              className="relative w-full object-contain transition-all duration-500 ease-in-out"
             />
-            <p className="text-xl text-white font-semibold mb-[30vh]">
+            <p className="text-xl text-white font-semibold sm:mb-[30vh]">
               {title}
             </p>
           </div>

@@ -47,11 +47,11 @@ interface INavbarProps {
   variant: "filled" | "transparent";
 }
 
-type LanguageType = "ru" | "uz";
+type LanguageType = "uz" | "ru";
 
 const flagImages: { [key in LanguageType]: string } = {
-  ru: "/ru.png",
   uz: "/uz.png",
+  ru: "/ru.png",
 };
 
 export const Navbar: React.FC<INavbarProps> = ({ variant }) => {

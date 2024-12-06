@@ -20,6 +20,7 @@
     "account": "akkaunt"
   },
   "home": {
+    "noBanners": "Bannerlar topilmadi",
     "viewCollection": "kolleksiyaga o'tish",
     "weRecommend": "biz tavsiya qilamiz"
   },

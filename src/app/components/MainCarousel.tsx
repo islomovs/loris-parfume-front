@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from "react";
 import { Pagination, Autoplay, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -6,6 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import Image from "next/image";
 import i18n from "@/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface IBanner {
   desktopImageNameRu: string;
@@ -20,6 +22,7 @@ interface IMainCarouselProps {
 
 export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const { t } = useTranslation("common");
 
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 768);
@@ -39,7 +42,11 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
   };
 
   if (!bannersData || bannersData.length === 0) {
-    return <div>No banners available</div>;
+    return (
+      <div className="flex justify-center items-center m-8">
+        {t("home.noBanners")}
+      </div>
+    );
   }
 
   return (
@@ -68,17 +75,11 @@ export const MainCarousel: React.FC<IMainCarouselProps> = ({ bannersData }) => {
 
         return (
           <SwiperSlide key={index}>
-            <div
-              className={`relative w-full ${
-                isMobile ? "aspect-[4/3]" : "aspect-[16/9]"
-              }`}
-            >
-              <Image
+            <div className="w-full">
+              <img
                 src={isMobile ? mobileImageName : desktopImageName}
                 alt={`Carousel image ${index}`}
-                className="w-full h-full object-cover transition-all duration-500 ease-in-out"
-                fill
-                priority
+                className="w-full object-cover transition-all duration-500 ease-in-out"
               />
             </div>
           </SwiperSlide>

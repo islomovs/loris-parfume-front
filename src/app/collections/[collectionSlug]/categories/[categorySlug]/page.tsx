@@ -82,31 +82,16 @@ export default function CategoriesPage({
       ? matchedCategory?.descriptionRu
       : matchedCategory?.descriptionUz;
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
     <div>
       {bannerImage ? (
         <div
-          className={`relative ${
-            isMobile ? "aspect-[4/3]" : "h-[90vh]"
-          } flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
+          className={`w-full aspect-auto flex justify-center items-end tracking-[.2em] transition-all duration-500 ease-in-out`}
         >
           <Image
             src={bannerImage}
             alt="Banner Image"
-            className={`w-full ${
-              isMobile ? "object-contain" : "object-cover"
-            } transition-all duration-500 ease-in-out`}
+            className={`w-full object-contain transition-all duration-500 ease-in-out`}
             fill
             priority
           />

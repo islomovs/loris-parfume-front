@@ -20,6 +20,7 @@
     "account": "Аккаунт"
   },
   "home": {
+    "noBanners": "Баннеры не найдены",
     "viewCollection": "Посмотреть коллекцию",
     "weRecommend": "мы рекомендуем"
   },
