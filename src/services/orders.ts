@@ -9,7 +9,6 @@ export interface OrderItem {
 
 export interface OrderData {
   fullName: string;
-  branchId: number;
   address: string;
   userId: number;
   addressLocationLink: string;

@@ -52,9 +52,10 @@ type FormData = {
   address: string;
   comment: string;
   paymentType: string;
-  deliveryType: string;
+  deliveryTypeRu: string;
   distance: number;
   deliverySum: number;
+  deliveryTypeUz: string;
 };
 
 const CheckoutPage = () => {
@@ -65,7 +66,8 @@ const CheckoutPage = () => {
   const { handleSubmit, setValue, control, register, getValues, watch } =
     useForm<FormData>({
       defaultValues: {
-        deliveryType: "Доставка", // Set Доставка as default
+        deliveryTypeRu: "Доставка",
+        deliveryTypeUz: "Yetkazib berish",
       },
     });
   const { t } = useTranslation("common");
@@ -74,11 +76,8 @@ const CheckoutPage = () => {
     phone: false,
     payment: false,
   });
-  const [branchName, setBranchName] = useState<string>("");
   const [city, setCity] = useState<string>("");
-  const [paymentType, setPaymentType] = useState<string>("");
   const [coords, setCoords] = useState([41.314472, 69.27991]);
-  const [branchId, setBranchId] = useState<number | null>(null);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [discountSum, setDiscountSum] = useState<number>(0);
   const [finalTotalSum, setFinalTotalSum] = useState<number>(totalSum());
@@ -145,6 +144,7 @@ const CheckoutPage = () => {
         } else {
           message.success(t("checkout.success"));
           router.push("/account");
+          clearCart();
         }
       },
       onError: () => {
@@ -175,23 +175,6 @@ const CheckoutPage = () => {
   };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    setPhoneNumber(sanitizePhoneNumber(data.phone));
-    const phoneIsEmpty = !data.phone;
-    const paymentIsEmpty = !data.paymentType;
-
-    loginMutation.mutate({ phone: sanitizePhoneNumber(data.phone) });
-
-    setRequiredFields((prev: any) => ({
-      ...prev,
-      phone: phoneIsEmpty,
-      payment: paymentIsEmpty,
-    }));
-
-    if (phoneIsEmpty || paymentIsEmpty) {
-      message.error(t("checkout.requiredFileds"));
-      return;
-    }
-
     if (!data.address) {
       message.error(t("checkout.addressErr"));
       return;
@@ -206,20 +189,22 @@ const CheckoutPage = () => {
 
     const orderData: OrderData = {
       fullName: data.fullName,
-      branchId: branchId ?? 0,
       address: data.address,
       addressLocationLink: `https://yandex.uz/maps/?ll=${coords[1]}%2C${coords[0]}`,
       distance: 5.0,
       phone: data.phone,
       comment: data.comment,
-      isDelivery: data.deliveryType === t("checkout.deliveryOptions.delivery"),
+      isDelivery:
+        i18n.language == "ru"
+          ? data.deliveryTypeRu === t("checkout.deliveryOptions.delivery")
+          : data.deliveryTypeUz === t("checkout.deliveryOptions.delivery"),
       isSoonDeliveryTime: false,
       longitude: coords[0] || 0.0,
       latitude: coords[1] || 0.0,
       deliverySum: deliverySum,
       totalSum: finalTotalSum,
       paymentType: data.paymentType?.toLowerCase(),
-      promocode: appliedPromoCode, // Include the applied promo code in the order
+      promocode: appliedPromoCode,
       returnUrl: token
         ? "https://lorisparfume.uz/account"
         : "https://lorisparfume.uz",
@@ -234,6 +219,22 @@ const CheckoutPage = () => {
       message.info(t("checkout.loginFirst"));
       setErrorMessage(null);
       onOpen();
+      setPhoneNumber(sanitizePhoneNumber(data.phone));
+      const phoneIsEmpty = !data.phone;
+      const paymentIsEmpty = !data.paymentType;
+
+      loginMutation.mutate({ phone: sanitizePhoneNumber(data.phone) });
+
+      setRequiredFields((prev: any) => ({
+        ...prev,
+        phone: phoneIsEmpty,
+        payment: paymentIsEmpty,
+      }));
+
+      if (phoneIsEmpty || paymentIsEmpty) {
+        message.error(t("checkout.requiredFileds"));
+        return;
+      }
     }
     setOrderData(orderData);
   };
