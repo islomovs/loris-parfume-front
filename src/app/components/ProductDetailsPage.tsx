@@ -88,7 +88,7 @@ export default function ProductDetailsPage({
   }, [product]);
 
   const handleAddToCart = () => {
-    if (product?.data.sizesItemsList?.length >= 2 && !selectedOption) {
+    if (product?.data.sizesItemsList[0]?.sizeId != 1 && !selectedOption) {
       message.warning(t("productDetails.selectSize"));
       return;
     }
@@ -192,11 +192,9 @@ export default function ProductDetailsPage({
         collectionId: product?.data?.collectionsItemsList[0]?.collectionId,
         collectionSlug: product?.data.collectionsItemsList[0].collectionSlug,
       };
-
+      showDrawer();
       addOrUpdateCartItem(newItem);
-      queryClient.invalidateQueries("cartItemsData").then(() => {
-        router.push("/checkouts");
-      });
+      queryClient.invalidateQueries("cartItemsData");
       loadingBarRef.current.complete();
     },
     onError: (error) => {
@@ -254,7 +252,7 @@ export default function ProductDetailsPage({
   };
 
   const microdataJson = JSON.stringify(microdata);
-
+  console.log("microdataJson: ", product?.data?.sizesItemsList[0]?.sizeId);
   return (
     <>
       <div className="flex flex-col px-4">
@@ -289,26 +287,27 @@ export default function ProductDetailsPage({
               </button>
             </div>
             <div>
-              {product?.data.sizesItemsList?.length >= 2 && (
-                <SizeSelector
-                  options={product?.data.sizesItemsList}
-                  selectedOption={selectedOption}
-                  onSelect={(option, price, sizeId) => {
-                    const sizeDiscountPercent =
-                      product?.data.sizesItemsList.find(
-                        (size: any) => size.sizeId === sizeId
-                      )?.discountPercent;
-                    const finalPrice = sizeDiscountPercent
-                      ? price * (1 - sizeDiscountPercent / 100)
-                      : price;
+              {product?.data?.sizesItemsList[0]?.sizeId != 1 &&
+                product?.data?.sizesItemsList.length != 0 && (
+                  <SizeSelector
+                    options={product?.data.sizesItemsList}
+                    selectedOption={selectedOption}
+                    onSelect={(option, price, sizeId) => {
+                      const sizeDiscountPercent =
+                        product?.data.sizesItemsList.find(
+                          (size: any) => size.sizeId === sizeId
+                        )?.discountPercent;
+                      const finalPrice = sizeDiscountPercent
+                        ? price * (1 - sizeDiscountPercent / 100)
+                        : price;
 
-                    setSelectedOption(option);
-                    setProductPrice(finalPrice);
-                    setOriginalPrice(price);
-                    setSelectedSizeId(sizeId);
-                  }}
-                />
-              )}
+                      setSelectedOption(option);
+                      setProductPrice(finalPrice);
+                      setOriginalPrice(price);
+                      setSelectedSizeId(sizeId);
+                    }}
+                  />
+                )}
               <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
               <div className="flex flex-col gap-2">
                 <AnimatedButton

@@ -20,6 +20,7 @@ export interface ICartItem {
 
 export const addToCart = async (item: any) => {
   try {
+    console.log("BEFORE Added item to cart:", item);
     const response = await axiosInstance.post(
       `${
         item.sizeId
@@ -27,9 +28,12 @@ export const addToCart = async (item: any) => {
           : `/api/v1/basket/add/${item.slug}?quantity=${item.quantity}&collectionSlug=${item.collectionSlug}`
       }`
     );
+    console.log("Added item to cart:", item);
     return response;
   } catch (error) {
-    console.error("Failed to add item to cart:", error);
+    console.log("Added item to cart with ERROR :", item);
+
+    console.error("Failed to add item to cart:", error, "AAAAND", item.sizeId);
   }
 };
 

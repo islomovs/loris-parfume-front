@@ -67,7 +67,7 @@ export const ProductCard = ({
         id: product?.id,
         slug,
         quantity,
-        sizeId,
+        sizeId: product.sizesItemsList[0]?.sizeId || 0,
         price: Number(discountPrice),
         nameEng: product?.nameEng,
         nameRu: product?.nameRu,
@@ -76,12 +76,11 @@ export const ProductCard = ({
         collectionId: product?.collectionsItemsList[0]?.collectionId,
         collectionSlug: product?.collectionsItemsList[0].collectionSlug,
       };
-
       addOrUpdateCartItem(newItem);
       queryClient.invalidateQueries("cartItemsData").then(() => {
         showDrawer();
       });
-      // loadingBarRef.current.complete();
+      loadingBarRef.current.complete();
     },
     onError: (error) => {
       console.error("Error adding item to cart:", error);
@@ -97,9 +96,10 @@ export const ProductCard = ({
       price: Number(product?.price),
       collectionId: product?.collectionsItemsList[0]?.collectionId,
       collectionSlug: product?.collectionsItemsList[0].collectionSlug,
-      ...(product?.sizesItemsList.length > 0 && {
-        size: product?.sizesItemsList[0],
-      }),
+      ...(product?.sizesItemsList[0]?.sizeId != 1 &&
+        product?.sizesItemsList.length != 0 && {
+          sizeId: product?.sizesItemsList[0].sizeId,
+        }),
     };
 
     sendGAEvent("event", "buttonClicked", {
@@ -150,6 +150,7 @@ export const ProductCard = ({
         parseFloat(product?.price) * (1 - product?.discountPercent / 100)
       )
     : formatPrice(product?.price);
+
   return (
     <div className="relative flex flex-col items-start h-fit  md:w-[380px] w-full">
       <LoadingBar color="#87754f" ref={loadingBarRef} />
