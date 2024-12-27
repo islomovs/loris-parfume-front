@@ -90,9 +90,9 @@ const ClientComponent = ({ params }: Props) => {
               alt="Banner Image"
               className="relative w-full object-contain transition-all duration-500 ease-in-out"
             />
-            <p className="text-xl text-white font-semibold sm:mb-[30vh]">
+            {/* <p className="text-xl text-white font-semibold">
               {title}
-            </p>
+            </p> */}
           </div>
         ) : (
           <div className="flex justify-center items-center">
