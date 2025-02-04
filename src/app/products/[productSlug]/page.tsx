@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: 'Loris parfume',
+      title: 'LORIS Perfume',
       description: 'Default Description',
     };
   }

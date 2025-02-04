@@ -18,15 +18,17 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Loris Parfum – Ароматы премиум-класса для мужчин и женщин",
+  title: "LORIS Perfume – Ароматы премиум-класса для мужчин и женщин",
   description:
-    "Откройте для себя мир уникальных ароматов с LORIS Parfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
-  applicationName: "Loris Parfume",
+    "Откройте для себя мир уникальных ароматов с LORIS Perfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
+  applicationName: "LORIS Perfume",
   keywords: [
-    "loris parfume",
-    "loris parfum",
+    "LORIS Perfume",
+    "LORIS Perfume",
     "parfume",
     "parfumeria",
+    "perfume",
+    "perfumeria",
     "atir",
     "duhi",
     "духи",
@@ -51,12 +53,12 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Loris Parfum – Ароматы премиум-класса для мужчин и женщин",
+    title: "LORIS Perfume – Ароматы премиум-класса для мужчин и женщин",
     description:
-      "Откройте для себя мир уникальных ароматов с LORIS Parfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
+      "Откройте для себя мир уникальных ароматов с LORIS Perfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
     url: "https://lorisparfume.uz",
     images: "https://lorisparfume.uz/logo600.jpg",
-    siteName: "Loris Parfume",
+    siteName: "LORIS Perfume",
     locale: "ru_RU",
     type: "website",
   },

@@ -59,7 +59,7 @@ export default function Footer() {
 
         <div className="flex flex-col p-5 lg:p-10">
           <h1 className="text-xs mb-3 lg:mb-5 font-normal uppercase tracking-[.2em]">
-            LORIS PARFUM
+            LORIS PERFUME
           </h1>
           <ul className="text-sm lg:text-[14px] leading-[21px] font-normal">
             {collections?.map((collection: ICollectionItem) => {
@@ -99,7 +99,7 @@ export default function Footer() {
 
       <div className="flex flex-col items-center mt-8">
         <p className="text-xs font-normal uppercase tracking-[.2em] mt-4 lg:mt-0">
-          COPYRIGHT© LORIS PARFUM
+          COPYRIGHT© LORIS PERFUME
         </p>
       </div>
     </footer>

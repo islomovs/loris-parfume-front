@@ -68,7 +68,7 @@ export default function Home() {
     "@type": "Organization",
     url: "https://lorisparfume.uz",
     logo: "https://lorisparfume.uz/logo600.jpg",
-    name: "Loris Parfum",
+    name: "LORIS Perfume",
     contactPoint: [
       {
         "@type": "ContactPoint",

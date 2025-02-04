@@ -246,7 +246,7 @@ export default function ProductDetailsPage({
       availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",
-        name: "Loris Parfume",
+        name: "LORIS Perfume",
       },
     },
   };

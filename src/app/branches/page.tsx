@@ -6,7 +6,7 @@ export async function generateMetadata() {
   return {
     title: "Филиалы | Парфюмерные Филиалы Лорис",
     description:
-      "LORIS Parfume представлен в ряде ключевых торговых центров и локаций по всей стране, предлагая широкий ассортимент уникальных ароматов для дома и парфюмов. Наши филиалы находятся в таких местах, как Tashkent City Mall, Seoul Mun, Samarqand Darvoza, Next, Riviera, Compass, Chimgan, Atlass Mall, Navruz Mall и O’zbegim Trade Center. Посетите ближайший магазин, чтобы окунуться в мир утонченных ароматов LORIS Parfume.",
+      "LORIS Perfume представлен в ряде ключевых торговых центров и локаций по всей стране, предлагая широкий ассортимент уникальных ароматов для дома и парфюмов. Наши филиалы находятся в таких местах, как Tashkent City Mall, Seoul Mun, Samarqand Darvoza, Next, Riviera, Compass, Chimgan, Atlass Mall, Navruz Mall и O’zbegim Trade Center. Посетите ближайший магазин, чтобы окунуться в мир утонченных ароматов LORIS Perfume.",
     alternates: {
       canonical: `${process.env.NEXT_PUBLIC_DOMAIN}/branches`,
       languages: {
