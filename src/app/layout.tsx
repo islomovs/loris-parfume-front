@@ -56,8 +56,8 @@ export const metadata: Metadata = {
     title: "LORIS Perfume – Ароматы премиум-класса для мужчин и женщин",
     description:
       "Откройте для себя мир уникальных ароматов с LORIS Perfume — лидером на рынке парфюмерии, который дарит вам неповторимые ощущения свежести и гармонии каждый день",
-    url: "https://lorisparfume.uz",
-    images: "https://lorisparfume.uz/logo600.jpg",
+    url: "https://lorisperfume.uz",
+    images: "https://lorisperfume.uz/logo600.jpg",
     siteName: "LORIS Perfume",
     locale: "ru_RU",
     type: "website",

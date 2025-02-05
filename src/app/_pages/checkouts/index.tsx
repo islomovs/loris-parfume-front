@@ -206,8 +206,8 @@ const CheckoutPage = () => {
       paymentType: data.paymentType?.toLowerCase(),
       promocode: appliedPromoCode,
       returnUrl: token
-        ? "https://lorisparfume.uz/account"
-        : "https://lorisparfume.uz",
+        ? "https://lorisperfume.uz/account"
+        : "https://lorisperfume.uz",
       ordersItemsList: ordersItemsList,
       userId: userInfo?.id || null,
       city,

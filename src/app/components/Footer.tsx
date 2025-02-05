@@ -28,10 +28,10 @@ export default function Footer() {
             {t("about.description")}
           </p>
           <a
-            href="mailto:uzbekistan@lorisparfum.com"
+            href="mailto:uzbekistan@lorisperfume.com"
             className="text-sm lg:text-[14px] font-normal mb-3"
           >
-            uzbekistan@lorisparfum.com
+            uzbekistan@lorisperfume.com
           </a>
           <a
             href="tel:+998939119944"

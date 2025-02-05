@@ -13,7 +13,7 @@ const StaticBanners = () => {
         <div className="grid md:gap-8 gap-4">
           <div className="grid md:grid-cols-1 grid-cols-2 md:gap-8 gap-4 h-full">
             <div className="relative overflow-hidden h-full w-full">
-              <Link href={"https://lorisparfume.uz/collections/creation/products/creation-angel-wings"}>
+              <Link href={"https://lorisperfume.uz/collections/creation/products/creation-angel-wings"}>
                 <Image
                   src={banner1}
                   alt="banner_image1"
@@ -22,7 +22,7 @@ const StaticBanners = () => {
               </Link>
             </div>
             <div className="block md:hidden relative overflow-hidden h-full w-full">
-              <Link href={"https://lorisparfume.uz/products/r-001"}>
+              <Link href={"https://lorisperfume.uz/products/r-001"}>
                 <Image
                   src={banner4}
                   alt="banner_image4"
@@ -33,7 +33,7 @@ const StaticBanners = () => {
           </div>
           <div className="grid grid-cols-2 md:gap-8 gap-4 h-full">
             <div className="relative overflow-hidden h-full w-full">
-              <Link href={"https://lorisparfume.uz/products/r-231"}>
+              <Link href={"https://lorisperfume.uz/products/r-231"}>
                 <Image
                   src={banner2}
                   alt="banner_image2"
@@ -42,7 +42,7 @@ const StaticBanners = () => {
               </Link>
             </div>
             <div className="relative overflow-hidden h-full w-full">
-              <Link href={"https://lorisparfume.uz/collections/elegant/products/elegant-elegant"}>
+              <Link href={"https://lorisperfume.uz/collections/elegant/products/elegant-elegant"}>
                 <Image
                   src={banner3}
                   alt="banner_image3"
@@ -53,7 +53,7 @@ const StaticBanners = () => {
           </div>
         </div>
         <div className="hidden md:block relative overflow-hidden h-full w-full">
-          <Link href={"https://lorisparfume.uz/collections/niche"}>
+          <Link href={"https://lorisperfume.uz/collections/niche"}>
             <Image
               src={banner4}
               alt="banner_image4"

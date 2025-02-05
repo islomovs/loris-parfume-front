@@ -66,8 +66,8 @@ export default function Home() {
   const JsonId = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    url: "https://lorisparfume.uz",
-    logo: "https://lorisparfume.uz/logo600.jpg",
+    url: "https://lorisperfume.uz",
+    logo: "https://lorisperfume.uz/logo600.jpg",
     name: "LORIS Perfume",
     contactPoint: [
       {
@@ -75,7 +75,7 @@ export default function Home() {
         telephone: "+998 93 911 99 44",
         areaServed: "UZ",
         availableLanguage: ["Uzbek", "Russian"],
-        email: "uzbekistan@lorisparfum.com",
+        email: "uzbekistan@lorisperfume.com",
       },
     ],
     sameAs: [
