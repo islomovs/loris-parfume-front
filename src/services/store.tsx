@@ -83,53 +83,72 @@ const useCartStore = create<CartState>()(
         });
       },
       clearCart: () => set({ cart: [] }),
+
+
       totalSum: () => {
         const cart = get().cart;
         let total = 0;
-
+      
         if (!cart || cart.length === 0) {
           return total; // Returns 0 if cart is empty or undefined
         }
-
-        const discountExceptions = ["creation"]; // Collections excluded from discounts
-
+      
+        const discountExceptions = ["creation"]; // Collections that normally don’t get discounts
+        const crossedDiscountCollections = ["womens", "men"]; // Collections that share discount logic
+      
         type GroupedItems = {
           [key: string]: ICartItem[];
         };
-
+      
         const itemsGrouped = cart.reduce<GroupedItems>((acc, item) => {
           const key = item.collectionSlug || "default-collection";
-          if (!acc[key]) {
-            acc[key] = [];
+      
+          if (crossedDiscountCollections.includes(key)) {
+            acc["crossed-group"] = acc["crossed-group"] || [];
+            acc["crossed-group"].push(item);
+          } else if (key === "creation") {
+            // Ensure "creation" items are grouped by ID so discounts apply only to identical items
+            const creationKey = `creation-${item.id}`;
+            acc[creationKey] = acc[creationKey] || [];
+            acc[creationKey].push(item);
+          } else {
+            acc[key] = acc[key] || [];
+            acc[key].push(item);
           }
-          acc[key].push(item);
           return acc;
         }, {});
-
-        Object.values(itemsGrouped).forEach((groupItems: ICartItem[]) => {
-          const collectionSlug =
-            groupItems[0].collectionSlug || "default-collection";
-          const isExcluded = discountExceptions.includes(collectionSlug);
-
-          const expandedItems = groupItems.flatMap((item) =>
-            Array(item.quantity).fill(item)
-          );
-
+      
+        Object.entries(itemsGrouped).forEach(([groupKey, groupItems]) => {
+          // Identify if this group belongs to "creation"
+          const isCreationGroup = groupKey.startsWith("creation-");
+          const collectionSlug = groupItems[0].collectionSlug || "default-collection";
+          const isExcluded = discountExceptions.includes(collectionSlug) && !isCreationGroup;
+      
+          // Expand items by quantity
+          const expandedItems = groupItems.flatMap((item) => Array(item.quantity).fill(item));
+      
           expandedItems.forEach((item, index) => {
             const price = item.discountPercent
-              ? Number(item.price) -
-                (Number(item.price) * item.discountPercent) / 100
+              ? Number(item.price) - (Number(item.price) * item.discountPercent) / 100
               : Number(item.price);
-
-            const effectivePrice =
-              isExcluded || (index + 1) % 2 !== 0 ? price : price / 2;
-
+      
+            // Apply discount for every 2nd item if it's not an excluded collection
+            const effectivePrice = isExcluded
+              ? price // No discount for excluded collections (except per-item creation)
+              : (index + 1) % 2 !== 0
+              ? price // Full price for odd-indexed items
+              : price / 2; // 50% discount for every second identical item
+      
             total += effectivePrice;
           });
         });
-
+      
         return total || 0; // Ensure total is a number
-      },
+      },      
+      
+      
+      
+
       getDiscountedTotal: (collectionSlug, price, quantity) => {
         const discountExceptions = ["f-2-women", "excluded-collection-2"]; // Update with your actual exception list
         const isExcluded = discountExceptions.includes(collectionSlug);
